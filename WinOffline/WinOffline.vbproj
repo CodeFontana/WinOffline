@@ -1,0 +1,436 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>
+    </SchemaVersion>
+    <ProjectGuid>{15ED8CF6-3D4D-43CD-8E5C-96EE2E5E0194}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>WinOffline.WinOffline</StartupObject>
+    <RootNamespace>WinOffline</RootNamespace>
+    <AssemblyName>WinOffline</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>WindowsFormsWithCustomSubMain</MyType>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>WinOffline.xml</DocumentationFile>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <Prefer32Bit>false</Prefer32Bit>
+    <WarningsAsErrors>
+    </WarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>WinOffline.xml</DocumentationFile>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
+    <WarningsAsErrors>
+    </WarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>WinOffline64.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>CD33EACA7FDB0E63C83EA1112B271F7C1093469F</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>bin\Signature\CA.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DocumentationFile>WinOffline.xml</DocumentationFile>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+    <WarningsAsErrors>
+    </WarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DocumentationFile>WinOffline.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+    <WarningsAsErrors>
+    </WarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>WinOffline.xml</DocumentationFile>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+    <WarningsAsErrors>
+    </WarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>WinOffline.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+    <WarningsAsErrors>
+    </WarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>bin\Signature\CA.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Diagnostics" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AboutBox.Designer.vb">
+      <DependentUpon>AboutBox.vb</DependentUpon>
+    </Compile>
+    <Compile Include="AboutBox.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AlertBox.Designer.vb">
+      <DependentUpon>AlertBox.vb</DependentUpon>
+    </Compile>
+    <Compile Include="AlertBox.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CertManager.vb" />
+    <Compile Include="ComstoreAPI.vb" />
+    <Compile Include="DatabaseAPI.vb" />
+    <Compile Include="HistoryVector.vb" />
+    <Compile Include="KeyboardHook.vb" />
+    <Compile Include="LibraryManager.vb" />
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="HelpUI.designer.vb">
+      <DependentUpon>HelpUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="HelpUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RemoveITCM.vb" />
+    <Compile Include="RemovalVector.vb" />
+    <Compile Include="SqlConnectUI.designer.vb">
+      <DependentUpon>SqlConnectUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SqlConnectUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinOfflineUI-Sql-GroupEvalGrid.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinOfflineUI-RemovalTool.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinOfflineUI-Sql-AgentGrid.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinOfflineUI-Sql-DatabaseAPI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinOfflineUI-Sql-DiscSoftGrid.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinOfflineUI-Sql-DuplCompGrid.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinOfflineUI-Sql-EngineGrid.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinOfflineUI-Sql-InstSoftGrid.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinOfflineUI-Sql-MdbOverview.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinOfflineUI-Sql-ServerGrid.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinOfflineUI-Sql-TableSpaceGrid.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinOfflineUI-Sql-UnUsedSoftGrid.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinOfflineUI-Sql-UserGrid.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinOfflineUI-Threading-Delegates.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinOfflineUI-Enc-Overdrive.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinOfflineUI-LaunchPad.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinOfflineUI-Sql-CleanApps.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinOfflineUI-Sql-QueryEditor.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinOfflineUI-CafStopStart.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinOfflineUI-SystemInfo.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PatchProcessor.vb" />
+    <Compile Include="FileVector.vb" />
+    <Compile Include="PatchOperations.vb" />
+    <Compile Include="Dispatcher.vb" />
+    <Compile Include="Globals.vb" />
+    <Compile Include="HistoryFileAPI.vb" />
+    <Compile Include="Init.vb" />
+    <Compile Include="LaunchPad.vb" />
+    <Compile Include="Logger.vb" />
+    <Compile Include="Manifest.vb" />
+    <Compile Include="PatchVector.vb" />
+    <Compile Include="PipeClient.vb" />
+    <Compile Include="PipeServer.vb" />
+    <Compile Include="JobContainer.vb" />
+    <Compile Include="ProgressUI.Designer.vb">
+      <DependentUpon>ProgressUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ProgressUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StageI.vb" />
+    <Compile Include="StageII.vb" />
+    <Compile Include="StageIII.vb" />
+    <Compile Include="StartServices.vb" />
+    <Compile Include="StopServices.vb" />
+    <Compile Include="WinOfflineUI-WinOffline-CLIHelpPanel.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinOfflineUI-WinOffline-RemovePanel.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinOfflineUI-WinOffline-SDHelpPanel.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinOfflineUI-WinOffline-MainPanel.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinOfflineUI-WinOffline-StartPanel.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinOfflineUI-WinOffline.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinOfflineUI.Designer.vb">
+      <DependentUpon>WinOfflineUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="WinOfflineUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Utility.vb" />
+    <Compile Include="WindowsAPI.vb" />
+    <Compile Include="WinOffline.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AboutBox.resx">
+      <DependentUpon>AboutBox.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AlertBox.resx">
+      <DependentUpon>AlertBox.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="HelpUI.resx">
+      <DependentUpon>HelpUI.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProgressUI.resx">
+      <DependentUpon>ProgressUI.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SqlConnectUI.resx">
+      <DependentUpon>SqlConnectUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinOfflineUI.resx">
+      <DependentUpon>WinOfflineUI.vb</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="app.config">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="bin\Signature\CA.pfx" />
+    <None Include="CA Inc.pfx" />
+    <None Include="My Project\app.manifest" />
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Cazipxp.exe" />
+    <EmbeddedResource Include="Screenshots\Step1.png" />
+    <EmbeddedResource Include="Screenshots\Step10.png" />
+    <EmbeddedResource Include="Screenshots\Step11.png" />
+    <EmbeddedResource Include="Screenshots\Step12.png" />
+    <EmbeddedResource Include="Screenshots\Step13.png" />
+    <EmbeddedResource Include="Screenshots\Step2.png" />
+    <EmbeddedResource Include="Screenshots\Step3.png" />
+    <EmbeddedResource Include="Screenshots\Step4.png" />
+    <EmbeddedResource Include="Screenshots\Step5.png" />
+    <EmbeddedResource Include="Screenshots\Step6.png" />
+    <EmbeddedResource Include="Screenshots\Step7.png" />
+    <EmbeddedResource Include="Screenshots\Step8.png" />
+    <EmbeddedResource Include="Screenshots\Step9.png" />
+    <EmbeddedResource Include="Screenshots\Next.png" />
+    <EmbeddedResource Include="Screenshots\Prev.png" />
+    <EmbeddedResource Include="Screenshots\Step14.png" />
+    <EmbeddedResource Include="Screenshots\Step15.png" />
+    <None Include="SQL-CleanApps-Unified.txt" />
+    <EmbeddedResource Include="LaunchService.exe" />
+    <Content Include="WinOffline-Readme.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WinOffline64.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

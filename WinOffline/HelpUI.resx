@@ -1,0 +1,394 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="rtbHelp.Text" xml:space="preserve">
+    <value>WinOffline Command Line Switches:
+
+-gethistory
+Report agent patch history only. CAF is not recycled and no patch operations are performed. Available in Software Delivery mode only.
+
+-remove [patch1,patch2,...]
+Removes patches from the agent. The agent history file(s) are scanned to find the associated product component and ensure the original files are available for restoration.
+
+Examples:
+-remove T5X0001
+-remove T5X0001,T5X0002
+
+-cleanlogs
+1- Cleans up the DSM logs folder. 
+2- Modifies the folder access control list (ACL) if Administrator permissions are missing.
+
+-resetcftrace
+Runs a "cftrace -c reset".
+
+-rmcamcfg
+1- Saves a backup of any existing cam.cfg file, if present.
+2- Deletes the existing cam.cfg or cam.bak files, if present.
+
+-cleanagent
+1- Cleans up the ..\CA\DSM\Agent\units folder.
+2- Cleans up the ..\CA\DSM\SD\TMP\activate folder.
+3- Cleans up the ..\CA\DSM\dts\dta\status folder.
+4- Cleans up the ..\CA\DSM\dts\dta\staging folder
+5- Recreates the ..\CA\DSM\dts\dta\status\index file.
+
+-cleanserver
+1- Cleans up the ..\CA\DSM\SD\ASM\D folder.
+2- Cleans up the ..\CA\DSM\SD\ASM\LIBRARY\activate folder**
+3- Cleans up the ..\CA\DSM\dts\dta\status folder.
+4- Cleans up the ..\CA\DSM\dts\dta\staging folder
+5- Recreates the ..\CA\DSM\dts\dta\status\index file.
+
+**Removes any NTFS junction points created back to Domain Manager's software library, before deleting any files/folders.
+
+-checklibrary
+Analyzes the software delivery library for consistency problems, and reports results, without making any changes to the database, library.dct file or LIBRARY folder.
+- Verifies system is an ITCM Manager or Scalability Server.
+- Verifies connectivity to the database, and the manager or server is registered there.
+- Load the list of software from the database (usd_rsw).
+- Load the list of software procedures from the database (usd_actproc).
+- Parse the library.dct file, and check the following:
+--&gt; associated .arc folder exists and contains a ".vol" folder, "reginfo" folder and "rsw.dat" file.
+--&gt; The package UUID is available and correctly formatted in the "rsw.dat" file.
+--&gt; The package UUID is not duplicate to a software package already processed.
+--&gt; The package UUID matches with existing usd_rsw.objectid in the database.
+- Process each usd_rsw record, checking for any usd_rsw.objectid not captured in the library file. [ITCM manager only]
+- Check for orphaned .arc folders, not captured by the library.
+- Check for orphaned .rcp folders, not captured by the database (usd_actproc).
+- Reports a summary of findings, without making any changes.
+
+-cleanlibrary
+Performs cleanup on the software delivery library, repairing consistency problems between the database, library.dct file and LIBRARY folder.
+- Verifies system is an ITCM Manager or Scalability Server.
+- Verifies connectivity to the database, and the manager or server is registered there.
+- Load the list of software from the database (usd_rsw).
+- Load the list of software procedures from the database (usd_actproc).
+- Parse the library.dct file, and check the following:
+--&gt; associated .arc folder exists and contains a ".vol" folder, "reginfo" folder and "rsw.dat" file.
+--&gt; The package UUID is available and correctly formatted in the "rsw.dat" file.
+--&gt; The package UUID is not duplicate to a software package already processed.
+--&gt; The package UUID matches with existing usd_rsw.objectid in the database.
+- Process each usd_rsw record, checking for any usd_rsw.objectid not captured in the library file. [ITCM manager only]
+- Check for orphaned .arc folders, not captured by the library.
+- Check for orphaned .rcp folders, not captured by the database (usd_actproc).
+- Keeps a rolling copy (up to two backups) of the library.dct file.
+- Cleans discrepancies/orphans found from the database.
+- Writes out a clean library.dct file.
+- Removes orphan or invalid .arc or .rcp folders, not consistent with the database or library.dct folder.
+
+-cleancerts
+1- Keeps a rolling backup, up to two copies, of the CBB folder.
+2- Cleans up formatting and syntax errors in both certstor.dat and cbbkstor.dat files.
+3- Cleans up any entry in certstor.dat, referencing a non-existent certificate file in certdb.
+4- Cleans up all itcm-anonymous certificate entries from the certstor.dat file.
+5- Cleans the cbbkstor.dat file of any private keys not matching with an entry in the certstor.dat file.
+6- Cleans the certdb folder, of any certificate not mating with an entry in the certstor.dat file.
+7- Runs "cacertutil list -v" to generate a new anonymous certificate.
+
+-skipcafstartup
+Don't start the CAF service after performing all patching/maintenance operations.
+
+-skipcam
+Don't stop/recycle the CAM service.  This may prevent some patches from successfully applying without the need for a reboot.
+
+-skipdmprimer
+Don't stop/recycle the DMPrimer service.  This may prevent some patches from successfully applying without the need for a reboot.
+
+-skiphm
+Don't stop/recycle the hmAgent service. This may prevent some patches from successfully applying without the need for a reboot.
+
+-loadgui
+Launch DSM Explorer for all currently logged on users.
+
+-simulatestop
+For debugging. Skips stopping/starting the CAF service. Used when testing WinOffline with dummy patches.
+
+-simulatepatch
+For debugging. Allows WinOffline to go through all the motions without acutally making any changes via the patches.
+
+-rmhistorybefore
+Deletes the %computername%.his file in the root of the DSM folder, and removes the REPLACED directory, BEFORE performing the current patch operation(s).
+
+-rmhistoryafter
+Deletes the %computername%.his file in the root of the DSM folder, and removes the REPLACED directory, AFTER performing the current patch operation(s).
+
+-dumpcazipxp
+Extract cazipxp.exe to the current working directory, and exit without making any changes.
+
+-regenuuid
+1- Deletes the HostUUID from the comstore.
+2- Deletes the HostUUID from the registry.
+
+-signalreboot
+Signal a software delivery reboot request.
+
+-reboot
+Reboot system after completion of the last stage of WinOffline.
+
+-uninstallitcm
+Perform normal uninstallation of ITCM. Choose this option if other CA products are installed.
+
+-removeitcm
+Perform full removal of ITCM. Choose this option if ITCM is the only CA product installed.  Will attempt removal of entire CA folder and ComputerAssociates registry key.
+
+-keepuuid
+When performing full removal (-removeitcm), retain only the HostUUID registry key for future use.
+
+-disableenc
+Disable the ENC client.
+
+WinOffline Software Delivery and Scripting Switches:
+
+-showgui
+Software Delivery mode:
+Displays a progress window in the context of each logged on user desktop. This allows the end-user to see the progress of WinOffline as it executes maintenance. The end user can close the progress window at will, without affecting the WinOffline execution. By default, the progress window is hidden from the end-users.
+
+Interactive mode:
+This option is ignored as the progress window is automatically displayed in the context of the user who launched WinOffline. If WinOffline is launched as the SYSTEM identity for interactive mode, this option can be used to display the progress window for all logged on users.
+
+-silent
+Software Delivery mode:
+This option will suppress the WinOffline tray icon, which will display based on ITCM comstore policy for the cfsystray icon. By default, software delivery mode is already silent except for the tray icon.
+
+Interactive mode:
+Executes interactive mode silently, without any user interaction or progress window. This switch always overrides the -showgui switch. By default, interactive mode normally displays an interactive window to the user.
+
+WinOffline Database Maintenance Switches:
+
+Note: These switches are only valid on ITCM managers.
+
+-testdbconn
+Tests connection to the database. Uses Windows authentication by default, unless (-dbuser) switch is also provided.
+
+-dbuser &lt;username&gt;
+Authenticate via sql credentials using the provided account. The (-dbpassword) switch is optional, otherwise user will be prompted at runtime.
+
+-dbpassword &lt;password&gt; (or -dbpasswd &lt;password&gt;)
+Provide password for provided sql account. Requires the (-dbuser) switch to be provided. If this switch is omitted, the user will be prompted.
+
+-dbinstance &lt;instance name&gt;
+Provide a non-default instance name, as required for connecting to the database.
+
+-dbport &lt;port&gt;
+Provide a non-default port number, as required for connecting to the database.
+
+-mdboverview
+Output an overview of the ITCM manager's database.</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        AAABAAEAQEAAAAEACAAoFgAAFgAAACgAAABAAAAAgAAAAAEACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AADDiUsAwINBAL+CQAC6fj4AtHo8AKlyOADy5dgA8OHSAO7ezADXsIYApXA3AOXMsQDnz7gA6ta/AMqZ
+        ZADOoG8A0aV2AKFtNgDr2MMA06h6AJ9sNQDUq34AcnJyAJaFcwCHh4cAl4d2AIqIhwCTk5MAkpKSAI+P
+        jwBzc3IAeXZzAKuaiAC8gD8AlJSUAOXl5QD5+fkAqqahAJiYmAB2dnYAc3NzAJiJeQCXlpYAnp6eAIGB
+        gQB3dXMAJBztANu3jgDevpoA4MKhAJhnMwCmn5YAlpaWACYe7gB0dHQAmJaUACsj7QAlHu4AKB/tAIuL
+        iwDy8vIAJBzuACUd7QD19fUAlZWVAOXl8gAlHe4AKCDuAOjo6AAkHOwA4sepACUc7QDPz88AnZ2dAHd3
+        dwCKiooAj4mCAPj4+ADY2NgAdnV0AC4n7gCMjIwAf3l0AHV0dAB1dXUAi4F2AHdxagBzcnEAfHBjAHRy
+        cABzcnIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAABQUFBQoKCgoRERERERERERQUFBQUFBQUFBQUFDIyMjIyMjIyFhYWFhYWFhYWFhYWFhYWFjIy
+        MjIyMjIyMjIyMgUFBQUKCgoKEREREREREREUFBQUFBQUFBQUFBQyMjIyMjIyVhYWFhYWFhYWFhYWFhYW
+        FihYMjIyMjIyMjIyMjIFBQUFCgoKChERERERERERFBQUFBQUFBQUFBQUMjIyMjIyWRYoFhYWFhYWFhYW
+        FhYWFhYoFloyMjIyMjIyMjIyBQUFBQoKCgoRERERERERERQUFBQUFBQUFBQUFDIyMjIyVlcWKBYWFhYW
+        FhYWFhYWFhYWKBYoWDIyMjIyMjIyMgUFBQULCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLFhYWFigW
+        IyMjIyMjI0hISEhLKCgoFigWFRUVFTIyMjIFBQUFCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLTCgW
+        FigWVCMjIyMjIyMjSEhISFQoKBYWKFUVFRUyMjIyBQUFBQsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsL
+        UxYoFhYWSSMjIyMjIyMjIyNISEhISygWFigWHhUVMjIyMgUFBQULCwsLCwsLCwsLCwsLCwsLCwsLCwsL
+        CwsLTCgWKBYWFiMjIyMuLi4uLi4uLkhISEgWFhYoKBZSFTIyMjIFBQUFCwsLCzExMTFGRkZGCwsLCwsL
+        CwsLCwsLFhYWKBYWSSMjIyM/Li4uLi4uLi5NSEhITlEoFhYWFhYyMjIyBQUFBQsLCwsxMTExMUZGRkYL
+        CwsLCwsLCwsLTCgWFigWSiMjIyM/Py4uLi4uLi4uTU1ISE5OKBYoFhYWFjIyMgUFBQULCwsLMTExMTEx
+        RkZGRgsLCwsLCwsLTxYoKBYWSSMjIyM/Pz9QLi4uLi4uLk1NTUhOTk5RFigWFhYWMjIFBQUFCwsLCzEx
+        MTExMTFGRkZGCwsLCwsLTCgWKBYWFiMjIyM/Pz8/Pj0uLi4uLi5NTU1NTk5ISBYWFhYWFhYyBQUFBQsL
+        CwsxMTExMTExMUZGRkYLCwsLFhYWFhYWSSMjIyMkJCQkJD0uLi4uLi4uJCQkJCRISEhISygWFhYWKQUF
+        BQULCwsLMDExMTExMTExRkZGRgsLCxYWFigWJyMjIyMkJCQkJCQuPUUuLi49LiQkJCQkJEhISEhKNhYW
+        FhYFBQUFCwsLCzAwMTExMTExMTFGRkYLCwsWFhYWSSMjIyMkJCQkJCQkLi4uLi4uLi4kJCQkJCQkSEhI
+        SEgWFhYWBQUFBQsLCwswMDAxMTExMTExMUZGRkYLFhYWFiMjIyMkJCQkJCQkJC4uLi4uLi4uJCQkJCQk
+        JCRISEhIFhYWFgQEBAQLCwsLMDAwMDExMTExMTExRkZGRhYWFhYjIyMuLi46Oi4uLj0uLi4uLi4uLi4u
+        Li4uRy4uLiMjIxYWFhYEBAQECwsLCzAwMDAwMTExMTExMTFGRkYWFhYWIyMkLi4uLi4uLi4uLi4uLi4u
+        Lj09Lj09Li4uLi4jIyMWFhYWBAQEBAsLCwswMDAwMDAxMTExMTExMUZGFhYWFiMkJC4uLj0uLi4uLi4u
+        PS4uPS4uLi4uPS4uLi4uIyMjFhYWFgQEBAQLCwsLMDAwMDAwMDExMTExMTExRhYWFhYkJCQuLi4uLi49
+        Li4uPS4uLi4uLi4uLi4uLi4uLiMjIxYWFhYEBAQECwsLCzAwMDAwMDAwMTExMTExMTEWFhYWJCQkLi4u
+        Li4uPS4uLi4uLkUuLi4uLi4uLi4uLi5EREQWFhYWBAQEBAsLCwsvMDAwMDAwMDAxMTExMTExFhYWFiMk
+        JC4uLi4uPS49PS4uLi49Li4uLi4uLi4uLi4uREREFhYWFgQEBAQLCwsLLy8wMDAwMDAwMDExMTExMRYW
+        FhYjIyQuLj0+Li4uLi49Li4uLi4uLi4uLi4+Lj4uLkRERBYWFhYEBAQECwsLCy8vLzAwMDAwMDAwMTEx
+        MTEWFhYWIyMjLi4uLkIuLi4uLi4uLi4uLi4uLi4uQy4uLi5EREQWFhYWBAQEBAsLCwsvLy8vMDAwMDAw
+        MDAxMTExFhYWHSMjIyMkJCQkPDw8JC4uPS4uLi4uJDw8PD8/Pz8jIyMjFhYWFgQEBAQLCwsLLy8vLy8w
+        MDAwMDAwMDExMRYWHR0jIyMjIyQkJDw8PEEuLi4uLj0uLjw8PDw/Pz8jIyMjLBYWFhYEBAQECwsLCy8v
+        Ly8vLzAwMDAwMDAwMTEWHR0dQEAjIyMjJCQ8PDw8Li4uLj0uLi48PDw8Pz8jIyMjNigWFhYWBAQEBAsL
+        CwsvLy8vLy8vMDAwMDAwMDAxOx0dGxsbKyMjIyMkPDw8PC49Pi4uLi4+PDw8PD8jIyMjLBYWFhYWKQMD
+        AwMLCwsLLy8vLy8vLy8wMDAwMDAwMDEzGxsbGxsbIyMjIyQkJCQuOC45ODouLiQkJCQjIyMjFhYWFhYW
+        FjIDAwMDCwsLCy8vLy8vLy8vLzAwMDAwMDAwMTcbGxsbGysjIyMjJCQkNS4uLi4uLi4kJCQjIyMjLBYW
+        FhYWFjIyAwMDAwsLCwsvLy8vLy8vLy8vMDAwMDAwMDAxMxsbGxsbNCMjIyMkJC4uNS4uLi4uJCQjIyMj
+        NigWFhYWFjIyMgMDAwMLCwsLLy8vLy8vLy8vLy8wMDAwMDEwMDEbGxsbGxsrIyMjIyQuLi4uLi4uLiQj
+        IyMjLBYWFhYWFjIyMjIhISEhCAgICA0NDQ0SEhISEggICAgICAgICAgICCUbGxsbGxsjIyMjLi4uLi4u
+        Li4jIyMjFhYWFhYWKQkUFBQUISEhIQgICAgNDQ0NEhISEhISCAgICAgICAgICAgIKhsbGxsbKyMjIyMk
+        JCQkJCQjIyMjLBYWKBYWLQkJFBQUFCEhISEICAgIDQ0NDRISEhISEhIICAgICAgICAgICAglGxsbGxsm
+        IyMjIyQkJCQjIyMjJxYWKBYWKQkJCRQUFBQhISEhCAgICA0NDQ0SEhISEhISEggICAgICAgICAgICBsb
+        GxsbIiMjIyMjJCQjIyMjIxYWFhYWFgkJCQkUFBQUAgICAggICAgNDQ0NDQ0NDRISEhISCAgICAgICAgI
+        CAgQIBwbGx0dFhYWFhYWFhYWFhYWFh4WGRUJCQkJFBQUFAICAgIICAgIDQ0NDQ0NDQ0SEhISEhIICAgI
+        CAgICAgIDxAaGxwdFhYWFhYWFhYWFhYWFhYeHxUVCQkJCRQUFBQCAgICCAgICA0NDQ0NDQ0NEhISEhIS
+        EggICAgICAgICA8PEBcYFhYWFhYWFhYWFhYWFhYWGRUVFQkJCQkUFBQUAgICAggICAgNDQ0NDQ0NDRIS
+        EhISEhISCAgICAgICAgPDw8QFhYWFhYWFhYWFhYWFhYWFhUVFRUJCQkJFBQUFAEBAQEHBwcHDA0NDQ0N
+        DQ0NDQ0NEhISEhIICAgICAgIDw8PDxAQEBAQEBAQExMTExMTExMVFRUVCQkJCRQUFBQBAQEBBwcHBwwM
+        DQ0NDQ0NDQ0NDRISEhISEggICAgICA8PDw8PEBAQEBAQEBATExMTExMTExUVFQkJCQkUFBQUAQEBAQcH
+        BwcMDAwNDQ0NDQ0NDQ0SEhISEhISCAgICAgPDw8PDw8QEBAQEBAQEBMTExMTExMTFRUJCQkJFBQUFAEB
+        AQEHBwcHDAwMDA0NDQ0NDQ0NEhISEhISEhIICAgIDw8PDw8PDxAQEBAQEBAQExMTExMTExMVCQkJCRQU
+        FBQBAQEBBwcHBwwMDAwMDQ0NDQ0NDQ0NDQ0SEhISEggICA8PDw8PDw8PEBAQEBAQEBATExMTExMTEwkJ
+        CQkUFBQUAQEBAQcHBwcMDAwMDAwNDQ0NDQ0NDQ0NEhISEhISCAgODw8PDw8PDw8QEBAQEBAQEBMTExMT
+        ExMJCQkJFBQUFAEBAQEHBwcHDAwMDAwMDA0NDQ0NDQ0NDRISEhISEhIIDg4PDw8PDw8PDxAQEBAQEBAQ
+        ExMTExMTCQkJCRQUFBQBAQEBBwcHBwwMDAwMDAwMDQ0NDQ0NDQ0SEhISEhISEg4ODg8PDw8PDw8PEBAQ
+        EBAQEBATExMTEwkJCQkUFBQUAQEBAQYGBgYLCwsLDAwMDAwNDQ0NDQ0NDQ0NDRISEhIODg4ODw8PDw8P
+        Dw8QEBAQEBAQEBMTExMJCQkJEREREQEBAQEGBgYGCwsLCwwMDAwMDA0NDQ0NDQ0NDQ0SEhISDg4ODg4P
+        Dw8PDw8PDxAQEBAQEBAQExMTCQkJCREREREBAQEBBgYGBgsLCwsMDAwMDAwMDQ0NDQ0NDQ0NEhISEg4O
+        Dg4ODg8PDw8PDw8PEBAQEBAQEBATEwkJCQkRERERAQEBAQYGBgYLCwsLDAwMDAwMDAwNDQ0NDQ0NDRIS
+        EhIODg4ODg4ODw8PDw8PDw8QEBAQEBAQEBMJCQkJEREREQAAAAAGBgYGCwsLCwsLCwsMDAwMDA0NDQ0N
+        DQ0NDQ0NDg4ODg4ODg4PDw8PDw8PDxAQEBAQEBAQCQkJCREREREAAAAABgYGBgsLCwsLCwsLDAwMDAwM
+        DQ0NDQ0NDQ0NDQ4ODg4ODg4ODg8PDw8PDw8PEBAQEBAQEAkJCQkRERERAAAAAAYGBgYLCwsLCwsLCwwM
+        DAwMDAwNDQ0NDQ0NDQ0ODg4ODg4ODg4ODw8PDw8PDw8QEBAQEBAJCQkJEREREQAAAAAGBgYGCwsLCwsL
+        CwsMDAwMDAwMDA0NDQ0NDQ0NDg4ODg4ODg4ODg4PDw8PDw8PDxAQEBAQCQkJCREREREAAAAABgYGBgYG
+        BgYGBgYGBwcHBwcHBwcICAgICAgICAkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkKCgoKAAAAAAYG
+        BgYGBgYGBgYGBgcHBwcHBwcHCAgICAgICAgJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCgoKCgAA
+        AAAGBgYGBgYGBgYGBgYHBwcHBwcHBwgICAgICAgICQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQoK
+        CgoAAAAABgYGBgYGBgYGBgYGBwcHBwcHBwcICAgICAgICAkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJ
+        CQkKCgoKAAAAAAAAAAAAAAAAAAAAAAEBAQEBAQEBAgICAgMDAwMDAwMDBAQEBAQEBAQEBAQEBQUFBQUF
+        BQUFBQUFBQUFBQAAAAAAAAAAAAAAAAAAAAABAQEBAQEBAQICAgIDAwMDAwMDAwQEBAQEBAQEBAQEBAUF
+        BQUFBQUFBQUFBQUFBQUAAAAAAAAAAAAAAAAAAAAAAQEBAQEBAQECAgICAwMDAwMDAwMEBAQEBAQEBAQE
+        BAQFBQUFBQUFBQUFBQUFBQUFAAAAAAAAAAAAAAAAAAAAAAEBAQEBAQEBAgICAgMDAwMDAwMDBAQEBAQE
+        BAQEBAQEBQUFBQUFBQUFBQUFBQUFBQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+</value>
+  </data>
+</root>
