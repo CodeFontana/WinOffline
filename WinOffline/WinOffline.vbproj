@@ -399,9 +399,6 @@
     <EmbeddedResource Include="Screenshots\Step15.png" />
     <None Include="SQL-CleanApps-Unified.txt" />
     <EmbeddedResource Include="LaunchService.exe" />
-    <Content Include="WinOffline-Readme.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="WinOffline64.ico" />
   </ItemGroup>
   <ItemGroup>
