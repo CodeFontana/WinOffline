@@ -15,24 +15,24 @@ Command Line mode -- WinOffline executes locally via the command line interface.
 Software Delivery mode -- WinOffline is registered as a software package inside ITCM Software Delivery and runs silently without any user interaction on agents.
 
 ## WinOffline Debug Log
-During execution -- %windir%\temp\WinOffline.txt
+During execution -- %windir%\temp\WinOffline.txt  
 After completion -- ..\CA\DSM\WinOffline<timestamp>.txt
 
 ## WinOffline Exit Codes
-1- Basic process initialization failed. 
-2- Administrator or UAC elevation check failed.
-3- Environment variable initialization failed.
-4- Windows registry initialization failed.
-5- ITCM common configuration initialization failed.
-6- Another instance of WinOffline is currently in-progress.
-7- WinOffline debug log initialization failed.
-8- Startup switch initialization failed.
-9- Pipe server initialization failed.
-10- External resource extraction failed.
-20- Re-init of out of sync SD job has failed.
-21- WinOffline execution failed, a review of the log file is required.
-100- WinOffline executed successfully, but an ITCM patching error has occurred.
-EE- .NET Framework is not installed or there are version compatibility issues.
+1- Basic process initialization failed.  
+2- Administrator or UAC elevation check failed.  
+3- Environment variable initialization failed.  
+4- Windows registry initialization failed.  
+5- ITCM common configuration initialization failed.  
+6- Another instance of WinOffline is currently in-progress.  
+7- WinOffline debug log initialization failed.  
+8- Startup switch initialization failed.  
+9- Pipe server initialization failed.  
+10- External resource extraction failed.  
+20- Re-init of out of sync SD job has failed.  
+21- WinOffline execution failed, a review of the log file is required.  
+100- WinOffline executed successfully, but an ITCM patching error has occurred.  
+EE- .NET Framework is not installed or there are version compatibility issues.  
 
 ## Deviations from ApplyPTF functionality
 - When removing a patch that's applied, instead of marking the patch as "backed out" in the history file, WinOffline will erase the previous record showing the patch was ever applied.
