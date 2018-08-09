@@ -114,12 +114,12 @@ DEPENDS:SomeFile1.cmd
 DEPENDS:SomeFile2.dat,SomeFile3.cmd
 
 JCL file requirements and formatting:
-* Each JCL file must contain a PRODUCT code.
-* Each JCL file must contain at least one instruction tag (PRESYSCMD, FILE, or SYSCMD).
-* WinOffline supportd JCLs having multiple insturction tags (PRESYSCMD, FILE, or SYSCMD).
-* WinOffline always runs the PRESYSCMD tags, in the order they are found, before performing FILE replacements.
-* WinOffline always runs the SYSCMD tags, in the order they are found, after performing FILE replacements.
-* Similar to the DEPENDS tag, WinOffline also supports multiple comma separated items in the PRESYSCMD or SYSCMD tags.
+> * Each JCL file must contain a PRODUCT code.
+> * Each JCL file must contain at least one instruction tag (PRESYSCMD, FILE, or SYSCMD).
+> * WinOffline supportd JCLs having multiple insturction tags (PRESYSCMD, FILE, or SYSCMD).
+> * WinOffline always runs the PRESYSCMD tags, in the order they are found, before performing FILE replacements.
+> * WinOffline always runs the SYSCMD tags, in the order they are found, after performing FILE replacements.
+> * Similar to the DEPENDS tag, WinOffline also supports multiple comma separated items in the PRESYSCMD or SYSCMD tags.
 
 Here's a sample JCL file:
 ```
@@ -184,39 +184,10 @@ VERSIONCHECK:14.0.1000.194
 > **Removes any NTFS junction points created back to Domain Manager's software library, before deleting any files/folders.
 
 -checklibrary
-> Analyzes the software delivery library for consistency problems, and reports results, without making any changes to the database, library.dct file or LIBRARY folder.
-* Verifies system is an ITCM Manager or Scalability Server.
-* Verifies connectivity to the database, and the manager or server is registered there.
-* Load the list of software from the database (usd_rsw).
-* Load the list of software procedures from the database (usd_actproc).
-* Parse the library.dct file, and check the following:  
-    * associated .arc folder exists and contains a ".vol" folder, "reginfo" folder and "rsw.dat" file.
-    * The package UUID is available and correctly formatted in the "rsw.dat" file.  
-    * The package UUID is not duplicate to a software package already processed.  
-    * The package UUID matches with existing usd_rsw.objectid in the database.  
-* Process each usd_rsw record, checking for any usd_rsw.objectid not captured in the library file. [ITCM manager only]
-* Check for orphaned .arc folders, not captured by the library.
-* Check for orphaned .rcp folders, not captured by the database (usd_actproc).
-* Reports a summary of findings, without making any changes.
+> Analyzes the software delivery library for consistency problems, and reports results, __without making any changes to the database, library.dct file or LIBRARY folder__.
 
 -cleanlibrary
 > Performs cleanup on the software delivery library, repairing consistency problems between the database, library.dct file and LIBRARY folder.
-* Verifies system is an ITCM Manager or Scalability Server.
-* Verifies connectivity to the database, and the manager or server is registered there.
-* Load the list of software from the database (usd_rsw).
-* Load the list of software procedures from the database (usd_actproc).
-* Parse the library.dct file, and check the following:
-    * associated .arc folder exists and contains a ".vol" folder, "reginfo" folder and "rsw.dat" file.
-    * The package UUID is available and correctly formatted in the "rsw.dat" file.
-    * The package UUID is not duplicate to a software package already processed.
-    * The package UUID matches with existing usd_rsw.objectid in the database.
-* Process each usd_rsw record, checking for any usd_rsw.objectid not captured in the library file. [ITCM manager only]
-* Check for orphaned .arc folders, not captured by the library.
-* Check for orphaned .rcp folders, not captured by the database (usd_actproc).
-* Keeps a rolling copy (up to two backups) of the library.dct file.
-* Cleans discrepancies/orphans found from the database.
-* Writes out a clean library.dct file.
-* Removes orphan or invalid .arc or .rcp folders, not consistent with the database or library.dct folder.
 
 -cleancerts
 > 1- Keeps a rolling backup, up to two copies, of the CBB folder.  
@@ -303,7 +274,7 @@ __Note__: These switches are only valid on ITCM managers.
 > Tests connection to the database. Uses Windows authentication by default, unless (-dbuser) switch is also provided.
 
 -dbuser \<username\>
-Authenticate via sql credentials using the provided account. The (-dbpassword) switch is optional, otherwise user will be prompted at runtime.
+> Authenticate via sql credentials using the provided account. The (-dbpassword) switch is optional, otherwise user will be prompted at runtime.
 
 -dbpassword \<password\> (or -dbpasswd \<password\>)
 > Provide password for provided sql account. Requires the (-dbuser) switch to be provided. If this switch is omitted, the user will be prompted.
