@@ -418,7 +418,7 @@ Public Class WinOffline
         ElseIf Globals.PatchErrorDetected Then
 
             ' Return
-            Return 100
+            Return 10
 
         Else
 
