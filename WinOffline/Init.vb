@@ -2624,7 +2624,7 @@ Partial Public Class WinOffline
         '   Used for cleaning up after prior execution failures, 
         '     or incomplete executions where stage III was never run.
         '   This is detected when we process the SD job container, and the cached
-        '     ID for the job doesn't match the current ID.
+        '     ID for the job doesn't match the current ID (JobContainer.vb).
         Public Shared Function SDStageIReInit(ByVal CallStack As String) As Integer
 
             ' Update call stack
@@ -2660,9 +2660,6 @@ Partial Public Class WinOffline
 
                 ' Delete temporary folder contents
                 Utility.DeleteFolderContents(CallStack, Globals.WinOfflineTemp, Nothing)
-
-                ' Write debug
-                Logger.WriteDebug(CallStack, "Fallback: Delete contents of temporary folder completed.")
 
             End Try
 

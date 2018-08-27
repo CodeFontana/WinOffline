@@ -203,6 +203,9 @@
         ' Write removal manifest cache file
         Manifest.WriteCache(CallStack, Manifest.REMOVAL_MANIFEST)
 
+        ' Write exception manifest cache file
+        Manifest.WriteCache(CallStack, Manifest.EXCEPTION_MANIFEST)
+
         ' *****************************
         ' - Write execution state file. [SD EXECUTION ONLY]
         ' *****************************

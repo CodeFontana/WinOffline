@@ -403,11 +403,27 @@
                 ' Write debug
                 Logger.WriteDebug(CallStack, "Error: Current job output ID does not match cached ID.")
 
-                ' Create exception
-                Manifest.UpdateManifest(CallStack,
-                                        Manifest.EXCEPTION_MANIFEST,
-                                        {"Warning: Software delivery job ID mismatch.",
-                                        "Reason: An incomplete prior execution was detected and remediated."})
+                ' Reinitialize
+                RunLevel = Init.SDStageIReInit(CallStack)
+
+                ' Check the run level
+                If RunLevel <> 0 Then
+
+                    ' Create exception
+                    Manifest.UpdateManifest(CallStack,
+                                            Manifest.EXCEPTION_MANIFEST,
+                                            {"Warning: Software delivery job ID mismatch.",
+                                            "Reason: An incomplete prior execution was detected and remediation failed."})
+
+                Else
+
+                    ' Create exception
+                    Manifest.UpdateManifest(CallStack,
+                                            Manifest.EXCEPTION_MANIFEST,
+                                            {"Warning: Software delivery job ID mismatch.",
+                                            "Reason: An incomplete prior execution was detected and remediated."})
+
+                End If
 
             Else
 
