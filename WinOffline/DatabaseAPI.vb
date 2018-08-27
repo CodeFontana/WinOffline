@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOffline/DatabaseAPI
-' File Name:    DatabaseAPI.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Imports System.Data
+﻿Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Text.RegularExpressions
 Imports System.Threading

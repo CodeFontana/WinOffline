@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOffline
-' File Name:    JobContainer.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Partial Public Class WinOffline
+﻿Partial Public Class WinOffline
 
     Public Shared Function JobContainer(ByVal CallStack As String) As Integer
 
@@ -416,22 +409,21 @@ Partial Public Class WinOffline
                 ' Check the run level
                 If RunLevel <> 0 Then
 
-                    ' Write debug
-                    Logger.WriteDebug(CallStack, "Error: Prior execution cleanup failed.")
+                    ' Create exception
+                    Manifest.UpdateManifest(CallStack,
+                                            Manifest.EXCEPTION_MANIFEST,
+                                            {"Warning: Software delivery job ID mismatch.",
+                                            "Reason: An incomplete prior execution was detected and remediation failed."})
 
-                    ' Set global
-                    Globals.FalseStart = True
+                Else
 
-                    ' Return
-                    Return 7
+                    ' Create exception
+                    Manifest.UpdateManifest(CallStack,
+                                            Manifest.EXCEPTION_MANIFEST,
+                                            {"Warning: Software delivery job ID mismatch.",
+                                            "Reason: An incomplete prior execution was detected and remediated."})
 
                 End If
-
-                ' Create exception
-                Manifest.UpdateManifest(CallStack,
-                                        Manifest.EXCEPTION_MANIFEST,
-                                        {"Warning: Software delivery job ID mismatch.",
-                                        "Reason: An incomplete prior execution was detected and remediated."})
 
             Else
 
@@ -490,7 +482,7 @@ Partial Public Class WinOffline
             Manifest.UpdateManifest(CallStack, Manifest.EXCEPTION_MANIFEST, {ex.Message, ex.StackTrace})
 
             ' Return
-            Return 8
+            Return 7
 
         End Try
 

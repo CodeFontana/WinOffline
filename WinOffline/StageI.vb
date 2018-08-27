@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOffline
-' File Name:    StageI.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Partial Public Class WinOffline
+﻿Partial Public Class WinOffline
 
     Public Shared Function StageI(ByVal CallStack As String) As Integer
 
@@ -209,6 +202,9 @@ Partial Public Class WinOffline
 
         ' Write removal manifest cache file
         Manifest.WriteCache(CallStack, Manifest.REMOVAL_MANIFEST)
+
+        ' Write exception manifest cache file
+        Manifest.WriteCache(CallStack, Manifest.EXCEPTION_MANIFEST)
 
         ' *****************************
         ' - Write execution state file. [SD EXECUTION ONLY]

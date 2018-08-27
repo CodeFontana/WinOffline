@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOffline
-' File Name:    HistoryFileAPI.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Partial Public Class WinOffline
+﻿Partial Public Class WinOffline
 
     Public Const IT_CLIENT_MANAGER As String = "IT Client Manager -- ITCM"
     Public Const SHARED_COMPONENTS As String = "Shared Components -- SC"
