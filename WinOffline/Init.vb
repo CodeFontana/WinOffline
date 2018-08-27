@@ -22,55 +22,6 @@ Partial Public Class WinOffline
             CallStack += "Init|"
 
             ' *****************************
-            ' - Shift key down: Extract app.config file.
-            ' *****************************
-
-            ' Check for shift key press
-            If My.Computer.Keyboard.ShiftKeyDown Then
-
-                ' Express initialization
-                InitProcess(CallStack)
-
-                ' Get the execution assembly
-                Globals.MyAssembly = System.Reflection.Assembly.GetExecutingAssembly()
-                Globals.MyRoot = Globals.MyAssembly.GetName().Name
-
-                ' Write debug
-                Logger.WriteDebug(CallStack, "Extract: " + Globals.WorkingDirectory + Globals.ProcessShortName + ".config")
-
-                ' Load embedded resource
-                Globals.MyResourceStream = Globals.MyAssembly.GetManifestResourceStream(Globals.MyRoot + "." + "app.config")
-
-                ' Redimension the buffer to the size of the resource
-                ReDim Globals.MyBuffer(Convert.ToInt32(Globals.MyResourceStream.Length) - 1)
-
-                ' Read the resource into the buffer
-                Globals.MyResourceStream.Read(Globals.MyBuffer, 0, Globals.MyBuffer.Length)
-
-                ' Close the read stream
-                Globals.MyResourceStream.Close()
-
-                ' Clear destination location
-                Utility.DeleteFile(CallStack, Globals.WorkingDirectory + Globals.ProcessShortName + ".config")
-
-                ' Open the write stream
-                Globals.MyFileStream = New System.IO.FileStream(Globals.WorkingDirectory + "\" + Globals.ProcessShortName + ".config", System.IO.FileMode.Create, System.IO.FileAccess.Write)
-
-                ' Purge the buffer to the write stream
-                Globals.MyFileStream.Write(Globals.MyBuffer, 0, Globals.MyBuffer.Length)
-
-                ' Close the write stream
-                Globals.MyFileStream.Close()
-
-                ' Detach console
-                WindowsAPI.DetachConsole()
-
-                ' Return
-                Environment.Exit(0)
-
-            End If
-
-            ' *****************************
             ' - Switch: Command line help.
             ' *****************************
 
@@ -306,53 +257,6 @@ Partial Public Class WinOffline
             End If
 
             ' *****************************
-            ' - Switch: Check for pipe client execution.
-            ' *****************************
-
-            ' Check for pipe client switch
-            If Utility.StringArrayContainsMatch(Globals.CommandLineArgs, "-client") Then
-
-                ' Encacpsulate express initialization
-                Try
-
-                    ' Express initialization
-                    InitProcess(CallStack)
-                    InitEnvironment(CallStack)
-                    InitRegistry(CallStack)
-                    InitComstore(CallStack)
-
-                Catch ex As Exception
-
-                    ' Report initialization exceptions (DEBUG ONLY)
-                    'AlertBox.CreateUserAlert(ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace, 20)
-
-                    ' Terminate program
-                    Environment.Exit(0)
-
-                End Try
-
-                ' Encapsulate pipe client
-                Try
-
-                    ' Set pipe client execution flag
-                    Globals.PipeClientExecution = True
-
-                    ' Start the pipe client
-                    PipeClient.PipeClientApp()
-
-                Catch ex As Exception
-
-                    ' Report pipe client exceptions (DEBUG ONLY)
-                    'AlertBox.CreateUserAlert(ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace, 20)
-
-                End Try
-
-                ' Terminate program
-                Environment.Exit(0)
-
-            End If
-
-            ' *****************************
             ' - Main process initialization.
             ' *****************************
 
@@ -384,37 +288,6 @@ Partial Public Class WinOffline
 
                 ' Return
                 Return 1
-
-            End Try
-
-            Try
-
-                ' Process initialization
-                ElevationCheck(CallStack)
-
-            Catch ex As Exception
-
-                ' Write debug
-                Logger.WriteDebug(CallStack, "Error: " + Globals.ProcessShortName + " elevation check failed.")
-                Logger.WriteDebug(CallStack, "Exception: " + ex.Message)
-                Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + ": Exit code 2.")
-
-                ' Check if user prompt is appropriate
-                If Not (SilentSwitch OrElse
-                    Globals.RunningAsSystemIdentity OrElse
-                    Globals.ParentProcessName.ToLower.Equals("sd_jexec") OrElse
-                    Globals.AttachedtoConsole) Then
-
-                    ' Prompt user with timeout
-                    AlertBox.CreateUserAlert("Exit code 2: " + Environment.NewLine +
-                                             Globals.ProcessShortName + " elevation check failed." +
-                                             Environment.NewLine + Environment.NewLine +
-                                             "Exception: " + Environment.NewLine + ex.Message, 20)
-
-                End If
-
-                ' Return
-                Return 2
 
             End Try
 
@@ -458,7 +331,7 @@ Partial Public Class WinOffline
                 End If
 
                 ' Return
-                Return 3
+                Return 2
 
             End Try
 
@@ -494,7 +367,7 @@ Partial Public Class WinOffline
                 End If
 
                 ' Return
-                Return 4
+                Return 3
 
             End Try
 
@@ -530,7 +403,7 @@ Partial Public Class WinOffline
                 End If
 
                 ' Return
-                Return 5
+                Return 4
 
             End Try
 
@@ -561,7 +434,7 @@ Partial Public Class WinOffline
                 End If
 
                 ' Return
-                Return 6
+                Return 5
 
             End Try
 
@@ -592,7 +465,7 @@ Partial Public Class WinOffline
                 End If
 
                 ' Return
-                Return 7
+                Return 6
 
             End Try
 
@@ -623,38 +496,7 @@ Partial Public Class WinOffline
                 End If
 
                 ' Return
-                Return 8
-
-            End Try
-
-            Try
-
-                ' Pipe server initialization
-                PipeServer.InitPipeServer(CallStack)
-
-            Catch ex As Exception
-
-                ' Write debug
-                Logger.WriteDebug(CallStack, "Error: " + Globals.ProcessShortName + " pipe server initialization failed.")
-                Logger.WriteDebug(CallStack, "Exception: " + ex.Message)
-                Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + ": Exit code 9.")
-
-                ' Check if user prompt is appropriate
-                If Not (SilentSwitch OrElse
-                    Globals.RunningAsSystemIdentity OrElse
-                    Globals.ParentProcessName.ToLower.Equals("sd_jexec") OrElse
-                    Globals.AttachedtoConsole) Then
-
-                    ' Prompt user with timeout
-                    AlertBox.CreateUserAlert("Exit code 9: " + Environment.NewLine +
-                                             Globals.ProcessShortName + " pipe server initialization failed." +
-                                             Environment.NewLine + Environment.NewLine +
-                                             "Exception: " + Environment.NewLine + ex.Message, 20)
-
-                End If
-
-                ' Return
-                Return 9
+                Return 7
 
             End Try
 
@@ -685,7 +527,7 @@ Partial Public Class WinOffline
                 End If
 
                 ' Return
-                Return 10
+                Return 8
 
             End Try
 
@@ -758,49 +600,6 @@ Partial Public Class WinOffline
             ' Write debug
             Logger.WriteDebug(CallStack, "Working directory: " + Globals.WorkingDirectory)
             Logger.WriteDebug(CallStack, "Attached to console: " + Globals.AttachedtoConsole.ToString)
-
-        End Sub
-
-        ' Elevation check function
-        Public Shared Sub ElevationCheck(ByVal CallStack As String)
-
-            ' Local variables
-            Dim Principal As New WindowsPrincipal(Globals.ProcessIdentity)
-
-            ' Update call stack
-            CallStack += "InitElevation|"
-
-            ' Check if user is in admin group
-            If Principal.IsInRole(WindowsBuiltInRole.Administrator) Then
-
-                ' Write debug
-                Logger.WriteDebug(CallStack, "User is an administrator.")
-
-            Else
-
-                ' Throw exception
-                Throw New Exception("User is not a member of the built-in Administrators group or is not running " +
-                                    Globals.ProcessFriendlyName + " with Administrator elevation.")
-
-            End If
-
-            ' Check OS version
-            If Environment.OSVersion.Version.Major >= 6 Then
-
-                ' Check process elevation
-                If WindowsAPI.IsProcessElevated Then
-
-                    ' Write debug
-                    Logger.WriteDebug(CallStack, "Process is elevated.")
-
-                Else
-
-                    ' Throw exception
-                    Throw New Exception(Globals.ProcessFriendlyName + " requires Administrator elevation.")
-
-                End If
-
-            End If
 
         End Sub
 
@@ -1712,7 +1511,7 @@ Partial Public Class WinOffline
             CallStack += "InitIsolation|"
 
             ' Check for pre-existing parallel process (exclude pipe clients)
-            If Utility.IsProcessRunningCountSpecial(Globals.ProcessFriendlyName, "-client") > 1 Then
+            If Utility.IsProcessRunningCount(Globals.ProcessFriendlyName) > 1 Then
 
                 ' Write debug
                 Logger.WriteDebug(CallStack, "Warning: Detected existing " + Globals.ProcessFriendlyName + " execution in progress.")
@@ -1947,37 +1746,7 @@ Partial Public Class WinOffline
             For i As Integer = 0 To Globals.CommandLineArgs.Length - 1
 
                 ' Match the switch
-                If Globals.CommandLineArgs(i).ToString.ToLower.Equals("attachdebug") Or
-                    Globals.CommandLineArgs(i).ToString.ToLower.Equals("-attachdebug") Or
-                    Globals.CommandLineArgs(i).ToString.ToLower.Equals("/attachdebug") Then
-
-                    ' Write debug
-                    Logger.WriteDebug(CallStack, "Switch: Prompt to attach debugger.")
-
-                ElseIf Globals.CommandLineArgs(i).ToString.ToLower.Equals("showgui") Or
-                    Globals.CommandLineArgs(i).ToString.ToLower.Equals("-showgui") Or
-                    Globals.CommandLineArgs(i).ToString.ToLower.Equals("/showgui") Then
-
-                    ' Set the GUI override switch
-                    Globals.ShowGUISwitch = True
-
-                    ' Write debug
-                    Logger.WriteDebug(CallStack, "Switch: Show status GUI to all users.")
-
-                ElseIf Globals.CommandLineArgs(i).ToString.ToLower.Equals("go") Or
-                        Globals.CommandLineArgs(i).ToString.ToLower.Equals("-go") Or
-                        Globals.CommandLineArgs(i).ToString.ToLower.Equals("/go") Or
-                        Globals.CommandLineArgs(i).ToString.ToLower.Equals("silent") Or
-                        Globals.CommandLineArgs(i).ToString.ToLower.Equals("-silent") Or
-                        Globals.CommandLineArgs(i).ToString.ToLower.Equals("/silent") Then
-
-                    ' Set the switch
-                    Globals.HideGUISwitch = True
-
-                    ' Write debug
-                    Logger.WriteDebug(CallStack, "Switch: Silent Execution.")
-
-                ElseIf Globals.CommandLineArgs(i).ToString.ToLower.Equals("backout") Or
+                If Globals.CommandLineArgs(i).ToString.ToLower.Equals("backout") Or
                         Globals.CommandLineArgs(i).ToString.ToLower.Equals("-backout") Or
                         Globals.CommandLineArgs(i).ToString.ToLower.Equals("/backout") Or
                         Globals.CommandLineArgs(i).ToString.ToLower.Equals("remove") Or
@@ -2600,7 +2369,7 @@ Partial Public Class WinOffline
                         End If
 
                         ' Perform cleanup
-                        DeInit(CallStack, False, False, True, False)
+                        DeInit(CallStack, True, False)
 
                         ' Return
                         Environment.Exit(0)
@@ -2832,7 +2601,7 @@ Partial Public Class WinOffline
                 If Globals.DumpCazipxpSwitch Then
 
                     ' Perform cleanup
-                    DeInit(CallStack, True, False, True, False)
+                    DeInit(CallStack, True, False)
 
                     ' Return
                     Environment.Exit(0)
@@ -2847,7 +2616,7 @@ Partial Public Class WinOffline
                 Logger.WriteDebug(CallStack, "Error: Exception caught extracting embedded resources, cleaning up..")
 
                 ' Perform cleanup
-                DeInit(CallStack, True, False, True, True)
+                DeInit(CallStack, True, True)
 
                 ' Throw exception
                 Throw New Exception("Exception caught extracting embedded resources:" +
@@ -2978,8 +2747,6 @@ Partial Public Class WinOffline
 
         ' Deinitialization function
         Public Shared Sub DeInit(ByVal CallStack As String,
-                                 ByVal TermPipeServer As Boolean,
-                                 ByVal SignalAutoClose As Boolean,
                                  ByVal BypassSummary As Boolean,
                                  ByVal KeepDebugLog As Boolean)
 
@@ -2989,13 +2756,6 @@ Partial Public Class WinOffline
 
             ' Update call stack
             CallStack += "DeInit|"
-
-            ' *****************************
-            ' - Terminate the pipe server.
-            ' *****************************
-
-            ' Check for pipe server termination
-            If TermPipeServer Then PipeServer.TermPipeServer(CallStack, SignalAutoClose)
 
             ' *****************************
             ' - Cleanup temp folder.

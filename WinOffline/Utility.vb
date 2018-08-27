@@ -1617,44 +1617,6 @@ Partial Public Class WinOffline
 
         End Function
 
-        Public Shared Function IsProcessRunningCountSpecial(ByVal ProcessFriendlyName As String, ByVal ExcludeCmdLine As String) As Integer
-
-            ' Local variables
-            Dim ProcessSearcher As ManagementObjectSearcher
-            Dim processCount As Integer = 0
-
-            ' Loop running processes
-            For Each RunningProcess As Process In Process.GetProcesses
-
-                ' Match the process name
-                If RunningProcess.ProcessName.ToLower.Equals(ProcessFriendlyName.ToLower) Then
-
-                    ' Query WMI
-                    ProcessSearcher = New ManagementObjectSearcher("SELECT * FROM Win32_Process WHERE ProcessId = " + RunningProcess.Id.ToString)
-
-                    ' Iterate the process list
-                    For Each WMIProcess As ManagementObject In ProcessSearcher.Get()
-
-                        ' Check for exclusion parameter
-                        If WMIProcess("CommandLine") IsNot Nothing AndAlso
-                            Not WMIProcess("CommandLine").ToString.ToLower.Contains(ExcludeCmdLine) Then
-
-                            ' Match found -- increment counter
-                            processCount += 1
-
-                        End If
-
-                    Next
-
-                End If
-
-            Next
-
-            ' Return process count
-            Return processCount
-
-        End Function
-
         Public Shared Function IsServiceEnabled(ByVal ServiceName As String) As Boolean
 
             ' Local variabes
@@ -1991,7 +1953,8 @@ Partial Public Class WinOffline
                                           Optional ByVal ArgumentString As String = "",
                                           Optional ByVal UseShellExecute As Boolean = False,
                                           Optional ByRef StandardOut As String = Nothing,
-                                          Optional ByVal RaiseException As Boolean = False) As Integer
+                                          Optional ByVal RaiseException As Boolean = False,
+                                          Optional ByVal Verb As String = "") As Integer
 
             ' Local variables
             Dim RunningProcess As Process
@@ -2018,6 +1981,7 @@ Partial Public Class WinOffline
                 ProcessStartInfo.UseShellExecute = UseShellExecute
                 ProcessStartInfo.RedirectStandardOutput = True
                 ProcessStartInfo.CreateNoWindow = True
+                ProcessStartInfo.Verb = Verb
 
                 ' Start detached process
                 RunningProcess = Process.Start(ProcessStartInfo)

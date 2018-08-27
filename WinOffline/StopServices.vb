@@ -825,14 +825,6 @@ Partial Public Class WinOffline
                 ' Write debug
                 Logger.WriteDebug(CallStack, "Notification area refreshed.")
 
-            Else
-
-                ' Inform pipe clients to refresh notification area
-                PipeServer.SendMessage(PipeServer.REFRESH_SYSTRAY, PipeServer.REFRESH_SYSTRAY)
-
-                ' Write debug
-                Logger.WriteDebug(CallStack, "Pipe clients: Perform notification area refresh.")
-
             End If
 
         Catch ex As Exception

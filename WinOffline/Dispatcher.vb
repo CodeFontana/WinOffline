@@ -93,7 +93,6 @@ Partial Public Class WinOffline
                         '   This signals MAIN that we should re-collect the job output ID from software delivery.
                         '   If collected from temp cache, we have the output ID from the wrong/previous job.
                         '   Re-init will wipe the cache, along with all temps, then we will pickup the new/current job ID.
-                        '   Refer to the notes in WinOffline.vb, where the scenario is described more extensively!
                         Globals.DirtyFlag = True
 
                         ' Perform reinit of temp folder and resources

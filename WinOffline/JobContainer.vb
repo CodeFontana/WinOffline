@@ -410,23 +410,6 @@ Partial Public Class WinOffline
                 ' Write debug
                 Logger.WriteDebug(CallStack, "Error: Current job output ID does not match cached ID.")
 
-                ' Reinitialize
-                RunLevel = Init.SDStageIReInit(CallStack)
-
-                ' Check the run level
-                If RunLevel <> 0 Then
-
-                    ' Write debug
-                    Logger.WriteDebug(CallStack, "Error: Prior execution cleanup failed.")
-
-                    ' Set global
-                    Globals.FalseStart = True
-
-                    ' Return
-                    Return 7
-
-                End If
-
                 ' Create exception
                 Manifest.UpdateManifest(CallStack,
                                         Manifest.EXCEPTION_MANIFEST,
@@ -490,7 +473,7 @@ Partial Public Class WinOffline
             Manifest.UpdateManifest(CallStack, Manifest.EXCEPTION_MANIFEST, {ex.Message, ex.StackTrace})
 
             ' Return
-            Return 8
+            Return 7
 
         End Try
 
