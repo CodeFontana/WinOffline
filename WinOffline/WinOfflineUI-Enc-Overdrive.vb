@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOfflineUI
-' File Name:    WinOfflineUI-Enc-Overdrive.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Imports System.Windows.Forms
+﻿Imports System.Windows.Forms
 Imports System.Threading
 
 Partial Public Class WinOfflineUI

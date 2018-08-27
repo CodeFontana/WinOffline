@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOffline/Init
-' File Name:    Init.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Imports System.Threading
+﻿Imports System.Threading
 Imports System.Management
 Imports System.Security.Principal
 

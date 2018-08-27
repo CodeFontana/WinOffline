@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOffline
-' File Name:    StopServices.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Imports System.ServiceProcess
+﻿Imports System.ServiceProcess
 Imports System.Threading
 
 Partial Public Class WinOffline

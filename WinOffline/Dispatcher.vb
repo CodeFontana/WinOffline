@@ -1,14 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOffline
-' File Name:    Dispatcher.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Imports System.Threading
-Imports System.Windows.Forms
-
-Partial Public Class WinOffline
+﻿Partial Public Class WinOffline
 
     ' Execution Dispatcher
     Public Shared Function Dispatcher(ByVal CallStack As String) As Integer

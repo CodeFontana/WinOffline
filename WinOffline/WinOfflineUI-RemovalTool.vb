@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOfflineUI
-' File Name:    WinOfflineUI-RemovalTool.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Imports System.Threading
+﻿Imports System.Threading
 
 Partial Public Class WinOfflineUI
 

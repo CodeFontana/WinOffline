@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOffline/Utility
-' File Name:    Utility.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Imports System.IO
+﻿Imports System.IO
 Imports System.Management
 Imports System.Security.AccessControl
 

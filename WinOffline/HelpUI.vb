@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   HelpUI
-' File Name:    HelpUI.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Public Class HelpUI
+﻿Public Class HelpUI
 
     Private Sub btnReturn_Click(sender As Object, e As EventArgs) Handles btnReturn.Click
         Me.Close()

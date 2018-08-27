@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOffline
-' File Name:    WinOffline.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Public Class WinOffline
+﻿Public Class WinOffline
 
     Public Shared Function Main(ByVal CommandLineArguments As String()) As Integer
 

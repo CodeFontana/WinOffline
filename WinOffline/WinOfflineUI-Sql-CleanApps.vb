@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOfflineUI
-' File Name:    WinOfflineUI-Sql-CleanApps.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Imports System.Data.SqlClient
+﻿Imports System.Data.SqlClient
 Imports System.Text.RegularExpressions
 Imports System.Threading
 

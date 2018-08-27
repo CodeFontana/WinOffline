@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   AlertBox
-' File Name:    AlertBox.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Imports System.Drawing
+﻿Imports System.Drawing
 Imports System.Windows.Forms
 
 Public Class AlertBox

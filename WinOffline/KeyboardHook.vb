@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOffline/KeyboardHook
-' File Name:    KeyboardHook.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Imports System.Runtime.InteropServices
+﻿Imports System.Runtime.InteropServices
 Imports System.Windows.Forms
 
 Partial Public Class WinOffline

@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOfflineUI
-' File Name:    WinOfflineUI-LaunchPad.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Imports System.ServiceProcess
+﻿Imports System.ServiceProcess
 Imports System.Windows.Forms
 
 Partial Public Class WinOfflineUI

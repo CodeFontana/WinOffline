@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   LibraryManager
-' File Name:    LibraryManager.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Imports System.Data.SqlClient
+﻿Imports System.Data.SqlClient
 Imports System.Threading
 
 Partial Public Class WinOffline

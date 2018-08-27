@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOfflineUI
-' File Name:    WinOfflineUI-Sql-QueryEditor.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Imports System.Threading
+﻿Imports System.Threading
 Imports System.Data.SqlClient
 Imports System.Windows.Forms
 Imports System.Text.RegularExpressions

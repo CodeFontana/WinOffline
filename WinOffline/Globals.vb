@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   Globals
-' File Name:    Globals.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Imports System.Management
+﻿Imports System.Management
 
 Public Class Globals
 

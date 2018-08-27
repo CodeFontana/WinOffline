@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   SqlConnectUI
-' File Name:    SqlConnectUI.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Imports System.Windows.Forms
+﻿Imports System.Windows.Forms
 
 Public Class SqlConnectUI
 
