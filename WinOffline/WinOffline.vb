@@ -60,7 +60,7 @@
             RunLevel = JobContainer(CallStack)
 
             ' Verify job output file availability
-            If RunLevel <> 0 Or Globals.JobOutputFile Is Nothing Or Globals.JobOutputFile.Equals("") Then
+            If RunLevel <> 0 OrElse Globals.JobOutputFile Is Nothing OrElse Globals.JobOutputFile.Equals("") Then
 
                 ' Write debug
                 Logger.WriteDebug(CallStack, "Warning: Software delivery job output will be unavailable.")
