@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOffline
-' File Name:    PatchProcessor.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Partial Public Class WinOffline
+﻿Partial Public Class WinOffline
 
     Public Shared Function PatchProcessor(ByVal CallStack As String) As Integer
 

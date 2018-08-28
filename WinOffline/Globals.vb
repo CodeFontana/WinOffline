@@ -1,17 +1,10 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   Globals
-' File Name:    Globals.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Imports System.Management
+﻿Imports System.Management
 
 Public Class Globals
 
     ' WinOffline and System Globals
     Public Shared CommandLineArgs As String() = Nothing                         ' Command line arguments passed to the application.
-    Public Shared AppVersion As String = "2018.08.01"                           ' Version string of the current build.
+    Public Shared AppVersion As String = "2018.08.27"                           ' Version string of the current build.
     Public Shared ProcessName As String = Nothing                               ' Fullpath including filename of the application process.
     Public Shared ProcessShortName As String = Nothing                          ' Filename of the application process.
     Public Shared ProcessFriendlyName As String = Nothing                       ' Friendly name of the application process.
@@ -43,15 +36,6 @@ Public Class Globals
     Public Shared WinOfflineTemp As String = Nothing                            ' Path to WinOffline temporary directory (e.g. %windir%\temp\WinOffline).
     Public Shared DebugStreamWriter As System.IO.StreamWriter = Nothing         ' The debug stream writer for the applicaiton log file.
     Public Shared AdditionalDebug As New ArrayList                              ' Array for reading in parallel execution debuging for later merge.
-
-    ' Pipe Server Globals
-    Public Shared PipeServerFileName As String = Nothing                        ' Pipe server file for connecting pipe clients.
-    Public Shared PipeServerWriter As System.IO.StreamWriter = Nothing          ' Pipe server stream writer.
-    Public Shared PipeServerAlreadyExists As Boolean = False                    ' Flag indicating pipe server already exists.
-
-    ' Pipe Client Globals
-    Public Shared PipeClientStream As System.IO.FileStream = Nothing            ' Stream for pipe client.
-    Public Shared PipeClientReader As System.IO.StreamReader = Nothing          ' Stream reader for pipe client.
 
     ' Client Automation Globals
     Public Shared WorkingDirectory As String = Nothing                          ' The working directory of the application process.
@@ -94,7 +78,6 @@ Public Class Globals
     Public Shared SDBasedMode As Boolean = False                                ' Flag: Execution is software delivery BASED.
     Public Shared WriteSDJobOutput As Boolean = False                           ' Flag: Write job output for software delivery.
     Public Shared DirtyFlag As Boolean = False                                  ' Flag: The current execution recovered from a prior failed execution.
-    Public Shared FalseStart As Boolean = False                                 ' Flag: SD execution is out of sync based on job ID cache.
     Public Shared FinalStage As Boolean = False                                 ' Flag: Current execution is the last stage-- finialize the debug log.
     Public Shared RunningAsSystemIdentity As Boolean = False                    ' Flag: Process is running under system identity.
     Public Shared PatchErrorDetected As Boolean = False                         ' Flag: A patch error was recorded in StageII.
@@ -104,8 +87,6 @@ Public Class Globals
     Public Shared RebootOnTermination As Boolean = False                        ' Flag: Reboot upon termination of WinOffline.
 
     ' User Switch Globals
-    Public Shared ShowGUISwitch As Boolean = False                              ' Switch: Display the WinOffline progress GUI.
-    Public Shared HideGUISwitch As Boolean = False                              ' Switch: Suppress the WinOffline progress GUI.
     Public Shared RemovePatchSwitch As Boolean = False                          ' Switch: Remove patches (instead of apply).
     Public Shared CleanupLogsSwitch As Boolean = False                          ' Switch: Cleanup various log folders.
     Public Shared ResetCftraceSwitch As Boolean = False                         ' Switch: Reset cftrace level.

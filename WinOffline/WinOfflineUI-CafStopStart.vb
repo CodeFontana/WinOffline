@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOfflineUI
-' File Name:    WinOfflineUI-CafStopStart.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Imports System.Threading
+﻿Imports System.Threading
 Imports System.Windows.Forms
 
 Partial Public Class WinOfflineUI

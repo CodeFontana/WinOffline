@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOffline
-' File Name:    LaunchPad.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Imports System.ServiceProcess
+﻿Imports System.ServiceProcess
 
 Partial Public Class WinOffline
 

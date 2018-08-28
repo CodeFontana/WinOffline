@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOfflineUI
-' File Name:    WinOfflineUI-WinOffline-CLIHelpPanel.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Imports System.IO
+﻿Imports System.IO
 Imports System.Windows.Forms
 Imports System.Drawing
 

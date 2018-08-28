@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOfflineUI
-' File Name:    WinOfflineUI-Sql-EngineGrid.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Imports System.Data
+﻿Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Threading
 Imports System.Windows.Forms

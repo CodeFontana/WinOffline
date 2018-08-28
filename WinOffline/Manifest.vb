@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOffline/Manifest
-' File Name:    PatchTable.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Partial Public Class WinOffline
+﻿Partial Public Class WinOffline
 
     Public Class Manifest
 

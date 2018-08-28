@@ -281,8 +281,6 @@
     <Compile Include="Logger.vb" />
     <Compile Include="Manifest.vb" />
     <Compile Include="PatchVector.vb" />
-    <Compile Include="PipeClient.vb" />
-    <Compile Include="PipeServer.vb" />
     <Compile Include="JobContainer.vb" />
     <Compile Include="ProgressUI.Designer.vb">
       <DependentUpon>ProgressUI.vb</DependentUpon>

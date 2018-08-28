@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WindowsAPI
-' File Name:    WindowsAPI.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-' Imports
+﻿' Imports
 Imports Microsoft.Win32.SafeHandles
 Imports System.ComponentModel
 Imports System.Runtime.InteropServices

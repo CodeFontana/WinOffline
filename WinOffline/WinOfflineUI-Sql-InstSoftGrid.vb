@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOfflineUI
-' File Name:    WinOfflineUI-Sql-InstSoftGrid.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Imports System.Data
+﻿Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Reflection
 Imports System.Threading

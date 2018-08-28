@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOffline/ComstoreAPI
-' File Name:    ComstoreAPI.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Partial Public Class WinOffline
+﻿Partial Public Class WinOffline
 
     Public Class ComstoreAPI
 

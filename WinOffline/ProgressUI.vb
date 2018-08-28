@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   ProgressUI
-' File Name:    ProgressUI.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Imports System.Windows.Forms
+﻿Imports System.Windows.Forms
 
 Public Class ProgressUI
 

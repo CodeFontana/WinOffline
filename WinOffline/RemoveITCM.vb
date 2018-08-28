@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOffline
-' File Name:    RemoveITCM.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Partial Public Class WinOffline
+﻿Partial Public Class WinOffline
 
     Public Shared Function RemoveITCM(ByVal CallStack As String) As Integer
 
@@ -176,7 +169,7 @@ Partial Public Class WinOffline
         ' *****************************
 
         ' Update call stack
-        CallStack += CallStack.Substring(0, CallStack.IndexOf("RemoveITCM|") + 11) + "DisableService|"
+        CallStack = CallStack.Substring(0, CallStack.IndexOf("RemoveITCM|") + 11) + "DisableService|"
 
         ' Check for full uninstall switch
         If Globals.RemoveITCM Then
@@ -222,7 +215,7 @@ Partial Public Class WinOffline
         ' *****************************
 
         ' Update call stack
-        CallStack += CallStack.Substring(0, CallStack.IndexOf("RemoveITCM|") + 11) + "KillProcess|"
+        CallStack = CallStack.Substring(0, CallStack.IndexOf("RemoveITCM|") + 11) + "KillProcess|"
 
         ' Kill processes
         ReturnBoolean = Utility.KillProcess("CAF")
@@ -656,7 +649,7 @@ Partial Public Class WinOffline
         ' *****************************
 
         ' Update call stack
-        CallStack += CallStack.Substring(0, CallStack.IndexOf("RemoveITCM|") + 11) + "RemoveTrayIcon|"
+        CallStack = CallStack.Substring(0, CallStack.IndexOf("RemoveITCM|") + 11) + "RemoveTrayIcon|"
 
         ' Delete cfsystray
         Utility.DeleteFile(CallStack, Globals.DSMFolder + "bin\cfsystray.exe")
@@ -669,7 +662,7 @@ Partial Public Class WinOffline
         ' *****************************
 
         ' Update call stack
-        CallStack += CallStack.Substring(0, CallStack.IndexOf("RemoveITCM|") + 11) + "RemoveMSI|"
+        CallStack = CallStack.Substring(0, CallStack.IndexOf("RemoveITCM|") + 11) + "RemoveMSI|"
 
         ' Uninstall documentation
         If Utility.RegistryKeyExists("SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{A56A74D1-E994-4447-A2C7-678C62457FA5}") OrElse
@@ -853,7 +846,7 @@ Partial Public Class WinOffline
         ' *****************************
 
         ' Update call stack
-        CallStack += CallStack.Substring(0, CallStack.IndexOf("RemoveITCM|") + 11) + "RemoveRegistry|"
+        CallStack = CallStack.Substring(0, CallStack.IndexOf("RemoveITCM|") + 11) + "RemoveRegistry|"
 
         ' Registry cleanup
         If Utility.DeleteRegistrySubKeyTree("HKLM", "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{A56A74D1-E994-4447-A2C7-678C62457FA5}") Then Logger.WriteDebug(CallStack, "Delete registry: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{A56A74D1-E994-4447-A2C7-678C62457FA5}")
@@ -980,7 +973,7 @@ Partial Public Class WinOffline
         ' *****************************
 
         ' Update call stack
-        CallStack += CallStack.Substring(0, CallStack.IndexOf("RemoveITCM|") + 11) + "RemoveFiles|"
+        CallStack = CallStack.Substring(0, CallStack.IndexOf("RemoveITCM|") + 11) + "RemoveFiles|"
 
         ' Remove common files
         Utility.DeleteFile(CallStack, Environment.SystemDirectory.Substring(0, 3) + "calogfile.txt")
@@ -1101,7 +1094,7 @@ Partial Public Class WinOffline
         ' *****************************
 
         ' Update call stack
-        CallStack += CallStack.Substring(0, CallStack.IndexOf("RemoveITCM|") + 11) + "RemoveVariables|"
+        CallStack = CallStack.Substring(0, CallStack.IndexOf("RemoveITCM|") + 11) + "RemoveVariables|"
 
         ' Encapsulate
         Try
@@ -1179,7 +1172,7 @@ Partial Public Class WinOffline
         End Try
 
         ' Update call stack
-        CallStack += CallStack.Substring(0, CallStack.IndexOf("RemoveITCM|") + 11)
+        CallStack = CallStack.Substring(0, CallStack.IndexOf("RemoveITCM|") + 11)
 
         ' *****************************
         ' - Cleanup temp folder.

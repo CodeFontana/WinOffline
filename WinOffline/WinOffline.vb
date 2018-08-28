@@ -1,16 +1,6 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOffline
-' File Name:    WinOffline.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Public Class WinOffline
+﻿Public Class WinOffline
 
     Public Shared Function Main(ByVal CommandLineArguments As String()) As Integer
-
-        ' Attach debugger
-        If Utility.StringArrayContains(CommandLineArguments, "attachdebug") Then MsgBox("Attach debugger.", MsgBoxStyle.Information, "Attach debugger")
 
         ' Local variables
         Dim CallStack As String = "|Main|"
@@ -41,9 +31,9 @@ Public Class WinOffline
         If RunLevel <> 0 Then
 
             ' Deinitialize
-            Init.DeInit(CallStack, True, False, True, False)
+            Init.DeInit(CallStack, True, False)
 
-            ' Return [1-10]
+            ' Return [1-8]
             Return RunLevel
 
         End If
@@ -59,7 +49,7 @@ Public Class WinOffline
             RunLevel = RemoveITCM(CallStack)
 
             ' Deinitialize
-            Init.DeInit(CallStack, False, False, True, False)
+            Init.DeInit(CallStack, True, False)
 
             ' Return
             Return RunLevel
@@ -77,7 +67,7 @@ Public Class WinOffline
             RunLevel = StopCAFOnDemand(CallStack)
 
             ' Deinitialize
-            Init.DeInit(CallStack, False, False, True, False)
+            Init.DeInit(CallStack, True, False)
 
             ' Return
             Return RunLevel
@@ -88,7 +78,7 @@ Public Class WinOffline
             RunLevel = StartCAFOnDemand(CallStack)
 
             ' Deinitialize
-            Init.DeInit(CallStack, False, False, True, False)
+            Init.DeInit(CallStack, True, False)
 
             ' Return
             Return RunLevel
@@ -106,7 +96,7 @@ Public Class WinOffline
             RunLevel = DatabaseAPI.SQLFunctionDispatch(CallStack)
 
             ' Deinitialize (keep debug log)
-            Init.DeInit(CallStack, True, False, True, True)
+            Init.DeInit(CallStack, True, True)
 
             ' Return
             Return RunLevel
@@ -124,7 +114,7 @@ Public Class WinOffline
             RunLevel = LaunchPad(CallStack, Globals.LaunchAppContext, Globals.LaunchAppFileName, FileVector.GetFilePath(Globals.LaunchAppFileName), Globals.LaunchAppArguments)
 
             ' Deinitialize
-            Init.DeInit(CallStack, False, False, True, False)
+            Init.DeInit(CallStack, True, False)
 
             ' Return
             Return RunLevel
@@ -142,7 +132,7 @@ Public Class WinOffline
             LibraryManager.RepairLibrary(CallStack)
 
             ' Deinitialize
-            Init.DeInit(CallStack, False, False, True, True)
+            Init.DeInit(CallStack, True, True)
 
             ' Return
             Return RunLevel
@@ -150,7 +140,7 @@ Public Class WinOffline
         End If
 
         ' *****************************
-        ' - Determine entry point. (Using very expanded logic)
+        ' - Determine entry point.
         ' *****************************
 
         ' Entry point check
@@ -163,75 +153,6 @@ Public Class WinOffline
             ' Set execution mode flag
             Globals.SDBasedMode = True
 
-            ' Identity check
-            If Globals.RunningAsSystemIdentity Then
-
-                ' Silent switch check
-                If Globals.HideGUISwitch Then
-
-                    ' Write debug
-                    Logger.WriteDebug(CallStack, "UI interaction: Silent")
-
-                Else
-
-                    ' ShowGUI switch check
-                    If Globals.ShowGUISwitch Then
-
-                        ' Write debug
-                        Logger.WriteDebug(CallStack, "UI interaction: Progress GUI")
-
-                        ' Deploy pipe clients
-                        PipeClient.InitPipeClient(CallStack)
-
-                    Else
-
-                        ' Write debug
-                        Logger.WriteDebug(CallStack, "UI interaction: Tray icon")
-
-                        ' Deploy pipe clients
-                        PipeClient.InitPipeClient(CallStack)
-
-                    End If
-
-                End If
-
-            Else
-
-                ' Silent switch check
-                If Globals.HideGUISwitch Then
-
-                    ' Write debug
-                    Logger.WriteDebug(CallStack, "UI interaction: Silent")
-
-                Else
-
-                    ' ShowGUI switch check
-                    If Globals.ShowGUISwitch Then
-
-                        ' Write debug
-                        Logger.WriteDebug(CallStack, "UI interaction: Progress GUI")
-
-                        ' Deploy pipe clients
-                        PipeClient.InitPipeClient(CallStack)
-
-                    Else
-
-                        ' Write debug
-                        Logger.WriteDebug(CallStack, "UI interaction: Tray icon")
-
-                        ' Deploy pipe clients
-                        PipeClient.InitPipeClient(CallStack)
-
-                    End If
-
-                End If
-
-            End If
-
-            ' Update pipe clients for SD online mode
-            PipeServer.SendMessage(PipeServer.SEND_SETTING, "SDOnlineMode:" + Globals.SDBasedMode.ToString)
-            Logger.WriteDebug(CallStack, "Write setting:  " + "SDOnlineMode:" + Globals.SDBasedMode.ToString)
-
             ' *****************************
             ' - Establish software delivery output ID and location.
             ' *****************************
@@ -239,46 +160,8 @@ Public Class WinOffline
             ' Process the active container file (.cwf)
             RunLevel = JobContainer(CallStack)
 
-            ' Verify SD execution is synchronized--
-            '   *****
-            '   "FalseStart" SD executions occur when the Administrator terminates the
-            '   WinOffline job container, before all stages have run thru completion,
-            '   and later, a subsequent WinOffline execution is delivered again.
-            '   *****
-            '   This scenario implies the C:\Windows\Temp\WinOffline\* temporary folder,
-            '   was never cleaned up, as execution never ran thru completion.
-            '   *****
-            '   The Dispatcher() flags a "dirty" execution when StageII is requested in
-            '   Software Delivery ONLINE mode, which is not per design. The Dispatcher
-            '   will call Init.SDStageIReInit() to attempt correction, and carry out the
-            '   orders of the current job, after cleaning up the old one.
-            '   *****
-            '   Since StageII is an OFFLINE mode, this means the job output ID was read
-            '   directly from cache. Setting the "dirty" flag informs WinOffline main,
-            '   after the Dispatcher() has returned, to dump the current cached output 
-            '   ID and process the job container file to get the current/correct job 
-            '   output ID.
-            '   *****
-            '   Similarly, during StageI and StageIII executions, which are ONLINE
-            '   execution modes, during the processing of the job container file from
-            '   software delivery, if a cached output ID is present, but mismatches
-            '   with the ID parsed from the current container, the execution is
-            '   considered "dirty". Once again, Init.SDStageIReInit() is called for
-            '   remediation, but if remediation fails for some reason, "FalseStart"
-            '   is set, and WinOffline shuts down gracefully, reporting the problem.
-            '   *****
-            If Globals.FalseStart Then
-
-                ' Write debug
-                Logger.WriteDebug(CallStack, "Error: Exception caught processing software delivery container file.")
-
-                ' Perform cleanup
-                Init.DeInit(CallStack, True, False, True, True)
-
-                ' Return
-                Return 20
-
-            ElseIf RunLevel <> 0 Or Globals.JobOutputFile Is Nothing Or Globals.JobOutputFile.Equals("") Then
+            ' Verify job output file availability
+            If RunLevel <> 0 Or Globals.JobOutputFile Is Nothing Or Globals.JobOutputFile.Equals("") Then
 
                 ' Write debug
                 Logger.WriteDebug(CallStack, "Warning: Software delivery job output will be unavailable.")
@@ -314,117 +197,70 @@ Public Class WinOffline
             ' Set execution mode flag
             Globals.SDBasedMode = False
 
-            ' Identity check
-            If Globals.RunningAsSystemIdentity Then
+            ' System or user account check
+            If Not Globals.RunningAsSystemIdentity Then
 
-                ' Silent switch check
-                If Globals.HideGUISwitch Then
+                ' Check if we're attached to the console
+                If Globals.AttachedtoConsole Then
 
-                    ' Write debug
-                    Logger.WriteDebug(CallStack, "UI interaction: Silent")
-
-                Else
-
-                    ' ShowGUI switch check
-                    If Globals.ShowGUISwitch Then
+                    ' Check if ITCM is not installed
+                    If Globals.ITCMInstalled = False Then
 
                         ' Write debug
-                        Logger.WriteDebug(CallStack, "UI interaction: Progress GUI")
+                        Logger.WriteDebug(CallStack, "ITCM is not installed.")
 
-                        ' Deploy pipe clients
-                        PipeClient.InitPipeClient(CallStack)
+                        ' Deinitialize
+                        Init.DeInit(CallStack, True, False)
 
-                    Else
-
-                        ' Write debug
-                        Logger.WriteDebug(CallStack, "UI interaction: Tray icon")
-
-                        ' Deploy pipe clients
-                        PipeClient.InitPipeClient(CallStack)
+                        ' Return
+                        Return 0
 
                     End If
 
-                End If
-
-            Else
-
-                ' Silent switch check
-                If Globals.HideGUISwitch Then
-
-                    ' Write debug
-                    Logger.WriteDebug(CallStack, "UI interaction: Silent")
-
                 Else
 
-                    ' Check console attachment
-                    If Globals.AttachedtoConsole Then
+                    ' Write debug
+                    Logger.WriteDebug(CallStack, "UI interaction: WinOffline Explorer")
 
-                        ' Check if ITCM is not installed
-                        If Globals.ITCMInstalled = False Then
+                    ' Enable log cleanup switch by default
+                    Globals.CleanupLogsSwitch = True
 
-                            ' Write debug
-                            Logger.WriteDebug(CallStack, "ITCM is not installed.")
+                    ' Initialize WinOfflineUI
+                    Globals.WinOfflineExplorer = New WinOfflineUI
 
-                            ' Deinitialize
-                            Init.DeInit(CallStack, True, False, True, False)
+                    ' Wait for result..
+                    If Globals.WinOfflineExplorer.ShowDialog() = Windows.Forms.DialogResult.Abort Or Globals.DumpCazipxpSwitch Then
 
-                            ' Return
-                            Return 0
+                        ' Check if user selected resource dump execution
+                        If Globals.DumpCazipxpSwitch Then
 
-                        End If
-
-                        ' Write debug
-                        Logger.WriteDebug(CallStack, "UI interaction: Tray icon")
-
-                        ' Deploy pipe clients
-                        PipeClient.InitPipeClient(CallStack)
-
-                    Else
-
-                        ' Write debug
-                        Logger.WriteDebug(CallStack, "UI interaction: WinOffline Explorer")
-
-                        ' Enable log cleanup switch by default
-                        Globals.CleanupLogsSwitch = True
-
-                        ' Initialize WinOfflineUI
-                        Globals.WinOfflineExplorer = New WinOfflineUI
-
-                        ' Wait for result..
-                        If Globals.WinOfflineExplorer.ShowDialog() = Windows.Forms.DialogResult.Abort Or Globals.DumpCazipxpSwitch Then
-
-                            ' Check if user selected resource dump execution
-                            If Globals.DumpCazipxpSwitch Then
-
-                                ' Copy Cazipxp to working directory
-                                System.IO.File.Copy(Globals.WinOfflineTemp + "\Cazipxp.exe", Globals.WorkingDirectory + "Cazipxp.exe", True)
-
-                            End If
-
-                            ' Perform cleanup (don't generate a patching summary)
-                            Init.DeInit(CallStack, True, False, True, False)
-
-                            ' Return
-                            Return 0
+                            ' Copy Cazipxp to working directory
+                            System.IO.File.Copy(Globals.WinOfflineTemp + "\Cazipxp.exe", Globals.WorkingDirectory + "Cazipxp.exe", True)
 
                         End If
 
-                        ' Create the progress gui
-                        Globals.ProgressGUI = New ProgressUI()
-                        Globals.ProgressGUI.Hide()
-                        Globals.ProgressGUI.SetFormTitle(Globals.ProcessFriendlyName + " -- " + Globals.AppVersion)
+                        ' Perform cleanup (don't generate a patching summary)
+                        Init.DeInit(CallStack, True, False)
 
-                        ' Start the progress gui thread
-                        Globals.ProgressUIThread = New System.Threading.Thread(AddressOf Globals.ProgressGUI.ShowDialog)
-                        Globals.ProgressUIThread.Start()
+                        ' Return
+                        Return 0
 
-                        ' Check tray icon policy
-                        If Globals.TrayIconVisible Then
+                    End If
 
-                            ' Enable debug gui notification icon
-                            Globals.ProgressGUI.TrayIcon.Visible = True
+                    ' Create the progress gui
+                    Globals.ProgressGUI = New ProgressUI()
+                    Globals.ProgressGUI.Hide()
+                    Globals.ProgressGUI.SetFormTitle(Globals.ProcessFriendlyName + " -- " + Globals.AppVersion)
 
-                        End If
+                    ' Start the progress gui thread
+                    Globals.ProgressUIThread = New System.Threading.Thread(AddressOf Globals.ProgressGUI.ShowDialog)
+                    Globals.ProgressUIThread.Start()
+
+                    ' Check tray icon policy
+                    If Globals.TrayIconVisible Then
+
+                        ' Enable debug gui notification icon
+                        Globals.ProgressGUI.TrayIcon.Visible = True
 
                     End If
 
@@ -459,15 +295,13 @@ Public Class WinOffline
 
                 ' Write debug
                 Logger.WriteDebug(CallStack, "Error: Exception caught processing software delivery container file.")
-                Logger.WriteDebug(CallStack, "Warning: Software delivery job output will be unavailable.")
 
-                ' Set job output flag
+                ' Set job output flag -- job output will be unavailable
                 Globals.WriteSDJobOutput = False
 
             Else
 
                 ' Write debug
-                Logger.WriteDebug(CallStack, "Software delivery container file processed.")
                 Logger.WriteDebug(CallStack, "Software delivery job output file: " + Globals.JobOutputFile)
 
                 ' Set job output flag
@@ -530,7 +364,7 @@ Public Class WinOffline
         If Globals.FinalStage Then
 
             ' Deinitialize
-            Init.DeInit(CallStack, True, False, False, True)
+            Init.DeInit(CallStack, False, True)
 
         End If
 
@@ -572,12 +406,12 @@ Public Class WinOffline
         If Globals.DispatcherReturnCode <> 0 Then
 
             ' Return
-            Return 21
+            Return 9
 
         ElseIf Globals.PatchErrorDetected Then
 
             ' Return
-            Return 100
+            Return 10
 
         Else
 

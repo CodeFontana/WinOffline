@@ -1,13 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOffline
-' File Name:    StageII.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Imports System.Threading
-
-Partial Public Class WinOffline
+﻿Partial Public Class WinOffline
 
     Public Shared Function StageII(ByVal CallStack As String) As Integer
 

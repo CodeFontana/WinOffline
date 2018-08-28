@@ -1,11 +1,4 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOfflineUI
-' File Name:    WinOfflineUI-SystemInfo.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Imports System.Management
+﻿Imports System.Management
 Imports System.Windows.Forms
 Imports System.Threading
 

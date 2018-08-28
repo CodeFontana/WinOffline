@@ -19,20 +19,17 @@ WinOffline is a utility designed to simplify CA IT Client Manager (ITCM) product
 After completion -- **..\CA\DSM\WinOffline\<timestamp\>.txt**
 
 ## WinOffline Exit Codes
-> 1- Basic process initialization failed.  
-2- Administrator or UAC elevation check failed.  
-3- Environment variable initialization failed.  
-4- Windows registry initialization failed.  
-5- ITCM common configuration initialization failed.  
-6- Another instance of WinOffline is currently in-progress.  
-7- WinOffline debug log initialization failed.  
-8- Startup switch initialization failed.  
-9- Pipe server initialization failed.  
-10- External resource extraction failed.  
-20- Re-init of out of sync SD job has failed.  
-21- WinOffline execution failed, a review of the log file is required.  
-100- WinOffline executed successfully, but an ITCM patching error has occurred.  
-EE- .NET Framework is not installed or there are version compatibility issues.  
+> 1- Basic process initialization failed.   
+2- Environment variable initialization failed.  
+3- Windows registry initialization failed.  
+4- ITCM common configuration initialization failed.  
+5- Another instance of WinOffline is currently in-progress.  
+6- WinOffline debug log initialization failed.  
+7- Startup switch initialization failed.  
+8- External resource extraction failed.   
+9- WinOffline execution failed, a review of the log file is required.  
+10- WinOffline executed successfully, but an ITCM patching error has occurred.  
+Everything Else- .NET Framework is not installed or there are version compatibility issues.  
 
 ## Deviations from ApplyPTF functionality
 > * When removing a patch that's applied, instead of marking the patch as "backed out" in the history file, WinOffline will erase the previous record showing the patch was ever applied.
@@ -45,15 +42,6 @@ EE- .NET Framework is not installed or there are version compatibility issues.
 ```
 PLATFORM:WINDOWS
 PRODUCT:DTSVMG
-COMPONENT:
-SUPERSEDE:
-RELEASE:
-GENLEVEL:
-VERSION:
-PREREQS:
-MPREREQS:
-COREQS:
-MCOREQS:
 SYSCMD:ScriptA.cmd
 ```
 
@@ -71,15 +59,6 @@ Sample JCL file with VERSIONCHECK:
 ```
 PLATFORM:WINDOWS
 PRODUCT:DTSVMG
-COMPONENT:
-SUPERSEDE:
-RELEASE:
-GENLEVEL:
-VERSION:
-PREREQS:
-MPREREQS:
-COREQS:
-MCOREQS:
 FILE:bin\cfsmcapi.dll
 FILE:bin\cfmessenger.dll
 VERSIONCHECK:12.9.0.338
@@ -92,15 +71,6 @@ Sample JCL file with DEPENDS:
 ```
 PLATFORM:WINDOWS
 PRODUCT:DTSVMG
-COMPONENT:
-SUPERSEDE:
-RELEASE:
-GENLEVEL:
-VERSION:
-PREREQS:
-MPREREQS:
-COREQS:
-MCOREQS:
 FILE:bin\cacertutil.exe
 SYSCMD:MyBatchScript.cmd
 DEPENDS:HelperScript.cmd
@@ -125,15 +95,6 @@ Here's a sample JCL file:
 ```
 PLATFORM:WINDOWS
 PRODUCT:BITCM
-COMPONENT:
-SUPERSEDE:
-RELEASE:
-GENLEVEL:
-VERSION:
-PREREQS:
-MPREREQS:
-COREQS:
-MCOREQS:
 PRESYSCMD:ScriptA.cmd
 DEPENDS:ScriptC.cmd
 FILE:bin\_SomeFile.txt
@@ -249,22 +210,6 @@ VERSIONCHECK:14.0.1000.194
 
 -disableenc
 > Disable the ENC client.
-
-## WinOffline Software Delivery and Scripting Switches
-
--showgui
-##### Software Delivery mode
-> Displays a progress window in the context of each logged on user desktop. This allows the end-user to see the progress of WinOffline as it executes maintenance. The end user can close the progress window at will, without affecting the WinOffline execution. By default, the progress window is hidden from the end-users.
-
-##### Interactive mode
-> This option is ignored as the progress window is automatically displayed in the context of the user who launched WinOffline. If WinOffline is launched as the SYSTEM identity for interactive mode, this option can be used to display the progress window for all logged on users.
-
--silent
-##### Software Delivery mode
-> This option will suppress the WinOffline tray icon, which will display based on ITCM comstore policy for the cfsystray icon. By default, software delivery mode is already silent except for the tray icon.
-
-##### Interactive mode
-> Executes interactive mode silently, without any user interaction or progress window. This switch always overrides the -showgui switch. By default, interactive mode normally displays an interactive window to the user.
 
 ## WinOffline Database Maintenance Switches
 

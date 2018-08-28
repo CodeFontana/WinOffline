@@ -1,21 +1,12 @@
-﻿'****************************** Class Header *******************************\
-' Project Name: WinOffline
-' Class Name:   WinOffline/Logger
-' File Name:    Logger.vb
-' Author:       Brian Fontana
-'***************************************************************************/
-
-Partial Public Class WinOffline
+﻿Partial Public Class WinOffline
 
     Public Class Logger
 
         ' Class variables
         Private Shared DebugLogBuffer As New ArrayList
         Private Shared DebugGUIBuffer As New ArrayList
-        Private Shared DebugPipeBuffer As New ArrayList
         Private Shared ActiveLogBuffer As Boolean = False
         Private Shared ActiveGUIBuffer As Boolean = False
-        Private Shared ActivePipeBuffer As Boolean = False
         Private Shared DebugGUITask As String = ""
         Private Shared PreviousTask As String = ""
         Private Shared ReInitDebugHistory As New ArrayList
@@ -156,69 +147,6 @@ Partial Public Class WinOffline
 
                 ' Add to buffer
                 DebugLogBuffer.Add(Message)
-
-            End If
-
-            ' *****************************
-            ' - Write debug to pipe server.
-            ' *****************************
-
-            ' Write debug to pipe server
-            If Globals.PipeServerWriter IsNot Nothing AndAlso
-                Globals.PipeServerWriter.BaseStream IsNot Nothing Then
-
-                Try
-
-                    ' Check for a GUI task update
-                    If Not DebugGUITask.Equals(PreviousTask) Then
-
-                        ' Send a message
-                        PipeServer.SendMessage(PipeServer.SEND_STATUS, DebugGUITask)
-
-                        ' Update the previous task
-                        PreviousTask = DebugGUITask
-
-                    End If
-
-                    ' Check for an active buffer
-                    If ActivePipeBuffer Then
-
-                        ' Purge contents of buffer
-                        For Each LineItem As String In DebugPipeBuffer
-
-                            ' Write buffer
-                            PipeServer.SendMessage(PipeServer.SEND_MESSAGE, LineItem)
-
-                        Next
-
-                        ' Clear the buffer
-                        DebugPipeBuffer.Clear()
-
-                        ' Deactivate buffer
-                        ActivePipeBuffer = False
-
-                    End If
-
-                    ' Write debug
-                    PipeServer.SendMessage(PipeServer.SEND_MESSAGE, Message)
-
-                Catch ex As Exception
-
-                    ' Activate buffer
-                    ActivePipeBuffer = True
-
-                    ' Add to buffer
-                    DebugPipeBuffer.Add(Message)
-
-                End Try
-
-            Else
-
-                ' Activate buffer
-                ActivePipeBuffer = True
-
-                ' Add to buffer
-                DebugPipeBuffer.Add(Message)
 
             End If
 
@@ -437,93 +365,6 @@ Partial Public Class WinOffline
 
                 ' Add to buffer
                 DebugLogBuffer.Add(CurrentTime + CallStack + Message)
-
-            End If
-
-            ' *****************************
-            ' - Write debug to pipe server.
-            ' *****************************
-
-            ' Write debug to pipe server
-            If Globals.PipeServerWriter IsNot Nothing AndAlso
-                Globals.PipeServerWriter.BaseStream IsNot Nothing Then
-
-                Try
-
-                    ' Check for a GUI task update
-                    If Not DebugGUITask.Equals(PreviousTask) Then
-
-                        ' Send a message
-                        PipeServer.SendMessage(PipeServer.SEND_STATUS, DebugGUITask)
-
-                        ' Update the previous task
-                        PreviousTask = DebugGUITask
-
-                    End If
-
-                    ' Check for an active buffer
-                    If ActivePipeBuffer Then
-
-                        ' Purge contents of buffer
-                        For Each LineItem As String In DebugPipeBuffer
-
-                            ' Write buffer
-                            PipeServer.SendMessage(PipeServer.SEND_MESSAGE, LineItem)
-
-                        Next
-
-                        ' Clear the buffer
-                        DebugPipeBuffer.Clear()
-
-                        ' Deactivate buffer
-                        ActivePipeBuffer = False
-
-                    End If
-
-                    ' Check if callstack changed
-                    If CallStackChanged Then
-
-                        ' Output blank line
-                        PipeServer.SendMessage(PipeServer.SEND_MESSAGE, "")
-
-                    End If
-
-                    ' Write debug
-                    PipeServer.SendMessage(PipeServer.SEND_MESSAGE, CurrentTime + CallStack + Message)
-
-                Catch ex As Exception
-
-                    ' Activate buffer
-                    ActivePipeBuffer = True
-
-                    ' Check if callstack changed
-                    If CallStackChanged Then
-
-                        ' Append blank line to buffer
-                        DebugPipeBuffer.Add("")
-
-                    End If
-
-                    ' Add to buffer
-                    DebugPipeBuffer.Add(CurrentTime + CallStack + Message)
-
-                End Try
-
-            Else
-
-                ' Activate buffer
-                ActivePipeBuffer = True
-
-                ' Check if callstack changed
-                If CallStackChanged Then
-
-                    ' Append blank line to buffer
-                    DebugPipeBuffer.Add("")
-
-                End If
-
-                ' Add to buffer
-                DebugPipeBuffer.Add(CurrentTime + CallStack + Message)
 
             End If
 
