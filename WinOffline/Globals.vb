@@ -16,9 +16,6 @@ Public Class Globals
     Public Shared ParentProcessName As String = Nothing                         ' Friendly name of the immediate parent process.
     Public Shared ParentProcessTree As New List(Of String)                      ' List of all parent process names.
     Public Shared ProcessIdentity As Security.Principal.WindowsIdentity         ' The identity currently executing the process.
-    Public Shared IPv4list As New ArrayList                                     ' Array for IPv4 addresses.
-    Public Shared IPv6list As New ArrayList                                     ' Array for IPv6 addresses.
-    Public Shared PipeClientExecution As Boolean = False                        ' Flag: Process is a pipe client execution.
     Public Shared DispatcherReturnCode As Integer = 0                           ' Return code from dispatcher.
     Public Const THREAD_REST_INTERVAL As Integer = 50                           ' Default rest interval for threads.
 
@@ -58,7 +55,6 @@ Public Class Globals
     Public Shared CachedJobOutputID As String = Nothing                         ' File: Cached software delivery job output ID.
     Public Shared JobOutputFolder As String = Nothing                           ' File: Software delivery job output folder.
     Public Shared JobOutputFile As String = Nothing                             ' File: Software delivery job output file.
-    Public Shared TrayIconVisible As Boolean = Nothing                          ' Comstore: Tray icon visibility policy.
     Public Shared SDLibraryFolder As String = Nothing                           ' Comstore: Path to the SD library.
     Public Shared ENCFunction As String = Nothing                               ' Comstore: ENC functionality description.
     Public Shared ENCGatewayServer As String = Nothing                          ' Comstore: ENC gateway server.

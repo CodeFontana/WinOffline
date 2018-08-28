@@ -39,107 +39,6 @@
         End If
 
         ' *****************************
-        ' - Check for removal tool execution.
-        ' *****************************
-
-        ' Check removal tool switches
-        If Globals.RemoveITCM OrElse Globals.UninstallITCM Then
-
-            ' Remove ITCM
-            RunLevel = RemoveITCM(CallStack)
-
-            ' Deinitialize
-            Init.DeInit(CallStack, True, False)
-
-            ' Return
-            Return RunLevel
-
-        End If
-
-        ' *****************************
-        ' - Check for caf on-demand switches.
-        ' *****************************
-
-        ' Check for caf on-demand switches
-        If Globals.StopCAFSwitch Then
-
-            ' Remove ITCM
-            RunLevel = StopCAFOnDemand(CallStack)
-
-            ' Deinitialize
-            Init.DeInit(CallStack, True, False)
-
-            ' Return
-            Return RunLevel
-
-        ElseIf Globals.StartCAFSwitch Then
-
-            ' Remove ITCM
-            RunLevel = StartCAFOnDemand(CallStack)
-
-            ' Deinitialize
-            Init.DeInit(CallStack, True, False)
-
-            ' Return
-            Return RunLevel
-
-        End If
-
-        ' *****************************
-        ' - Check for SQL execution switches.
-        ' *****************************
-
-        ' Check for SQL execution switches
-        If Globals.AttachedtoConsole AndAlso (Globals.DbTestConnectionSwitch OrElse Globals.MdbOverviewSwitch OrElse Globals.MdbCleanAppsSwitch) Then
-
-            ' Call SQL function dispatcher
-            RunLevel = DatabaseAPI.SQLFunctionDispatch(CallStack)
-
-            ' Deinitialize (keep debug log)
-            Init.DeInit(CallStack, True, True)
-
-            ' Return
-            Return RunLevel
-
-        End If
-
-        ' *****************************
-        ' - Check for launch app switch.
-        ' *****************************
-
-        ' Check for launch app switch
-        If Globals.LaunchAppSwitch Then
-
-            ' Laumch app
-            RunLevel = LaunchPad(CallStack, Globals.LaunchAppContext, Globals.LaunchAppFileName, FileVector.GetFilePath(Globals.LaunchAppFileName), Globals.LaunchAppArguments)
-
-            ' Deinitialize
-            Init.DeInit(CallStack, True, False)
-
-            ' Return
-            Return RunLevel
-
-        End If
-
-        ' *****************************
-        ' - Check for software library cleanup execution.
-        ' *****************************
-
-        ' Check for libray analysis or cleanup switches
-        If Globals.AttachedtoConsole AndAlso (Globals.CheckSDLibrarySwitch OrElse Globals.CleanupSDLibrarySwitch) Then
-
-            ' Cleanup library
-            LibraryManager.RepairLibrary(CallStack)
-
-            ' Deinitialize
-            Init.DeInit(CallStack, True, True)
-
-            ' Return
-            Return RunLevel
-
-        End If
-
-        ' *****************************
         ' - Determine entry point.
         ' *****************************
 
@@ -256,13 +155,8 @@
                     Globals.ProgressUIThread = New System.Threading.Thread(AddressOf Globals.ProgressGUI.ShowDialog)
                     Globals.ProgressUIThread.Start()
 
-                    ' Check tray icon policy
-                    If Globals.TrayIconVisible Then
-
-                        ' Enable debug gui notification icon
-                        Globals.ProgressGUI.TrayIcon.Visible = True
-
-                    End If
+                    ' Enable debug gui notification icon
+                    Globals.ProgressGUI.TrayIcon.Visible = True
 
                 End If
 
