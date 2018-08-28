@@ -4,7 +4,7 @@ Public Class Globals
 
     ' WinOffline and System Globals
     Public Shared CommandLineArgs As String() = Nothing                         ' Command line arguments passed to the application.
-    Public Shared AppVersion As String = "2018.08.27"                           ' Version string of the current build.
+    Public Shared AppVersion As String = "2018.08.28"                           ' Version string of the current build.
     Public Shared ProcessName As String = Nothing                               ' Fullpath including filename of the application process.
     Public Shared ProcessShortName As String = Nothing                          ' Filename of the application process.
     Public Shared ProcessFriendlyName As String = Nothing                       ' Friendly name of the application process.
@@ -12,10 +12,9 @@ Public Class Globals
     Public Shared ProcessFilePath As String = Nothing                           ' Directory of the process. (e.g. C:\SomeDirectory)
     Public Shared AttachedtoConsole As Boolean = False                          ' Flag: Attached to console.
     Public Shared HostName As String = Nothing                                  ' Hostname of computer executing the application.
-    Public Shared ProcessWMI As ManagementObject = Nothing                      ' A management object for querying the system WMI.
     Public Shared ProcessID As Integer = Nothing                                ' The process ID (PID) of the application process.
-    Public Shared ParentProcessID As Integer = Nothing                          ' The parent process ID (PPID) of the application process.
-    Public Shared ParentProcessName As String = Nothing                         ' Friendly name of the parent process.
+    Public Shared ParentProcessName As String = Nothing                         ' Friendly name of the immediate parent process.
+    Public Shared ParentProcessTree As New List(Of String)                      ' List of all parent process names.
     Public Shared ProcessIdentity As Security.Principal.WindowsIdentity         ' The identity currently executing the process.
     Public Shared IPv4list As New ArrayList                                     ' Array for IPv4 addresses.
     Public Shared IPv6list As New ArrayList                                     ' Array for IPv6 addresses.

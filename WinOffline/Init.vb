@@ -268,7 +268,7 @@ Partial Public Class WinOffline
                 ' Check if user prompt is appropriate
                 If Not (SilentSwitch OrElse
                     Globals.RunningAsSystemIdentity OrElse
-                    Globals.ParentProcessName.ToLower.Equals("sd_jexec") OrElse
+                    Globals.ParentProcessTree.Contains("sd_jexec") OrElse
                     Globals.AttachedtoConsole) Then
 
                     ' Prompt user with timeout
@@ -312,7 +312,7 @@ Partial Public Class WinOffline
                 ' Check if user prompt is appropriate
                 If Not (SilentSwitch OrElse
                     Globals.RunningAsSystemIdentity OrElse
-                    Globals.ParentProcessName.ToLower.Equals("sd_jexec") OrElse
+                    Globals.ParentProcessTree.Contains("sd_jexec") OrElse
                     Globals.AttachedtoConsole) Then
 
                     ' Prompt user with timeout
@@ -348,7 +348,7 @@ Partial Public Class WinOffline
                 ' Check if user prompt is appropriate
                 If Not (SilentSwitch OrElse
                     Globals.RunningAsSystemIdentity OrElse
-                    Globals.ParentProcessName.ToLower.Equals("sd_jexec") OrElse
+                    Globals.ParentProcessTree.Contains("sd_jexec") OrElse
                     Globals.AttachedtoConsole) Then
 
                     ' Prompt user with timeout
@@ -384,7 +384,7 @@ Partial Public Class WinOffline
                 ' Check if user prompt is appropriate
                 If Not (SilentSwitch OrElse
                     Globals.RunningAsSystemIdentity OrElse
-                    Globals.ParentProcessName.ToLower.Equals("sd_jexec") OrElse
+                    Globals.ParentProcessTree.Contains("sd_jexec") OrElse
                     Globals.AttachedtoConsole) Then
 
                     ' Prompt user with timeout
@@ -415,7 +415,7 @@ Partial Public Class WinOffline
                 ' Check if user prompt is appropriate
                 If Not (SilentSwitch OrElse
                     Globals.RunningAsSystemIdentity OrElse
-                    Globals.ParentProcessName.ToLower.Equals("sd_jexec") OrElse
+                    Globals.ParentProcessTree.Contains("sd_jexec") OrElse
                     Globals.AttachedtoConsole) Then
 
                     ' Prompt user with timeout
@@ -446,7 +446,7 @@ Partial Public Class WinOffline
                 ' Check if user prompt is appropriate
                 If Not (SilentSwitch OrElse
                     Globals.RunningAsSystemIdentity OrElse
-                    Globals.ParentProcessName.ToLower.Equals("sd_jexec") OrElse
+                    Globals.ParentProcessTree.Contains("sd_jexec") OrElse
                     Globals.AttachedtoConsole) Then
 
                     ' Prompt user with timeout
@@ -477,7 +477,7 @@ Partial Public Class WinOffline
                 ' Check if user prompt is appropriate
                 If Not (SilentSwitch OrElse
                     Globals.RunningAsSystemIdentity OrElse
-                    Globals.ParentProcessName.ToLower.Equals("sd_jexec") OrElse
+                    Globals.ParentProcessTree.Contains("sd_jexec") OrElse
                     Globals.AttachedtoConsole) Then
 
                     ' Prompt user with timeout
@@ -508,7 +508,7 @@ Partial Public Class WinOffline
                 ' Check if user prompt is appropriate
                 If Not (SilentSwitch OrElse
                     Globals.RunningAsSystemIdentity OrElse
-                    Globals.ParentProcessName.ToLower.Equals("sd_jexec") OrElse
+                    Globals.ParentProcessTree.Contains("sd_jexec") OrElse
                     Globals.AttachedtoConsole) Then
 
                     ' Prompt user with timeout
@@ -532,6 +532,12 @@ Partial Public Class WinOffline
         ' Initialize process
         Public Shared Sub InitProcess(ByVal CallStack As String)
 
+            ' Local variables
+            Dim ProcessWMI As ManagementObject = Nothing
+            Dim CurrentID As Integer = Nothing
+            Dim ParentID As Integer = Nothing
+            Dim ParentName As String = Nothing
+
             ' Update call stack
             CallStack += "InitProcess|"
 
@@ -548,8 +554,6 @@ Partial Public Class WinOffline
 
             ' Read process identity
             Globals.ProcessIdentity = WindowsIdentity.GetCurrent
-
-            ' Set identity flag
             Globals.RunningAsSystemIdentity = WindowsIdentity.GetCurrent.IsSystem
 
             ' Write debug
@@ -564,26 +568,36 @@ Partial Public Class WinOffline
             ' Query WMI
             Try
 
-                ' Query WMI for process info
-                Globals.ProcessWMI = New ManagementObject("Win32_Process.Handle='" & Globals.ProcessID & "'")
-                Globals.ParentProcessID = Globals.ProcessWMI("ParentProcessID")
+                ' Stub first process id
+                CurrentID = Globals.ProcessID
 
-                ' Write debug
-                Logger.WriteDebug(CallStack, "Parent PID: " + Globals.ParentProcessID.ToString)
+                ' Loop dangerously
+                While True
 
-                ' Get friendly parent process name
-                Globals.ParentProcessName = System.Diagnostics.Process.GetProcessById(Globals.ParentProcessID).ProcessName.ToString
+                    ' Query WMI for parent process info
+                    ProcessWMI = New ManagementObject("Win32_Process.Handle='" & CurrentID & "'")
+                    ParentID = ProcessWMI("ParentProcessID")
+                    ParentName = Process.GetProcessById(ParentID).ProcessName.ToString
 
-                ' Write debug
-                Logger.WriteDebug(CallStack, "Parent name: " + Globals.ParentProcessName)
+                    ' Write debug
+                    Logger.WriteDebug(CallStack, "Parent PID: " + ParentID.ToString)
+                    Logger.WriteDebug(CallStack, "Parent name: " + ParentName)
+
+                    ' Store immediate parent for reference
+                    If Globals.ParentProcessName Is Nothing Then Globals.ParentProcessName = ParentName.ToLower
+
+                    ' Add to list
+                    Globals.ParentProcessTree.Add(ParentName.ToLower)
+
+                    ' Reload parent id for next iteration
+                    CurrentID = ParentID
+
+                End While
 
             Catch ex As Exception
 
-                ' Write debug
-                Logger.WriteDebug(CallStack, "Parent process has terminated.")
-
-                ' Manually set parent process
-                Globals.ParentProcessName = "NoParent"
+                ' Check if immediate parent has terminated
+                If Globals.ParentProcessName Is Nothing Then Globals.ParentProcessName = "noparent"
 
             End Try
 
@@ -1561,7 +1575,7 @@ Partial Public Class WinOffline
                 ' *****************************
 
                 ' Check the parent process
-                If Globals.ParentProcessName.ToLower.Equals("sd_jexec") Then
+                If Globals.ParentProcessTree.Contains("sd_jexec") Then
 
                     ' *****************************
                     ' Scenario #1: Duplicate process, our parent is software delivery.

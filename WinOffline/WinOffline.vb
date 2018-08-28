@@ -144,7 +144,7 @@
         ' *****************************
 
         ' Entry point check
-        If Globals.ParentProcessName.ToLower.Equals("sd_jexec") Then
+        If Globals.ParentProcessTree.Contains("sd_jexec") Then
 
             ' Write debug
             Logger.WriteDebug(CallStack, "Entry point: Software Delivery")
