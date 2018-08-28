@@ -61,9 +61,6 @@
             ' Verify job output file availability
             If RunLevel <> 0 OrElse Globals.JobOutputFile Is Nothing OrElse Globals.JobOutputFile.Equals("") Then
 
-                ' Write debug
-                Logger.WriteDebug(CallStack, "Software delivery job output will be unavailable.")
-
                 ' Set job output flag
                 Globals.WriteSDJobOutput = False
 
