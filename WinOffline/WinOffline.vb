@@ -47,7 +47,6 @@
 
             ' Write debug
             Logger.WriteDebug(CallStack, "Entry point: Software Delivery")
-            Logger.WriteDebug(CallStack, "User identity: " + Globals.ProcessIdentity.Name)
 
             ' Set execution mode flag
             Globals.SDBasedMode = True
@@ -91,7 +90,6 @@
 
             ' Write debug
             Logger.WriteDebug(CallStack, "Entry point: Non-Software Delivery")
-            Logger.WriteDebug(CallStack, "User identity: " + Globals.ProcessIdentity.Name)
 
             ' Set execution mode flag
             Globals.SDBasedMode = False
@@ -185,7 +183,7 @@
             RunLevel = JobContainer(CallStack)
 
             ' Check the run level
-            If RunLevel <> 0 Or Globals.JobOutputFile Is Nothing Or Globals.JobOutputFile.Equals("") Then
+            If RunLevel <> 0 OrElse Globals.JobOutputFile Is Nothing OrElse Globals.JobOutputFile.Equals("") Then
 
                 ' Write debug
                 Logger.WriteDebug(CallStack, "Error: Exception caught processing software delivery container file.")
