@@ -62,16 +62,10 @@
             If RunLevel <> 0 OrElse Globals.JobOutputFile Is Nothing OrElse Globals.JobOutputFile.Equals("") Then
 
                 ' Write debug
-                Logger.WriteDebug(CallStack, "Warning: Software delivery job output will be unavailable.")
+                Logger.WriteDebug(CallStack, "Software delivery job output will be unavailable.")
 
                 ' Set job output flag
                 Globals.WriteSDJobOutput = False
-
-                ' Create exception
-                Manifest.UpdateManifest(CallStack,
-                                        Manifest.EXCEPTION_MANIFEST,
-                                        {"Error: Exception caught processing software delivery container file.",
-                                        "Reason: Please analyze the debug log for more information."})
 
             Else
 
@@ -240,7 +234,7 @@
         ' *****************************
 
         ' Check the dispatcher return
-        If RunLevel <> 0 Then
+        If Globals.DispatcherReturnCode <> 0 Then
 
             ' Write debug
             Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + " completed with an error.")
