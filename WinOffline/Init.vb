@@ -8,9 +8,6 @@ Partial Public Class WinOffline
 
         Public Shared Function Init(ByVal CallStack As String) As Integer
 
-            ' Local variables
-            Dim SilentSwitch As Boolean = Utility.StringArrayContains(Globals.CommandLineArgs, "silent")
-
             ' Update call stack
             CallStack += "Init|"
 
@@ -19,8 +16,8 @@ Partial Public Class WinOffline
             ' *****************************
 
             ' Check for help switch
-            If Utility.StringArrayContains(Globals.CommandLineArgs, "?") OrElse
-                Utility.StringArrayContains(Globals.CommandLineArgs, "help") Then
+            If Utility.StringArrayContains(Globals.CommandLineArgs, "?", True) OrElse
+                Utility.StringArrayContains(Globals.CommandLineArgs, "help", True) Then
 
                 ' Set identity flag
                 Globals.RunningAsSystemIdentity = WindowsIdentity.GetCurrent.IsSystem
@@ -57,8 +54,8 @@ Partial Public Class WinOffline
             ' *****************************
 
             ' Check for removal tool switches
-            If Utility.StringArrayContains(Globals.CommandLineArgs, "removeitcm") OrElse
-                Utility.StringArrayContains(Globals.CommandLineArgs, "uninstallitcm") Then
+            If Utility.StringArrayContains(Globals.CommandLineArgs, "removeitcm", True) OrElse
+                Utility.StringArrayContains(Globals.CommandLineArgs, "uninstallitcm", True) Then
 
                 ' Encacpsulate express initialization
                 Try
@@ -107,8 +104,8 @@ Partial Public Class WinOffline
             ' *****************************
 
             ' Check for caf on-demand stop/start switches
-            If Utility.StringArrayContains(Globals.CommandLineArgs, "stopcaf") OrElse
-                Utility.StringArrayContains(Globals.CommandLineArgs, "startcaf") Then
+            If Utility.StringArrayContains(Globals.CommandLineArgs, "stopcaf", True) OrElse
+                Utility.StringArrayContains(Globals.CommandLineArgs, "startcaf", True) Then
 
                 ' Encapsulate express initialization
                 Try
@@ -174,10 +171,10 @@ Partial Public Class WinOffline
 
             ' Check for sql switches
             If Globals.AttachedtoConsole AndAlso
-                (Utility.StringArrayContains(Globals.CommandLineArgs, "testdbconn") OrElse
-                Utility.StringArrayContains(Globals.CommandLineArgs, "testconn") OrElse
-                Utility.StringArrayContains(Globals.CommandLineArgs, "mdboverview") OrElse
-                Utility.StringArrayContains(Globals.CommandLineArgs, "cleanapps")) Then
+                (Utility.StringArrayContains(Globals.CommandLineArgs, "testdbconn", True) OrElse
+                Utility.StringArrayContains(Globals.CommandLineArgs, "testconn", True) OrElse
+                Utility.StringArrayContains(Globals.CommandLineArgs, "mdboverview", True) OrElse
+                Utility.StringArrayContains(Globals.CommandLineArgs, "cleanapps", True)) Then
 
                 ' Encacpsulate express initialization
                 Try
@@ -237,7 +234,7 @@ Partial Public Class WinOffline
             ' *****************************
 
             ' Check for sql switches
-            If Utility.StringArrayContains(Globals.CommandLineArgs, "launch") Then
+            If Utility.StringArrayContains(Globals.CommandLineArgs, "launch", True) Then
 
                 ' Encacpsulate express initialization
                 Try
@@ -290,8 +287,8 @@ Partial Public Class WinOffline
 
             ' Check for sql switches
             If Globals.AttachedtoConsole AndAlso
-                (Utility.StringArrayContains(Globals.CommandLineArgs, "checklibrary") OrElse
-                Utility.StringArrayContains(Globals.CommandLineArgs, "cleanlibrary")) Then
+                (Utility.StringArrayContains(Globals.CommandLineArgs, "checklibrary", True) OrElse
+                Utility.StringArrayContains(Globals.CommandLineArgs, "cleanlibrary", True)) Then
 
                 ' Encacpsulate express initialization
                 Try
@@ -363,8 +360,7 @@ Partial Public Class WinOffline
                 Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + ": Exit code 1.")
 
                 ' Check if user prompt is appropriate
-                If Not (SilentSwitch OrElse
-                    Globals.RunningAsSystemIdentity OrElse
+                If Not (Globals.RunningAsSystemIdentity OrElse
                     Globals.ParentProcessTree.Contains("sd_jexec") OrElse
                     Globals.AttachedtoConsole) Then
 
@@ -407,8 +403,7 @@ Partial Public Class WinOffline
                 Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + ": Exit code 3.")
 
                 ' Check if user prompt is appropriate
-                If Not (SilentSwitch OrElse
-                    Globals.RunningAsSystemIdentity OrElse
+                If Not (Globals.RunningAsSystemIdentity OrElse
                     Globals.ParentProcessTree.Contains("sd_jexec") OrElse
                     Globals.AttachedtoConsole) Then
 
@@ -443,8 +438,7 @@ Partial Public Class WinOffline
                 Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + ": Exit code 4.")
 
                 ' Check if user prompt is appropriate
-                If Not (SilentSwitch OrElse
-                    Globals.RunningAsSystemIdentity OrElse
+                If Not (Globals.RunningAsSystemIdentity OrElse
                     Globals.ParentProcessTree.Contains("sd_jexec") OrElse
                     Globals.AttachedtoConsole) Then
 
@@ -479,8 +473,7 @@ Partial Public Class WinOffline
                 Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + ": Exit code 5.")
 
                 ' Check if user prompt is appropriate
-                If Not (SilentSwitch OrElse
-                    Globals.RunningAsSystemIdentity OrElse
+                If Not (Globals.RunningAsSystemIdentity OrElse
                     Globals.ParentProcessTree.Contains("sd_jexec") OrElse
                     Globals.AttachedtoConsole) Then
 
@@ -510,8 +503,7 @@ Partial Public Class WinOffline
                 Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + ": Exit code 6.")
 
                 ' Check if user prompt is appropriate
-                If Not (SilentSwitch OrElse
-                    Globals.RunningAsSystemIdentity OrElse
+                If Not (Globals.RunningAsSystemIdentity OrElse
                     Globals.ParentProcessTree.Contains("sd_jexec") OrElse
                     Globals.AttachedtoConsole) Then
 
@@ -541,8 +533,7 @@ Partial Public Class WinOffline
                 Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + ": Exit code 7.")
 
                 ' Check if user prompt is appropriate
-                If Not (SilentSwitch OrElse
-                    Globals.RunningAsSystemIdentity OrElse
+                If Not (Globals.RunningAsSystemIdentity OrElse
                     Globals.ParentProcessTree.Contains("sd_jexec") OrElse
                     Globals.AttachedtoConsole) Then
 
@@ -572,8 +563,7 @@ Partial Public Class WinOffline
                 Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + ": Exit code 8.")
 
                 ' Check if user prompt is appropriate
-                If Not (SilentSwitch OrElse
-                    Globals.RunningAsSystemIdentity OrElse
+                If Not (Globals.RunningAsSystemIdentity OrElse
                     Globals.ParentProcessTree.Contains("sd_jexec") OrElse
                     Globals.AttachedtoConsole) Then
 
@@ -603,8 +593,7 @@ Partial Public Class WinOffline
                 Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + ": Exit code 10.")
 
                 ' Check if user prompt is appropriate
-                If Not (SilentSwitch OrElse
-                    Globals.RunningAsSystemIdentity OrElse
+                If Not (Globals.RunningAsSystemIdentity OrElse
                     Globals.ParentProcessTree.Contains("sd_jexec") OrElse
                     Globals.AttachedtoConsole) Then
 
