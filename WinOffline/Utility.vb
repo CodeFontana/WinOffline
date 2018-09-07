@@ -1495,6 +1495,9 @@ Partial Public Class WinOffline
                 ' Match the process name
                 If RunningProcess.ProcessName.ToLower.Equals(ProcessFriendlyName.ToLower) Then
 
+                    ' Debug
+                    Logger.WriteDebug(Logger.LastCallStack, "IsProcessRunning() found: " + RunningProcess.Id.ToString + "/" + RunningProcess.ProcessName)
+
                     ' Match found
                     Return True
 
