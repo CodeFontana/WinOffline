@@ -7,340 +7,170 @@ Partial Public Class WinOffline
     Public Class Init
 
         Public Shared Function Init(ByVal CallStack As String) As Integer
-
-            ' Update call stack
             CallStack += "Init|"
 
             ' *****************************
             ' - Switch: Command line help.
             ' *****************************
 
-            ' Check for help switch
             If Utility.StringArrayContains(Globals.CommandLineArgs, "?", True) OrElse
                 Utility.StringArrayContains(Globals.CommandLineArgs, "help", True) Then
-
-                ' Set identity flag
                 Globals.RunningAsSystemIdentity = WindowsIdentity.GetCurrent.IsSystem
-
-                ' Verify we're not running as SYSTEM
                 If Not Globals.RunningAsSystemIdentity Then
-
-                    ' Check if attached to console
                     If Globals.AttachedtoConsole Then
-
-                        ' Write help text
                         Logger.WriteDebug(Environment.NewLine + HelpUI.rtbHelp.Text)
-
                     Else
-
-                        ' Show the about box
                         Dim CLIHelp As New HelpUI
                         CLIHelp.ShowDialog()
-
                     End If
-
-                    ' Detach console
                     WindowsAPI.DetachConsole()
-
-                    ' Hard exit
                     Environment.Exit(0)
-
                 End If
-
             End If
 
             ' *****************************
             ' - Switch: Removal tool execution.
             ' *****************************
 
-            ' Check for removal tool switches
             If Utility.StringArrayContains(Globals.CommandLineArgs, "removeitcm", True) OrElse
                 Utility.StringArrayContains(Globals.CommandLineArgs, "uninstallitcm", True) Then
-
-                ' Encacpsulate express initialization
                 Try
-
-                    ' Express initialization
                     InitProcess(CallStack)
                     InitEnvironment(CallStack)
                     If Utility.IsITCMInstalled Then InitRegistry(CallStack)
                     InitStartupSwitches(CallStack)
-
                 Catch ex As Exception
-
-                    ' Verify we're not running as SYSTEM
                     If Not WindowsIdentity.GetCurrent.IsSystem Then
-
-                        ' Check if attached to console
                         If Globals.AttachedtoConsole Then
-
-                            ' Write debug
                             Logger.WriteDebug(CallStack, ex.Message)
-
                         Else
-
-                            ' Report initialization exception
                             AlertBox.CreateUserAlert(ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace, 20)
-
                         End If
-
                     End If
-
                 End Try
-
-                ' Remove ITCM
                 RemoveITCM(CallStack)
-
-                ' Deinitialize
                 DeInit(CallStack, True, False)
-
-                ' Hard exit
                 Environment.Exit(0)
-
             End If
 
             ' *****************************
             ' - Switch: On-demand CAF stop/start.
             ' *****************************
 
-            ' Check for caf on-demand stop/start switches
             If Utility.StringArrayContains(Globals.CommandLineArgs, "stopcaf", True) OrElse
                 Utility.StringArrayContains(Globals.CommandLineArgs, "startcaf", True) Then
-
-                ' Encapsulate express initialization
                 Try
-
-                    ' Express initialization
                     InitProcess(CallStack)
                     InitEnvironment(CallStack)
                     If Utility.IsITCMInstalled Then InitRegistry(CallStack)
                     InitStartupSwitches(CallStack)
-
                 Catch ex As Exception
-
-                    ' Verify we're not running as SYSTEM
                     If Not WindowsIdentity.GetCurrent.IsSystem Then
-
-                        ' Check if attached to console
                         If Globals.AttachedtoConsole Then
-
-                            ' Write debug
                             Logger.WriteDebug(CallStack, ex.Message)
-
                         Else
-
-                            ' Report initialization exception
                             AlertBox.CreateUserAlert(ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace, 20)
-
                         End If
-
                     End If
-
-                    ' Detach from console
                     WindowsAPI.DetachConsole()
-
-                    ' Hard exit
                     Environment.Exit(0)
-
                 End Try
-
-                ' Check for caf on-demand switches
                 If Globals.StopCAFSwitch Then
-
-                    ' Stop CAF
                     StopCAFOnDemand(CallStack)
-
                 ElseIf Globals.StartCAFSwitch Then
-
-                    ' Start CAF
                     StartCAFOnDemand(CallStack)
-
                 End If
-
-                ' Deinitialize
                 DeInit(CallStack, True, False)
-
-                ' Hard exit
                 Environment.Exit(0)
-
             End If
 
             ' *****************************
             ' - Switch: Command line database utilities.
             ' *****************************
 
-            ' Check for sql switches
             If Globals.AttachedtoConsole AndAlso
                 (Utility.StringArrayContains(Globals.CommandLineArgs, "testdbconn", True) OrElse
                 Utility.StringArrayContains(Globals.CommandLineArgs, "testconn", True) OrElse
                 Utility.StringArrayContains(Globals.CommandLineArgs, "mdboverview", True) OrElse
                 Utility.StringArrayContains(Globals.CommandLineArgs, "cleanapps", True)) Then
-
-                ' Encacpsulate express initialization
                 Try
-
-                    ' Check if ITCM is installed
                     If Not Utility.IsITCMInstalled Then Throw New Exception("ITCM is not installed.")
-
-                    ' Express initialization
                     InitProcess(CallStack)
                     InitEnvironment(CallStack)
                     InitRegistry(CallStack)
                     InitComstore(CallStack)
                     Logger.InitDebugLog(CallStack)
                     InitStartupSwitches(CallStack)
-
                 Catch ex As Exception
-
-                    ' Verify we're not running as SYSTEM
                     If Not WindowsIdentity.GetCurrent.IsSystem Then
-
-                        ' Check if attached to console
                         If Globals.AttachedtoConsole Then
-
-                            ' Write debug
                             Logger.WriteDebug(CallStack, ex.Message)
-
                         Else
-
-                            ' Report initialization exception
                             AlertBox.CreateUserAlert(ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace, 20)
-
                         End If
-
                     End If
-
-                    ' Detach from console
                     WindowsAPI.DetachConsole()
-
-                    ' Hard exit
                     Environment.Exit(0)
-
                 End Try
-
-                ' Call SQL function dispatcher
                 DatabaseAPI.SQLFunctionDispatch(CallStack)
-
-                ' Deinitialize (keep debug log)
                 DeInit(CallStack, True, True)
-
-                ' Hard exit
                 Environment.Exit(0)
-
             End If
 
             ' *****************************
             ' - Switch: Launch an application
             ' *****************************
 
-            ' Check for sql switches
             If Utility.StringArrayContains(Globals.CommandLineArgs, "launch", True) Then
-
-                ' Encacpsulate express initialization
                 Try
-
-                    ' Express initialization
                     InitProcess(CallStack)
                     InitEnvironment(CallStack)
                     InitStartupSwitches(CallStack)
                     InitResources(CallStack)
-
                 Catch ex As Exception
-
-                    ' Verify we're not running as SYSTEM
                     If Not WindowsIdentity.GetCurrent.IsSystem Then
-
-                        ' Check if attached to console
                         If Globals.AttachedtoConsole Then
-
-                            ' Write debug
                             Logger.WriteDebug(CallStack, ex.Message)
-
                         Else
-
-                            ' Report initialization exception
                             AlertBox.CreateUserAlert(ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace, 20)
-
                         End If
-
                     End If
-
-                    ' Detach from console
                     WindowsAPI.DetachConsole()
-
                 End Try
-
-                ' Laumch app
                 LaunchPad(CallStack, Globals.LaunchAppContext, Globals.LaunchAppFileName, FileVector.GetFilePath(Globals.LaunchAppFileName), Globals.LaunchAppArguments)
-
-                ' Deinitialize
                 DeInit(CallStack, True, False)
-
-                ' Hard exit
                 Environment.Exit(0)
-
             End If
 
             ' *****************************
             ' - Switch: On-demand software library cleanup execution.
             ' *****************************
 
-            ' Check for sql switches
             If Globals.AttachedtoConsole AndAlso
                 (Utility.StringArrayContains(Globals.CommandLineArgs, "checklibrary", True) OrElse
                 Utility.StringArrayContains(Globals.CommandLineArgs, "cleanlibrary", True)) Then
-
-                ' Encacpsulate express initialization
                 Try
-
-                    ' Check if ITCM is installed
                     If Not Utility.IsITCMInstalled Then Throw New Exception("ITCM is not installed.")
-
-                    ' Express initialization
                     InitProcess(CallStack)
                     InitEnvironment(CallStack)
                     InitRegistry(CallStack)
                     InitComstore(CallStack)
                     Logger.InitDebugLog(CallStack)
                     InitStartupSwitches(CallStack)
-
                 Catch ex As Exception
-
-                    ' Verify we're not running as SYSTEM
                     If Not WindowsIdentity.GetCurrent.IsSystem Then
-
-                        ' Check if attached to console
                         If Globals.AttachedtoConsole Then
-
-                            ' Write debug
                             Logger.WriteDebug(CallStack, ex.Message)
-
                         Else
-
-                            ' Report initialization exception
                             AlertBox.CreateUserAlert(ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace, 20)
-
                         End If
-
                     End If
-
-                    ' Detach from console
                     WindowsAPI.DetachConsole()
-
-                    ' Hard exit
                     Environment.Exit(0)
-
                 End Try
-
-                ' Cleanup library
                 LibraryManager.RepairLibrary(CallStack)
-
-                ' Deinitialize
                 DeInit(CallStack, True, True)
-
-                ' Hard exit
                 Environment.Exit(0)
-
             End If
 
             ' *****************************
@@ -348,271 +178,146 @@ Partial Public Class WinOffline
             ' *****************************
 
             Try
-
-                ' Process initialization
                 InitProcess(CallStack)
-
             Catch ex As Exception
-
-                ' Write debug
                 Logger.WriteDebug(CallStack, "Error: " + Globals.ProcessShortName + " initialization failed.")
                 Logger.WriteDebug(CallStack, "Exception: " + ex.Message)
                 Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + ": Exit code 1.")
-
-                ' Check if user prompt is appropriate
                 If Not (Globals.RunningAsSystemIdentity OrElse
                     Globals.ParentProcessTree.Contains("sd_jexec") OrElse
                     Globals.AttachedtoConsole) Then
-
-                    ' Prompt user with timeout
                     AlertBox.CreateUserAlert("Exit code 1: " + Environment.NewLine +
                                              Globals.ProcessFriendlyName + " process initialization failed." +
                                              Environment.NewLine + Environment.NewLine +
                                              "Exception: " + Environment.NewLine + ex.Message, 20)
-
                 End If
-
-                ' Return
                 Return 1
-
             End Try
 
             Try
-
-                ' Verify ITCM is present on the system
-                If Utility.IsITCMInstalled Then
-
-                    ' Set global flag
-                    Globals.ITCMInstalled = True
-
-                Else
-
-                    ' Set global flag
-                    Globals.ITCMInstalled = False
-
-                End If
-
-                ' Environment initialization
+                If Utility.IsITCMInstalled Then Globals.ITCMInstalled = True Else Globals.ITCMInstalled = False
                 InitEnvironment(CallStack)
-
             Catch ex As Exception
-
-                ' Write debug
                 Logger.WriteDebug(CallStack, "Error: " + Globals.ProcessShortName + " environment initialization failed.")
                 Logger.WriteDebug(CallStack, "Exception: " + ex.Message)
-                Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + ": Exit code 3.")
-
-                ' Check if user prompt is appropriate
+                Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + ": Exit code 2.")
                 If Not (Globals.RunningAsSystemIdentity OrElse
                     Globals.ParentProcessTree.Contains("sd_jexec") OrElse
                     Globals.AttachedtoConsole) Then
-
-                    ' Prompt user with timeout
-                    AlertBox.CreateUserAlert("Exit code 3: " + Environment.NewLine +
+                    AlertBox.CreateUserAlert("Exit code 2: " + Environment.NewLine +
                                              Globals.ProcessShortName + " environment initialization failed." +
                                              Environment.NewLine + Environment.NewLine +
                                              "Exception: " + Environment.NewLine + ex.Message, 20)
-
                 End If
-
-                ' Return
                 Return 2
-
             End Try
 
             Try
-
-                ' Initlize based on ITCM installation status
                 If Globals.ITCMInstalled Then
-
-                    ' Registry Initialization
                     InitRegistry(CallStack)
-
                 End If
-
             Catch ex As Exception
-
-                ' Write debug
                 Logger.WriteDebug(CallStack, "Error: " + Globals.ProcessShortName + " registry initialization failed.")
                 Logger.WriteDebug(CallStack, "Exception: " + ex.Message)
-                Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + ": Exit code 4.")
-
-                ' Check if user prompt is appropriate
+                Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + ": Exit code 3.")
                 If Not (Globals.RunningAsSystemIdentity OrElse
                     Globals.ParentProcessTree.Contains("sd_jexec") OrElse
                     Globals.AttachedtoConsole) Then
-
-                    ' Prompt user with timeout
-                    AlertBox.CreateUserAlert("Exit code 4: " + Environment.NewLine +
+                    AlertBox.CreateUserAlert("Exit code 3: " + Environment.NewLine +
                                              Globals.ProcessShortName + " registry initialization failed." +
                                              Environment.NewLine + Environment.NewLine +
                                              "Exception: " + Environment.NewLine + ex.Message, 20)
-
                 End If
-
-                ' Return
                 Return 3
-
             End Try
 
             Try
-
-                ' Initialize based on ITCM installation status
                 If Globals.ITCMInstalled Then
-
-                    ' Comstore Initialization
                     InitComstore(CallStack)
-
                 End If
-
             Catch ex As Exception
-
-                ' Write debug
                 Logger.WriteDebug(CallStack, "Error: " + Globals.ProcessShortName + " comstore initialization failed.")
                 Logger.WriteDebug(CallStack, "Exception: " + ex.Message)
-                Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + ": Exit code 5.")
-
-                ' Check if user prompt is appropriate
+                Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + ": Exit code 4.")
                 If Not (Globals.RunningAsSystemIdentity OrElse
                     Globals.ParentProcessTree.Contains("sd_jexec") OrElse
                     Globals.AttachedtoConsole) Then
-
-                    ' Prompt user with timeout
-                    AlertBox.CreateUserAlert("Exit code 5: " + Environment.NewLine +
+                    AlertBox.CreateUserAlert("Exit code 4: " + Environment.NewLine +
                                              Globals.ProcessShortName + " comstore initialization failed." +
                                              Environment.NewLine + Environment.NewLine +
                                              "Exception: " + Environment.NewLine + ex.Message, 20)
-
                 End If
-
-                ' Return
                 Return 4
-
             End Try
 
             Try
-
-                ' Isolation check
                 IsolationCheck(CallStack)
-
             Catch ex As Exception
-
-                ' Write debug
                 Logger.WriteDebug(CallStack, "Error: " + Globals.ProcessShortName + " isolation check failed.")
                 Logger.WriteDebug(CallStack, "Exception: " + ex.Message)
-                Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + ": Exit code 6.")
-
-                ' Check if user prompt is appropriate
+                Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + ": Exit code 5.")
                 If Not (Globals.RunningAsSystemIdentity OrElse
                     Globals.ParentProcessTree.Contains("sd_jexec") OrElse
                     Globals.AttachedtoConsole) Then
-
-                    ' Prompt user with timeout
-                    AlertBox.CreateUserAlert("Exit code 6: " + Environment.NewLine +
+                    AlertBox.CreateUserAlert("Exit code 5: " + Environment.NewLine +
                                              Globals.ProcessShortName + " isolation check failed." +
                                              Environment.NewLine + Environment.NewLine +
                                              "Exception: " + Environment.NewLine + ex.Message, 20)
-
                 End If
-
-                ' Return
                 Return 5
-
             End Try
 
             Try
-
-                ' Debug log initialization
                 Logger.InitDebugLog(CallStack)
-
             Catch ex As Exception
-
-                ' Write debug
                 Logger.WriteDebug(CallStack, "Error: " + Globals.ProcessShortName + " debug log initialization failed.")
                 Logger.WriteDebug(CallStack, "Exception: " + ex.Message)
-                Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + ": Exit code 7.")
-
-                ' Check if user prompt is appropriate
+                Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + ": Exit code 6.")
                 If Not (Globals.RunningAsSystemIdentity OrElse
                     Globals.ParentProcessTree.Contains("sd_jexec") OrElse
                     Globals.AttachedtoConsole) Then
-
-                    ' Prompt user with timeout
-                    AlertBox.CreateUserAlert("Exit code 7: " + Environment.NewLine +
+                    AlertBox.CreateUserAlert("Exit code 6: " + Environment.NewLine +
                                              Globals.ProcessShortName + " debug log initialization failed." +
                                              Environment.NewLine + Environment.NewLine +
                                              "Exception: " + Environment.NewLine + ex.Message, 20)
-
                 End If
-
-                ' Return
                 Return 6
-
             End Try
 
             Try
-
-                ' Startup switch initialization
                 InitStartupSwitches(CallStack)
-
             Catch ex As Exception
-
-                ' Write debug
                 Logger.WriteDebug(CallStack, "Error: " + Globals.ProcessShortName + " failed to process startup switches.")
                 Logger.WriteDebug(CallStack, "Exception: " + ex.Message)
-                Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + ": Exit code 8.")
-
-                ' Check if user prompt is appropriate
+                Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + ": Exit code 7.")
                 If Not (Globals.RunningAsSystemIdentity OrElse
                     Globals.ParentProcessTree.Contains("sd_jexec") OrElse
                     Globals.AttachedtoConsole) Then
-
-                    ' Prompt user with timeout
-                    AlertBox.CreateUserAlert("Exit code 8: " + Environment.NewLine +
+                    AlertBox.CreateUserAlert("Exit code 7: " + Environment.NewLine +
                                              Globals.ProcessShortName + " failed to process startup switches." +
                                              Environment.NewLine + Environment.NewLine +
                                              "Exception: " + Environment.NewLine + ex.Message, 20)
-
                 End If
-
-                ' Return
                 Return 7
-
             End Try
 
             Try
-
-                ' Extract embedded resources
                 InitResources(CallStack)
-
             Catch ex As Exception
-
-                ' Write debug
                 Logger.WriteDebug(CallStack, "Error: " + Globals.ProcessShortName + " resource extraction failed.")
                 Logger.WriteDebug(CallStack, "Exception: " + ex.Message)
-                Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + ": Exit code 10.")
-
-                ' Check if user prompt is appropriate
+                Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + ": Exit code 8.")
                 If Not (Globals.RunningAsSystemIdentity OrElse
                     Globals.ParentProcessTree.Contains("sd_jexec") OrElse
                     Globals.AttachedtoConsole) Then
-
-                    ' Prompt user with timeout
-                    AlertBox.CreateUserAlert("Exit code 10: " + Environment.NewLine +
+                    AlertBox.CreateUserAlert("Exit code 8: " + Environment.NewLine +
                                              Globals.ProcessShortName + " resource extraction failed." +
                                              Environment.NewLine + Environment.NewLine +
                                              "Exception: " + Environment.NewLine + ex.Message, 20)
-
                 End If
-
-                ' Return
                 Return 8
-
             End Try
-
-            ' Return
             Return 0
-
         End Function
 
         ' Initialize process
