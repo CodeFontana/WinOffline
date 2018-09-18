@@ -16,52 +16,41 @@ Partial Public Class WinOffline
         Public Shared ManagerName As String = Nothing
 
         Public Shared Function SQLFunctionDispatch(ByVal Callstack As String) As Integer
+
             Dim ConnectionString As String = Nothing
             Dim DbConnection As SqlConnection = Nothing
             Callstack += "DatabaseAPI|"
 
-            ' *****************************
-            ' - Perform verifications.
-            ' *****************************
-
+            ' Perform verifications
             If Not Utility.IsITCMInstalled Then
                 Logger.WriteDebug(Callstack, "Error: ITCM is not installed.")
                 Return 0
             End If
-
             If Not Globals.ITCMFunction.ToLower.Contains("manager") Then
                 Logger.WriteDebug(Callstack, "Error: Database functions only available on ITCM managers.")
                 Return 0
             End If
-
             If Globals.DatabaseServer Is Nothing Then
                 Logger.WriteDebug(Callstack, "Error: Database server name from comstore is empty.")
                 Return 0
             End If
-
             If Globals.DbUser Is Nothing Then
                 Globals.DbUser = Globals.ProcessIdentity.Name
                 Logger.WriteDebug(Callstack, "Logon as: " + Globals.DbUser)
-            ElseIf Globals.DbPassword Is Nothing Then
-                ' Write directly to attached console (this is not logged)
-                Console.WriteLine()
+            End If
+            If Globals.DbPassword Is Nothing Then
+                Console.WriteLine() ' Write directly to attached console (this is not logged)
                 Console.WriteLine(Callstack.Substring(Callstack.IndexOf("DatabaseAPI")) + "Logon as: " + Globals.DbUser)
                 Console.Write(Callstack.Substring(Callstack.IndexOf("DatabaseAPI")) + "Enter password: ")
                 KeyboardHook.SetHook() ' Hook the keyboard for low-level input
-
-                ' Wait for keyboard release
-                While (KeyboardHook.KeyboardHooked)
-                    System.Windows.Forms.Application.DoEvents()
-                    System.Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
+                While (KeyboardHook.KeyboardHooked) ' Wait for keyboard release
+                    Windows.Forms.Application.DoEvents()
+                    Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                 End While
-
                 Globals.DbPassword = KeyboardHook.CapturedString.ToString
             End If
 
-            ' *****************************
-            ' - Build connection string.
-            ' *****************************
-
+            ' Build connection string
             If Globals.DbUser.Contains("\") Then
                 ConnectionString = "Server=" + Globals.DatabaseServer
                 ConnectionString += "\" + Globals.DatabaseInstance
@@ -80,6 +69,7 @@ Partial Public Class WinOffline
             End If
 
             Try
+                ' Connect to database
                 DbConnection = New SqlConnection(ConnectionString)
                 DbConnection.Open()
                 DomainUuid = SqlSelectScalar(Callstack, DbConnection, "select set_val_uuid from ca_settings with (nolock) where set_id=1")
@@ -91,6 +81,7 @@ Partial Public Class WinOffline
                 ManagerName = SqlSelectScalar(Callstack, DbConnection, "select label from ca_manager with (nolock) where domain_uuid=" + DomainUuid)
                 Logger.WriteDebug(Callstack, "Manager name: " + ManagerName)
 
+                ' Dispatch
                 If Globals.MdbOverviewSwitch Then
                     Logger.WriteDebug(Callstack, "Domain managers: " + SqlSelectScalar(Callstack, DbConnection, "select count(*) from ca_n_tier with (nolock) where domain_type=0"))
                     Logger.WriteDebug(Callstack, "Scalability Servers: " + SqlSelectScalar(Callstack, DbConnection, "select count(*) from ca_server with (nolock)"))
@@ -118,7 +109,9 @@ Partial Public Class WinOffline
                     Logger.WriteDebug(Callstack, "Query Based Policies: " + SqlSelectScalar(Callstack, DbConnection, "select count(*) from polidef with (nolock)"))
                     Logger.WriteDebug(Callstack, "Engine Instances: " + SqlSelectScalar(Callstack, DbConnection, "select count(*) from ca_engine with (nolock)"))
                     Logger.WriteDebug(Callstack, "Engine Tasks: " + SqlSelectScalar(Callstack, DbConnection, "select count(*) from ncjobcfg with (nolock) where jotype<>2 and domainid=" + DomainId))
+
                 ElseIf Globals.MdbCleanAppsSwitch Then
+
                     Dim SqlScript As String = My.Resources.SQL_CleanApps_Unified
                     Dim SqlBatches As String()
                     Dim SqlCmd As SqlCommand
@@ -128,13 +121,16 @@ Partial Public Class WinOffline
                     ' Enumerate sql batches based on "GO"
                     SqlBatches = Regex.Split(SqlScript, "^\s*GO\s*\d*\s*($|\-\-.*$)", RegexOptions.Multiline Or RegexOptions.IgnorePatternWhitespace Or RegexOptions.IgnoreCase)
 
+                    ' Execute sql batches
                     For Each QueryLine As String In SqlBatches
                         If QueryLine.Equals("") Then Continue For
                         SqlCmd = New SqlCommand(QueryLine, DbConnection)
                         SqlData = SqlCmd.ExecuteReader()
                         SqlData.Close()
                     Next
+
                 End If
+
             Catch ex As Exception
                 Logger.WriteDebug(Callstack, "Exception: " + ex.Message)
             Finally
@@ -143,14 +139,19 @@ Partial Public Class WinOffline
                     Logger.WriteDebug(Callstack, "Database connection closed.")
                 End If
             End Try
+
             Return 0
+
         End Function
 
         Private Shared Sub OnMdbCleanAppsInfoMessage(ByVal sender As Object, ByVal e As SqlInfoMessageEventArgs)
+
             Logger.WriteDebug(Logger.LastCallStack, e.Message)
+
         End Sub
 
         Public Shared Function SqlSelectScalar(ByVal CallStack As String, ByVal DatabaseConnection As SqlConnection, ByVal QueryText As String) As String
+
             Dim SqlCmd As SqlCommand
             Dim SqlData As SqlDataReader
             Dim ScalarValue As String = ""
@@ -172,15 +173,20 @@ Partial Public Class WinOffline
                         ScalarValue = SqlData(0).ToString
                     End If
                 End If
+
                 SqlData.Close()
+
             Catch ex As Exception
                 Logger.WriteDebug(CallStack, "Database Exception: " + ex.Message)
                 Return ex.Message
             End Try
+
             Return ScalarValue
+
         End Function
 
         Public Shared Function SqlSelectScalarList(ByVal CallStack As String, ByVal DatabaseConnection As SqlConnection, ByVal QueryText As String) As List(Of String)
+
             Dim SqlCmd As SqlCommand
             Dim SqlData As SqlDataReader
             Dim ResultArray As New List(Of String)
@@ -206,17 +212,22 @@ Partial Public Class WinOffline
                         End While
                     End If
                 Loop While SqlData.NextResult
+
                 SqlData.Close()
+
             Catch ex As Exception
                 Logger.WriteDebug(CallStack, "Database Exception: " + ex.Message)
             End Try
+
             Return ResultArray
+
         End Function
 
         Public Shared Function SqlSelectGrid(ByVal CallStack As String,
                                              ByVal DatabaseConnection As SqlConnection,
                                              ByVal QueryText As String,
                                              Optional ByVal IncludeColumnHeaders As Boolean = False) As List(Of List(Of String))
+
             Dim SqlCmd As SqlCommand
             Dim SqlData As SqlDataReader
             Dim RowArray As New List(Of String)
@@ -257,11 +268,15 @@ Partial Public Class WinOffline
                         End While
                     End If
                 Loop While SqlData.NextResult
+
                 SqlData.Close()
+
             Catch ex As Exception
                 Logger.WriteDebug(CallStack, "Database Exception: " + ex.Message)
             End Try
+
             Return ResultArray
+
         End Function
 
     End Class
