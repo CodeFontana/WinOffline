@@ -406,7 +406,7 @@
             Dim RemainingOutput As String
             Dim ConsoleOutput As String
 
-            ' Trigger cacertutil list -v
+            ' Run cacertutil list -v
             ExecutionString = Globals.DSMFolder + "bin\cacertutil.exe"
             ArgumentString = "list -v"
             Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)

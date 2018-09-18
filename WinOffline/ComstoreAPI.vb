@@ -3,6 +3,7 @@
     Public Class ComstoreAPI
 
         Public Shared Function GetParameterValue(ByVal ParameterSection As String, ByVal ParameterName As String) As String
+
             Dim ExecutionString As String
             Dim ArgumentString As String
             Dim RunningProcess As Process
@@ -20,9 +21,11 @@
             StandardOutput = RunningProcess.StandardOutput.ReadToEnd
             RunningProcess.Close()
             Return StandardOutput.Replace(vbCr, "").Replace(vbLf, "") ' Return -- remove carriage return (with full safety)
+
         End Function
 
         Public Shared Function SetParameterValue(ByVal ParameterSection As String, ByVal ParameterName As String, ByVal NewValue As String) As String
+
             Dim ExecutionString As String
             Dim ArgumentString As String
             Dim RunningProcess As Process
@@ -40,9 +43,11 @@
             StandardOutput = RunningProcess.StandardOutput.ReadToEnd
             RunningProcess.Close()
             Return StandardOutput.Replace(vbCr, "").Replace(vbLf, "") ' Return -- remove carriage return (with full safety)
+
         End Function
 
         Public Shared Function DeleteParameter(ByVal ParameterSection As String, ByVal ParameterName As String) As String
+
             Dim ExecutionString As String
             Dim ArgumentString As String
             Dim RunningProcess As Process
@@ -60,9 +65,11 @@
             StandardOutput = RunningProcess.StandardOutput.ReadToEnd
             RunningProcess.Close()
             Return StandardOutput.Replace(vbCr, "").Replace(vbLf, "") ' Return -- remove carriage return (with full safety)
+
         End Function
 
         Public Shared Function DeleteParameterSection(ByVal ParameterSection As String) As String
+
             Dim ExecutionString As String
             Dim ArgumentString As String
             Dim RunningProcess As Process
@@ -80,6 +87,7 @@
             StandardOutput = RunningProcess.StandardOutput.ReadToEnd
             RunningProcess.Close()
             Return StandardOutput.Replace(vbCr, "").Replace(vbLf, "") ' Return -- remove carriage return (with full safety)
+
         End Function
 
     End Class
