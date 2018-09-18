@@ -102,6 +102,7 @@
         End Function
 
         Public Shared Function ReadCache(ByVal CallStack As String) As ArrayList
+
             Dim CacheFile As String = Globals.WinOfflineTemp + "\" + Globals.ProcessFriendlyName + "-history.cache"
             Dim CacheReader As System.IO.StreamReader
             Dim strLine As String = ""
@@ -146,18 +147,18 @@
 
             Logger.WriteDebug(CallStack, "Close file: " + CacheFile)
             CacheReader.Close()
+
             Return RestoredManifest
+
         End Function
 
         Public Shared Sub WriteCache(ByVal CallStack As String, ByVal HistoryManifest As ArrayList)
+
             Dim CacheFile As String = Globals.WinOfflineTemp + "\" + Globals.ProcessFriendlyName + "-history.cache"
             Dim CacheWriter As System.IO.StreamWriter
             Dim CurEvent As HistoryVector
 
-            ' *****************************
-            ' - Flush prior cache file.
-            ' *****************************
-
+            ' Flush prior cache file
             If System.IO.File.Exists(CacheFile) Then
                 Utility.DeleteFile(CallStack, CacheFile)
             ElseIf Not System.IO.Directory.Exists(Globals.WinOfflineTemp) Then
@@ -166,13 +167,9 @@
                 Return
             End If
 
-            ' *****************************
-            ' - Create a new cache file.
-            ' *****************************
-
+            ' Create a new cache file
             Logger.WriteDebug(CallStack, "Write cache file: " + CacheFile)
             CacheWriter = New System.IO.StreamWriter(CacheFile, False)
-
             For n As Integer = 0 To HistoryManifest.Count() - 1
                 CurEvent = DirectCast(HistoryManifest.Item(n), HistoryVector)
                 If CurEvent.IsEmpty Then
@@ -184,9 +181,9 @@
                 End If
                 CacheWriter.WriteLine(CurEvent.toString)
             Next
-
             Logger.WriteDebug(CallStack, "Close file: " + CacheFile)
             CacheWriter.Close()
+
         End Sub
 
     End Class

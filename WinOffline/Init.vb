@@ -7,12 +7,10 @@ Partial Public Class WinOffline
     Public Class Init
 
         Public Shared Function Init(ByVal CallStack As String) As Integer
+
             CallStack += "Init|"
 
-            ' *****************************
-            ' - Switch: Command line help.
-            ' *****************************
-
+            ' Switch: Command line help
             If Utility.StringArrayContains(Globals.CommandLineArgs, "?", True) OrElse
                 Utility.StringArrayContains(Globals.CommandLineArgs, "help", True) Then
                 Globals.RunningAsSystemIdentity = WindowsIdentity.GetCurrent.IsSystem
@@ -28,10 +26,7 @@ Partial Public Class WinOffline
                 End If
             End If
 
-            ' *****************************
-            ' - Switch: Removal tool execution.
-            ' *****************************
-
+            ' Switch: Removal tool execution
             If Utility.StringArrayContains(Globals.CommandLineArgs, "removeitcm", True) OrElse
                 Utility.StringArrayContains(Globals.CommandLineArgs, "uninstallitcm", True) Then
                 Try
@@ -53,10 +48,7 @@ Partial Public Class WinOffline
                 Environment.Exit(0)
             End If
 
-            ' *****************************
-            ' - Switch: On-demand CAF stop/start.
-            ' *****************************
-
+            ' Switch: On-demand CAF stop/start
             If Utility.StringArrayContains(Globals.CommandLineArgs, "stopcaf", True) OrElse
                 Utility.StringArrayContains(Globals.CommandLineArgs, "startcaf", True) Then
                 Try
@@ -84,10 +76,7 @@ Partial Public Class WinOffline
                 Environment.Exit(0)
             End If
 
-            ' *****************************
-            ' - Switch: Command line database utilities.
-            ' *****************************
-
+            ' Switch: Command line database utilities
             If Globals.AttachedtoConsole AndAlso
                 (Utility.StringArrayContains(Globals.CommandLineArgs, "testdbconn", True) OrElse
                 Utility.StringArrayContains(Globals.CommandLineArgs, "testconn", True) OrElse
@@ -117,10 +106,7 @@ Partial Public Class WinOffline
                 Environment.Exit(0)
             End If
 
-            ' *****************************
-            ' - Switch: Launch an application
-            ' *****************************
-
+            ' Switch: Launch an application
             If Utility.StringArrayContains(Globals.CommandLineArgs, "launch", True) Then
                 Try
                     InitProcess(CallStack)
@@ -142,10 +128,7 @@ Partial Public Class WinOffline
                 Environment.Exit(0)
             End If
 
-            ' *****************************
-            ' - Switch: On-demand software library cleanup execution.
-            ' *****************************
-
+            ' Switch: On-demand software library cleanup execution
             If Globals.AttachedtoConsole AndAlso
                 (Utility.StringArrayContains(Globals.CommandLineArgs, "checklibrary", True) OrElse
                 Utility.StringArrayContains(Globals.CommandLineArgs, "cleanlibrary", True)) Then
@@ -173,10 +156,7 @@ Partial Public Class WinOffline
                 Environment.Exit(0)
             End If
 
-            ' *****************************
-            ' - Main process initialization.
-            ' *****************************
-
+            ' InitProcess()
             Try
                 InitProcess(CallStack)
             Catch ex As Exception
@@ -194,6 +174,7 @@ Partial Public Class WinOffline
                 Return 1
             End Try
 
+            ' InitEnvironment()
             Try
                 If Utility.IsITCMInstalled Then Globals.ITCMInstalled = True Else Globals.ITCMInstalled = False
                 InitEnvironment(CallStack)
@@ -212,6 +193,7 @@ Partial Public Class WinOffline
                 Return 2
             End Try
 
+            ' InitRegistry()
             Try
                 If Globals.ITCMInstalled Then
                     InitRegistry(CallStack)
@@ -231,6 +213,7 @@ Partial Public Class WinOffline
                 Return 3
             End Try
 
+            ' InitComstore()
             Try
                 If Globals.ITCMInstalled Then
                     InitComstore(CallStack)
@@ -250,6 +233,7 @@ Partial Public Class WinOffline
                 Return 4
             End Try
 
+            ' IsolationCheck()
             Try
                 IsolationCheck(CallStack)
             Catch ex As Exception
@@ -267,6 +251,7 @@ Partial Public Class WinOffline
                 Return 5
             End Try
 
+            ' InitDebugLog()
             Try
                 Logger.InitDebugLog(CallStack)
             Catch ex As Exception
@@ -284,6 +269,7 @@ Partial Public Class WinOffline
                 Return 6
             End Try
 
+            ' InitStartupSwitches()
             Try
                 InitStartupSwitches(CallStack)
             Catch ex As Exception
@@ -301,6 +287,7 @@ Partial Public Class WinOffline
                 Return 7
             End Try
 
+            ' InitResources()
             Try
                 InitResources(CallStack)
             Catch ex As Exception
@@ -317,25 +304,33 @@ Partial Public Class WinOffline
                 End If
                 Return 8
             End Try
+
             Return 0
+
         End Function
 
         Public Shared Sub InitProcess(ByVal CallStack As String)
+
             Dim ProcessWMI As ManagementObject = Nothing
             Dim CurrentID As Integer = Nothing
             Dim ParentID As Integer = Nothing
             Dim ParentName As String = Nothing
+
             CallStack += "InitProcess|"
+
+            ' The basics
+            Globals.HostName = My.Computer.Name
+            Globals.ProcessIdentity = WindowsIdentity.GetCurrent
+            Globals.RunningAsSystemIdentity = WindowsIdentity.GetCurrent.IsSystem
+            Globals.ProcessID = Process.GetCurrentProcess.Id
             Logger.WriteDebug(CallStack, "Process name: " + Globals.ProcessShortName)
             Logger.WriteDebug(CallStack, "Version: " + Globals.ProcessFriendlyName + " " + Globals.AppVersion)
             Logger.WriteDebug(CallStack, ".NET framework version: " + Globals.DotNetVersion)
-            Globals.HostName = My.Computer.Name
             Logger.WriteDebug(CallStack, "Hostname: " + My.Computer.Name)
-            Globals.ProcessIdentity = WindowsIdentity.GetCurrent
-            Globals.RunningAsSystemIdentity = WindowsIdentity.GetCurrent.IsSystem
             Logger.WriteDebug(CallStack, "Running as: " + Globals.ProcessIdentity.Name)
-            Globals.ProcessID = Process.GetCurrentProcess.Id
             Logger.WriteDebug(CallStack, "PID: " + Globals.ProcessID.ToString)
+
+            ' Read up the parent process tree
             Try
                 CurrentID = Globals.ProcessID
                 While True
@@ -350,13 +345,19 @@ Partial Public Class WinOffline
             Catch ex As Exception
                 If Globals.ParentProcessName Is Nothing Then Globals.ParentProcessName = "noparent"
             End Try
+
+            ' More basics
             Globals.WorkingDirectory = Globals.ProcessName.Substring(0, Globals.ProcessName.LastIndexOf("\") + 1)
             Logger.WriteDebug(CallStack, "Working directory: " + Globals.WorkingDirectory)
             Logger.WriteDebug(CallStack, "Attached to console: " + Globals.AttachedtoConsole.ToString)
+
         End Sub
 
         Public Shared Sub InitEnvironment(ByVal CallStack As String)
+
             CallStack += "InitEnvironment|"
+
+            ' Lock on a temporary location
             Try
                 Globals.WindowsBase = Environment.GetEnvironmentVariable("windir", EnvironmentVariableTarget.Machine)
                 Globals.WinOfflineTemp = Environment.GetEnvironmentVariable("TEMP", EnvironmentVariableTarget.Machine)
@@ -379,12 +380,14 @@ Partial Public Class WinOffline
                 Globals.WindowsTemp = Globals.WinOfflineTemp
                 Globals.WinOfflineTemp = Globals.WinOfflineTemp + "\" + Globals.ProcessFriendlyName
                 Logger.WriteDebug(CallStack, "Temporary folder: " + Globals.WindowsTemp)
+
             Catch ex As Exception
                 Throw New Exception("Unable to create a temporary folder. " +
                                     "An exception was caught while attempting to read system environment variables: " +
                                     Environment.NewLine + Environment.NewLine + ex.Message)
             End Try
 
+            ' Create temporary folder
             Try
                 If System.IO.Directory.Exists(Globals.WinOfflineTemp) Then
                     Logger.WriteDebug(CallStack, Globals.ProcessFriendlyName + " folder already exists: " + Globals.WinOfflineTemp)
@@ -399,6 +402,7 @@ Partial Public Class WinOffline
                                     Environment.NewLine + Environment.NewLine + ex.Message)
             End Try
 
+            ' Read component variables
             If Globals.ITCMInstalled Then
                 Try
                     Globals.CAMFolder = Environment.GetEnvironmentVariable("CAI_MSQ", EnvironmentVariableTarget.Machine)
@@ -425,14 +429,17 @@ Partial Public Class WinOffline
                     Throw New Exception("An exception was caught reading the SSA install folder: " +
                                         Environment.NewLine + Environment.NewLine + ex.Message)
                 End Try
+
             End If
         End Sub
 
         Public Shared Sub InitRegistry(ByVal CallStack As String)
+
             Dim ProductInfoKey As Microsoft.Win32.RegistryKey = Nothing
             Dim CAPKIKey As Microsoft.Win32.RegistryKey = Nothing
             Dim FeatureKeys As String()
             Dim FeatureValue As String
+
             CallStack += "InitRegistry|"
 
             ProductInfoKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE\Wow6432Node\ComputerAssociates\Unicenter ITRM", False)
@@ -649,6 +656,7 @@ Partial Public Class WinOffline
         End Sub
 
         Public Shared Sub InitComstore(ByVal CallStack As String)
+
             Dim ComstoreString As String
             CallStack += "InitComstore|"
 
@@ -725,13 +733,16 @@ Partial Public Class WinOffline
                 Globals.DatabaseUser = ComstoreString
                 Logger.WriteDebug(CallStack, "Database user: " + Globals.DatabaseUser)
             End If
+
         End Sub
 
         Public Shared Sub IsolationCheck(ByVal CallStack As String)
+
             Dim clsParentProcessName As String
             Dim LoopCounter As Integer = 0
             CallStack += "InitIsolation|"
 
+            ' More than one of us?
             If Utility.IsProcessRunningCount(Globals.ProcessFriendlyName) > 1 Then
                 Logger.WriteDebug(CallStack, "Warning: Detected existing " + Globals.ProcessFriendlyName + " execution in progress.")
                 Logger.WriteDebug(CallStack, "Warning: Current execution (this process) may not be the primary process.")
@@ -743,7 +754,6 @@ Partial Public Class WinOffline
                         Continue For
                     End If
                     Logger.WriteDebug(CallStack, "Existing " + Globals.ProcessFriendlyName + " PID: " + clsProcess.Id.ToString)
-
                     Try
                         Dim clsProcessWMI = New ManagementObject("Win32_Process.Handle='" & clsProcess.Id & "'")
                         Dim clsParentProcessID = clsProcessWMI("ParentProcessID")
@@ -756,17 +766,10 @@ Partial Public Class WinOffline
                     End Try
                 Next
 
-                ' *****************************
-                ' - Dispatch duplicate process (this process).
-                ' *****************************
-
+                ' Dispatch duplicate process (this process)
                 If Globals.ParentProcessTree.Contains("sd_jexec") Then
-
-                    ' *****************************
-                    ' Scenario #1: Duplicate process, our parent is software delivery.
-                    ' --> Signal a re-run request and terminate.
-                    ' *****************************
-
+                    ' Scenario #1: Duplicate process, our parent is software delivery
+                    ' --> Signal a re-run request and terminate
                     Logger.WriteDebug(CallStack, "Entry point: Software delivery.")
                     Logger.WriteDebug(CallStack, "Signal re-run request..")
                     Dim ExecutionString = Globals.DSMFolder + "bin\" + "sd_acmd.exe"
@@ -783,16 +786,11 @@ Partial Public Class WinOffline
                     Throw New Exception("Scenario #1: Duplicate process, our parent is software delivery. Signal re-run request..")
 
                 ElseIf Globals.ParentProcessName.ToLower.Equals(Globals.ProcessFriendlyName.ToLower) Then
-
-                    ' *****************************
-                    ' Scenario #2: Duplicate process, our parent is WinOffline.
-                    ' --> Finite loop for isolation before continuing, otherwise terminate.
-                    ' *****************************
-
+                    ' Scenario #2: Duplicate process, our parent is WinOffline
+                    ' --> Finite loop for isolation before continuing, otherwise terminate
                     Logger.WriteDebug(CallStack, "Entry point: " + Globals.ProcessFriendlyName + ".")
                     Thread.Sleep(10000)
                     LoopCounter = 0
-
                     While Utility.IsProcessRunningCount(Globals.ProcessFriendlyName) > 1
                         Logger.WriteDebug(CallStack, "Parent process is still active.")
                         System.Windows.Forms.Application.DoEvents()
@@ -805,21 +803,15 @@ Partial Public Class WinOffline
                                                 "Finite loop for isolation before continuing, otherwise terminate.")
                         End If
                     End While
-
                     Logger.WriteDebug(CallStack, "Parent process has terminated.")
                     Logger.WriteDebug(CallStack, "Isolation Check: Passed.")
 
                 ElseIf Globals.ParentProcessName.ToLower.Equals("noparent") Then
-
-                    ' *****************************
                     ' Scenario #3: Duplicate process, our parent is unknown or has terminated.
-                    ' --> Finite loop for isolation before continuing, otherwise terminate.
-                    ' *****************************
-
+                    ' --> Finite loop for isolation before continuing, otherwise terminate
                     Logger.WriteDebug(CallStack, "Entry point: No parent.")
                     Thread.Sleep(10000)
                     LoopCounter = 0
-
                     While Utility.IsProcessRunningCount(Globals.ProcessFriendlyName) > 1
                         Logger.WriteDebug(CallStack, "Parallel process is still active.")
                         System.Windows.Forms.Application.DoEvents()
@@ -832,34 +824,33 @@ Partial Public Class WinOffline
                                                 "Finite loop for isolation before continuing, otherwise terminate.")
                         End If
                     End While
-
                     Logger.WriteDebug(CallStack, "Parallel process has terminated.")
                     Logger.WriteDebug(CallStack, "Isolation Check: Passed.")
 
                 Else
-
-                    ' *****************************
-                    ' Scenario #4: Duplicate process launched by user or script.
-                    ' --> Terminate.
-                    ' *****************************
-
+                    ' Scenario #4: Duplicate process launched by user or script
+                    ' --> Terminate
                     Logger.WriteDebug(CallStack, "Entry point: Standalone execution.")
                     Logger.WriteDebug(CallStack, "Exit with isolation check failure..")
                     Throw New Exception("Scenario #4: Duplicate process launched by user or script. Terminate.")
                 End If
+
             Else
                 Logger.WriteDebug(CallStack, "No parallel " + Globals.ProcessShortName + " processes detected.")
             End If
+
         End Sub
 
-        ' Startup switch initialization
         Public Shared Sub InitStartupSwitches(ByVal CallStack As String)
+
             Dim RemovePatchString As String
             Dim IndividualPatch As String()
             Dim rVector As RemovalVector
             Dim RemovePatchSwitchError As Boolean = False
+
             CallStack += "InitSwitch|"
 
+            ' Iterate command line args
             For i As Integer = 0 To Globals.CommandLineArgs.Length - 1
                 If Globals.CommandLineArgs(i).ToString.ToLower.Equals("backout") Or
                         Globals.CommandLineArgs(i).ToString.ToLower.Equals("-backout") Or
@@ -1249,9 +1240,11 @@ Partial Public Class WinOffline
             If Globals.CommandLineArgs.Length = 0 Then
                 Logger.WriteDebug(CallStack, "No startup switches specified.")
             End If
+
         End Sub
 
         Public Shared Sub InitResources(ByVal CallStack As String)
+
             Dim Source As String
             Dim Destination As String
             CallStack += "InitResource|"
@@ -1341,7 +1334,9 @@ Partial Public Class WinOffline
         '   This is detected when we process the SD job container, and the cached
         '     ID for the job doesn't match the current ID (JobContainer.vb).
         Public Shared Function SDStageIReInit(ByVal CallStack As String) As Integer
+
             CallStack += "ReInit|"
+
             Try
                 Logger.WriteDebug(CallStack, "Delete Folder: " + Globals.WinOfflineTemp)
                 System.IO.Directory.Delete(Globals.WinOfflineTemp, True)
@@ -1377,12 +1372,16 @@ Partial Public Class WinOffline
             Logger.WriteDebug(CallStack, "Reinitialize debug log..")
             Logger.SDStageIReInitDebugLog()
             Logger.WriteDebug(CallStack, "Debug log reinitialized.")
+
             Return 0
+
         End Function
 
         Public Shared Sub DeInit(ByVal CallStack As String, ByVal BypassSummary As Boolean, ByVal KeepDebugLog As Boolean)
+
             Dim FileList As String()
             Dim Today As String = DateTime.Now.ToString("yyyyMMdd")
+
             CallStack += "DeInit|"
 
             Try
@@ -1452,6 +1451,7 @@ Partial Public Class WinOffline
             End If
 
             WindowsAPI.DetachConsole()
+
         End Sub
 
     End Class
