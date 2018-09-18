@@ -1,6 +1,7 @@
 ﻿Partial Public Class WinOffline
 
     Public Shared Function Dispatcher(ByVal CallStack As String) As Integer
+
         Dim StateFile As String
         Dim StateStreamReader As System.IO.StreamReader
         Dim StateLine As String
@@ -57,7 +58,6 @@
                     End If
 
                 ElseIf StateLine.Equals("StageII completed.") Then
-
                     ' Dispatch StageIII
                     Logger.WriteDebug(CallStack, "Execution marker: StageII Completed.")
                     RunLevel = StageIII(CallStack)
@@ -76,7 +76,6 @@
                     End If
 
                 Else
-
                     ' This should never happen
                     Logger.WriteDebug(CallStack, "Error: Execution marker is unknown.")
                     Manifest.UpdateManifest(CallStack,
@@ -89,7 +88,6 @@
                 End If
 
             Else
-
                 Logger.WriteDebug(CallStack, "Execution marker not found.")
 
                 ' No marker, dispatch based on SD/non-SD mode
@@ -137,9 +135,9 @@
                         Logger.WriteDebug(CallStack, "Set final stage marker: True")
                         Globals.FinalStage = True
                     End If
+
                 Else
                     Logger.WriteDebug(CallStack, "Execution mode: Software delivery")
-
                     ' Dispatch StageI
                     RunLevel = StageI(CallStack)
                     If RunLevel <> 0 Then

@@ -111,7 +111,6 @@ Partial Public Class WinOffline
                     Logger.WriteDebug(Callstack, "Engine Tasks: " + SqlSelectScalar(Callstack, DbConnection, "select count(*) from ncjobcfg with (nolock) where jotype<>2 and domainid=" + DomainId))
 
                 ElseIf Globals.MdbCleanAppsSwitch Then
-
                     Dim SqlScript As String = My.Resources.SQL_CleanApps_Unified
                     Dim SqlBatches As String()
                     Dim SqlCmd As SqlCommand
@@ -145,9 +144,7 @@ Partial Public Class WinOffline
         End Function
 
         Private Shared Sub OnMdbCleanAppsInfoMessage(ByVal sender As Object, ByVal e As SqlInfoMessageEventArgs)
-
             Logger.WriteDebug(Logger.LastCallStack, e.Message)
-
         End Sub
 
         Public Shared Function SqlSelectScalar(ByVal CallStack As String, ByVal DatabaseConnection As SqlConnection, ByVal QueryText As String) As String

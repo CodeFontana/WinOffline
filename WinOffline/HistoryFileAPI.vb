@@ -8,27 +8,26 @@
     Public Const EXPLORER_GUI As String = "DSM Explorer GUI -- EGC"
 
     Public Shared Function ProcessHistoryFiles(ByVal CallStack As String)
+
         Dim Runlevel As Integer = 0
         CallStack += "HistoryFile|"
 
+        ' Read component history files
         Runlevel = ReadHistoryFile(CallStack, IT_CLIENT_MANAGER, Globals.DSMFolder + Globals.HostName + ".his")
         If Runlevel <> 0 Then
             Logger.WriteDebug(CallStack, "Error: Failed to process ITCM history file.")
             Return 1
         End If
-
         Runlevel = ReadHistoryFile(CallStack, SHARED_COMPONENTS, Globals.SharedCompFolder + Globals.HostName + ".his")
         If Runlevel <> 0 Then
             Logger.WriteDebug(CallStack, "Error: Failed to process shared components history file.")
             Return 2
         End If
-
         Runlevel = ReadHistoryFile(CallStack, CA_MESSAGE_QUEUING, Globals.CAMFolder + "\" + Globals.HostName + ".his")
         If Runlevel <> 0 Then
             Logger.WriteDebug(CallStack, "Error: Failed to process CAM history file.")
             Return 3
         End If
-
         If Globals.SSAFolder IsNot Nothing Then
             Runlevel = ReadHistoryFile(CallStack, SECURE_SOCKET_ADAPATER, Globals.SSAFolder + Globals.HostName + ".his")
             If Runlevel <> 0 Then
@@ -36,7 +35,6 @@
                 Return 4
             End If
         End If
-
         If Globals.DTSFolder IsNot Nothing Then
             Runlevel = ReadHistoryFile(CallStack, DATA_TRANSPORT, Globals.DTSFolder + "\" + Globals.HostName + ".his")
             If Runlevel <> 0 Then
@@ -44,7 +42,6 @@
                 Return 5
             End If
         End If
-
         If Globals.EGCFolder IsNot Nothing Then
             Runlevel = ReadHistoryFile(CallStack, EXPLORER_GUI, Globals.EGCFolder + Globals.HostName + ".his")
             If Runlevel <> 0 Then
@@ -52,10 +49,13 @@
                 Return 6
             End If
         End If
+
         Return 0
+
     End Function
 
     Public Shared Function ReadHistoryFile(ByVal CallStack As String, ByVal Component As String, ByVal HistoryFile As String)
+
         Dim HistoryFileFound As Boolean = False             ' Flag indicating if history file is available.
         Dim HistoryFileReader As System.IO.StreamReader     ' Input stream for reading history file.
         Dim HistoryArray As New ArrayList                   ' Array for storing raw history from file.
@@ -63,10 +63,12 @@
         Dim HistoryEvents As New ArrayList                  ' Array for grouping related history file entries.
         Dim hVector As HistoryVector                        ' History vector object.
         Dim PatchCount As Integer = 0                       ' Patch counter (for summary purposes)
+
         Logger.WriteDebug(CallStack, "Component: " + Component)
 
         If System.IO.File.Exists(HistoryFile) Then
             Try
+                ' Read history file
                 HistoryFileFound = True
                 Logger.WriteDebug(CallStack, "Open file: " + HistoryFile)
                 Logger.WriteDebug("############################################################")
@@ -80,6 +82,7 @@
                 Logger.WriteDebug(CallStack, "Close file: " + HistoryFile)
                 HistoryFileReader.Close()
 
+                ' Process history file
                 For i As Integer = 0 To HistoryArray.Count - 1
                     strLine = HistoryArray.Item(i)
                     If strLine.StartsWith("[") And strLine.ToLower.Contains("installed") Then
@@ -127,15 +130,21 @@
             Logger.WriteDebug(CallStack, "History file: Unavailable.")
             Manifest.UpdateManifest(CallStack, Manifest.HISTORY_MANIFEST, hVector)
         End If
+
         Return 0
+
     End Function
 
     Public Shared Sub AddtoHistory(ByVal CallStack As String, ByVal pVector As PatchVector)
+
         Dim HistoryFile As String = ""
         Dim HistoryFileInfo As System.IO.FileInfo
         Dim HistoryFileWriter As System.IO.StreamWriter
         Dim NewFile As Boolean = False
+
         CallStack += "HistoryFile|"
+
+        ' Stub proper history file location
         If pVector.IsClientAuto Then HistoryFile = Globals.DSMFolder + Globals.HostName + ".his"
         If pVector.IsSharedComponent Then HistoryFile = Globals.SharedCompFolder + Globals.HostName + ".his"
         If pVector.IsCAM Then HistoryFile = Globals.CAMFolder + "\" + Globals.HostName + ".his"
@@ -144,6 +153,7 @@
         If pVector.IsExplorerGUI Then HistoryFile = Globals.EGCFolder + Globals.HostName + ".his"
 
         Try
+            ' Append history file
             Logger.WriteDebug(CallStack, "Append history file: " + HistoryFile)
             If System.IO.File.Exists(HistoryFile) Then
                 HistoryFileInfo = New System.IO.FileInfo(HistoryFile)
@@ -155,6 +165,8 @@
             Else
                 NewFile = True
             End If
+
+            ' Write new history file
             HistoryFileWriter = New IO.StreamWriter(HistoryFile, True)
             If NewFile Then
                 Logger.WriteDebug(CallStack, "Write: " + "[" + pVector.GetApplyPTFDateFormat + "] - PTF Wizard created this history file.")
@@ -167,6 +179,7 @@
             HistoryFileWriter.WriteLine(pVector.GetApplyPTFSummary)
             Logger.WriteDebug(CallStack, "Close file: " + HistoryFile)
             HistoryFileWriter.Close()
+
         Catch ex As Exception
             Logger.WriteDebug(CallStack, "Error: Exception caught appending history file.")
             Logger.WriteDebug(ex.Message)
@@ -174,10 +187,13 @@
             Manifest.UpdateManifest(CallStack, Manifest.EXCEPTION_MANIFEST, {ex.Message, ex.StackTrace})
             Return
         End Try
+
         Return
+
     End Sub
 
     Public Shared Sub RemoveFromHistory(ByVal CallStack As String, ByVal rVector As RemovalVector)
+
         Dim HistoryFileReader As System.IO.StreamReader
         Dim HistoryFileWriter As System.IO.StreamWriter
         Dim strLine As String
@@ -186,8 +202,10 @@
         Dim EndIndex As Integer = -1
         Dim DelimCount As Integer = 0
         Dim HistoryFileInfo As System.IO.FileInfo
+
         CallStack += "HistoryFile|"
 
+        ' Read history file
         If System.IO.File.Exists(rVector.HistoryFile) Then
             Try
                 Logger.WriteDebug(CallStack, "Read history file: " + rVector.HistoryFile)
@@ -205,12 +223,10 @@
                 Manifest.UpdateManifest(CallStack, Manifest.EXCEPTION_MANIFEST, {ex.Message, ex.StackTrace})
                 Return
             End Try
+
         End If
 
-        ' *****************************
-        ' - Remove last patch occurrence.
-        ' *****************************
-
+        ' Remove last patch occurrence of specified patch
         Try
             For i As Integer = 0 To HistoryFileArray.Count - 1
                 If HistoryFileArray.Item(i).ToString.ToLower.Contains("ptf wizard installed " + rVector.RemovalItem.ToLower) Then
@@ -224,7 +240,6 @@
                     Next
                 End If
             Next
-
             If BeginIndex <> -1 And EndIndex <> -1 And BeginIndex < EndIndex Then
                 HistoryFileArray.RemoveRange(BeginIndex, EndIndex - BeginIndex)
                 Logger.WriteDebug(CallStack, "Last occurrence removed: " + rVector.RemovalItem)
@@ -238,10 +253,7 @@
             Return
         End Try
 
-        ' *****************************
-        ' - Write history file.
-        ' *****************************
-
+        ' Write history file
         Try
             HistoryFileInfo = New System.IO.FileInfo(rVector.HistoryFile)
             If HistoryFileInfo.Attributes And IO.FileAttributes.ReadOnly Then
@@ -255,6 +267,7 @@
             Next
             Logger.WriteDebug(CallStack, "Close file: " + rVector.HistoryFile)
             HistoryFileWriter.Close()
+
         Catch ex As Exception
             Logger.WriteDebug(CallStack, "Error: Exception caught rewriting history file.")
             Logger.WriteDebug(ex.Message)
@@ -263,15 +276,15 @@
             Return
         End Try
 
-        ' *****************************
-        ' - Normalize history file.
-        ' *****************************
-
+        ' Normalize history file
         NormalizeHistoryFile(CallStack, rVector.HistoryFile)
+
         Return
+
     End Sub
 
     Public Shared Sub NormalizeHistoryFile(ByVal CallStack As String, ByVal HistoryFile As String)
+
         Dim HistoryFileReader As System.IO.StreamReader
         Dim HistoryFileWriter As System.IO.StreamWriter
         Dim HistoryFileCreateDate As Date
@@ -284,10 +297,7 @@
         Dim EndIndex As Integer = 0
         Dim DelimCount As Integer = 0
 
-        ' *****************************
-        ' - Read history file.
-        ' *****************************
-
+        ' Read history file
         If System.IO.File.Exists(HistoryFile) Then
             Try
                 HistoryFileCreateDate = System.IO.File.GetCreationTime(HistoryFile)
@@ -309,26 +319,36 @@
             End Try
         End If
 
-        ' *****************************
-        ' - Normalize history file.
-        ' *****************************
-
+        ' Normalize history file
         Try
+
+            ' Iterate history file, in reverse
             For i As Integer = HistoryFileArray.Count - 1 To 0 Step -1
+
+                ' Read current line
                 CurrentLine = HistoryFileArray.Item(i)
+
+                ' Read previous line
                 If i < HistoryFileArray.Count - 1 Then
                     PreviousLine = HistoryFileArray.Item(i + 1)
                 Else
                     PreviousLine = "-1"
                 End If
+
+                ' Process current line
                 If CurrentLine.Equals("") AndAlso PreviousLine.Equals("") Then
                     HistoryFileArray.RemoveAt(i)
                     Continue For
+
                 ElseIf CurrentLine.ToLower.StartsWith("installedfile=") Then
+
+                    ' Is the entry long enough?
                     If i - 8 < 0 Then
                         HistoryFileArray.RemoveAt(i)
                         Continue For
                     End If
+
+                    ' Iterate up, stupid!
                     For j As Integer = i - 1 To 0 Step -1
                         ForwardLine = HistoryFileArray.Item(j)
                         If ForwardLine.Equals("") Then
@@ -370,6 +390,7 @@
                         End If
                     Next
                     Continue For
+
                 ElseIf CurrentLine.ToLower.StartsWith("#") OrElse
                     CurrentLine.Equals("") OrElse
                     CurrentLine.ToLower.Contains("ptf wizard created this history file") Then
@@ -380,15 +401,21 @@
                         Continue For
                     End If
                     Continue For
+
                 Else
                     HistoryFileArray.RemoveAt(i)
                     Continue For
                 End If
+
             Next
+
+            ' Is the header present?
             If HistoryFileArray.Count = 0 OrElse Not DirectCast(HistoryFileArray.Item(0), String).ToLower.Contains("ptf wizard created this history file") Then
                 HistoryFileArray.Insert(0, HistoryFileCreateDate.ToString("[ddd MMM d HH:mm:ss yyyy]") + " - PTF Wizard created this history file.")
             End If
+
             Logger.WriteDebug(CallStack, "History file normalized.")
+
         Catch ex As Exception
             Logger.WriteDebug(CallStack, "Error: Exception caught normalizing history file.")
             Logger.WriteDebug(ex.Message)
@@ -397,10 +424,7 @@
             Return
         End Try
 
-        ' *****************************
-        ' - Write history file.
-        ' *****************************
-
+        ' Write history file
         Try
             Logger.WriteDebug(CallStack, "Rewrite history file: " + HistoryFile)
             HistoryFileWriter = New System.IO.StreamWriter(HistoryFile, False)
@@ -416,6 +440,7 @@
             Manifest.UpdateManifest(CallStack, Manifest.EXCEPTION_MANIFEST, {ex.Message, ex.StackTrace})
             Return
         End Try
+
     End Sub
 
 End Class
