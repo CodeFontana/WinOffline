@@ -10,15 +10,21 @@
 
         Try
             If System.IO.File.Exists(StateFile) Then
+
+                ' Read state file and set execution mode
                 Logger.WriteDebug(CallStack, "Found prior execution marker.")
-                Globals.SDBasedMode = True
                 Logger.WriteDebug(CallStack, "Upgrade execution mode: Software Delivery")
                 Logger.WriteDebug(CallStack, "Open file: " + StateFile)
                 StateStreamReader = New System.IO.StreamReader(StateFile)
                 StateLine = StateStreamReader.ReadLine()
                 StateStreamReader.Close()
+                Globals.SDBasedMode = True
+
+                ' Dispatch based on state file contents
                 If StateLine.Equals("StageI completed.") Then
                     Logger.WriteDebug(CallStack, "Execution marker: StageI completed.")
+
+                    ' Check for wrong mode (StageII under software delivery mode)
                     If Globals.ParentProcessTree.Contains("sd_jexec") Then
                         Logger.WriteDebug(CallStack, "Error: StageII requested in software delivery online mode.")
                         Manifest.UpdateManifest(CallStack,
@@ -39,6 +45,8 @@
                         End If
                         Return RunLevel
                     End If
+
+                    ' Dispatch StageII
                     RunLevel = StageII(CallStack)
                     If RunLevel <> 0 Then
                         Logger.WriteDebug(CallStack, "Error: StageII reports failure.")
@@ -47,7 +55,10 @@
                                                 {"Error: StageII reports an error.",
                                                 "Reason: Please analyze the debug log for more information."})
                     End If
+
                 ElseIf StateLine.Equals("StageII completed.") Then
+
+                    ' Dispatch StageIII
                     Logger.WriteDebug(CallStack, "Execution marker: StageII Completed.")
                     RunLevel = StageIII(CallStack)
                     If RunLevel <> 0 Then
@@ -63,7 +74,10 @@
                         Logger.WriteDebug(CallStack, "Set final stage marker: True")
                         Globals.FinalStage = True
                     End If
+
                 Else
+
+                    ' This should never happen
                     Logger.WriteDebug(CallStack, "Error: Execution marker is unknown.")
                     Manifest.UpdateManifest(CallStack,
                                             Manifest.EXCEPTION_MANIFEST,
@@ -73,10 +87,16 @@
                     Globals.FinalStage = True
                     Return 4 ' Return (Software Delivery: Unknown marker, StageIII-OK)
                 End If
+
             Else
+
                 Logger.WriteDebug(CallStack, "Execution marker not found.")
+
+                ' No marker, dispatch based on SD/non-SD mode
                 If Not Globals.SDBasedMode Then
                     Logger.WriteDebug(CallStack, "Execution mode: Non-Software Delivery")
+
+                    ' Dispatch StageI
                     RunLevel = StageI(CallStack)
                     If RunLevel <> 0 Then
                         Logger.WriteDebug(CallStack, "Error: StageI reports failure.")
@@ -88,6 +108,8 @@
                         Globals.FinalStage = True
                         Return 5 ' Return (Interactive: StageI-FAIL)
                     End If
+
+                    ' Dispatch StageII
                     RunLevel = StageII(CallStack)
                     If RunLevel <> 0 Then
                         Logger.WriteDebug(CallStack, "Error: StageII reports failure.")
@@ -99,6 +121,8 @@
                         Globals.FinalStage = True
                         Return 6 ' Return (Interactive: StageI-OK, StageII-FAIL)
                     End If
+
+                    ' Dispatch StageIII
                     RunLevel = StageIII(CallStack)
                     If RunLevel <> 0 Then
                         Logger.WriteDebug(CallStack, "Error: StageIII reports failure.")
@@ -115,6 +139,8 @@
                     End If
                 Else
                     Logger.WriteDebug(CallStack, "Execution mode: Software delivery")
+
+                    ' Dispatch StageI
                     RunLevel = StageI(CallStack)
                     If RunLevel <> 0 Then
                         Logger.WriteDebug(CallStack, "Error: StageI reports failure.")
@@ -127,7 +153,9 @@
                         Return 8 ' Return (Software Delivery: StageI-FAIL)
                     End If
                 End If
+
             End If
+
         Catch ex As Exception
             Logger.WriteDebug(CallStack, "Error: Exception caught in the dispatcher.")
             Logger.WriteDebug(ex.Message)
@@ -137,7 +165,9 @@
             Globals.FinalStage = True
             Return 1
         End Try
+
         Return RunLevel
+
     End Function
 
 End Class
