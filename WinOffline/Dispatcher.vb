@@ -38,7 +38,7 @@
                         '   Re-init will wipe the cache, along with all temps, then we will pickup the new/current job ID.
                         Globals.DirtyFlag = True
                         Init.SDStageIReInit(CallStack)
-                        RunLevel = StageI(CallStack)
+                        RunLevel = StageI(CallStack) ' StageI
                         If RunLevel <> 0 Then
                             Logger.WriteDebug(CallStack, "Set final stage marker: True")
                             Globals.FinalStage = True
@@ -58,9 +58,8 @@
                     End If
 
                 ElseIf StateLine.Equals("StageII completed.") Then
-                    ' Dispatch StageIII
                     Logger.WriteDebug(CallStack, "Execution marker: StageII Completed.")
-                    RunLevel = StageIII(CallStack)
+                    RunLevel = StageIII(CallStack) ' Dispatch StageIII
                     If RunLevel <> 0 Then
                         Logger.WriteDebug(CallStack, "Error: StageIII reports failure.")
                         Manifest.UpdateManifest(CallStack,
@@ -138,8 +137,7 @@
 
                 Else
                     Logger.WriteDebug(CallStack, "Execution mode: Software delivery")
-                    ' Dispatch StageI
-                    RunLevel = StageI(CallStack)
+                    RunLevel = StageI(CallStack) ' Dispatch StageI
                     If RunLevel <> 0 Then
                         Logger.WriteDebug(CallStack, "Error: StageI reports failure.")
                         Manifest.UpdateManifest(CallStack,

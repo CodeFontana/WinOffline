@@ -1229,10 +1229,8 @@ Partial Public Class WinOffline
             If Globals.ParentProcessName.ToLower.Equals("cmd") AndAlso
                 Globals.WorkingDirectory.ToLower.Contains("\dmprimer\caunicenterdsm\") AndAlso
                 Globals.WorkingDirectory.ToLower.Contains("\testfixes\") Then
-                ' Set implied switches (don't stop CAM or DMPrimer services)
-                ' Note: Stopping these services will interrupt infrastructure deployment process
-                Globals.SkipCAM = True
-                Globals.SkipDMPrimer = True
+                Globals.SkipCAM = True ' Set implied switches (don't stop CAM or DMPrimer services)
+                Globals.SkipDMPrimer = True ' Note: Stopping these services will interrupt infrastructure deployment process
                 Logger.WriteDebug(CallStack, "Implied Switch: Don't stop CAM service.")
                 Logger.WriteDebug(CallStack, "Implied Switch: Don't stop DMPrimer service.")
             End If

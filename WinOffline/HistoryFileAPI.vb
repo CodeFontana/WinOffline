@@ -18,16 +18,19 @@
             Logger.WriteDebug(CallStack, "Error: Failed to process ITCM history file.")
             Return 1
         End If
+
         Runlevel = ReadHistoryFile(CallStack, SHARED_COMPONENTS, Globals.SharedCompFolder + Globals.HostName + ".his")
         If Runlevel <> 0 Then
             Logger.WriteDebug(CallStack, "Error: Failed to process shared components history file.")
             Return 2
         End If
+
         Runlevel = ReadHistoryFile(CallStack, CA_MESSAGE_QUEUING, Globals.CAMFolder + "\" + Globals.HostName + ".his")
         If Runlevel <> 0 Then
             Logger.WriteDebug(CallStack, "Error: Failed to process CAM history file.")
             Return 3
         End If
+
         If Globals.SSAFolder IsNot Nothing Then
             Runlevel = ReadHistoryFile(CallStack, SECURE_SOCKET_ADAPATER, Globals.SSAFolder + Globals.HostName + ".his")
             If Runlevel <> 0 Then
@@ -35,6 +38,7 @@
                 Return 4
             End If
         End If
+
         If Globals.DTSFolder IsNot Nothing Then
             Runlevel = ReadHistoryFile(CallStack, DATA_TRANSPORT, Globals.DTSFolder + "\" + Globals.HostName + ".his")
             If Runlevel <> 0 Then
@@ -42,6 +46,7 @@
                 Return 5
             End If
         End If
+
         If Globals.EGCFolder IsNot Nothing Then
             Runlevel = ReadHistoryFile(CallStack, EXPLORER_GUI, Globals.EGCFolder + Globals.HostName + ".his")
             If Runlevel <> 0 Then

@@ -38,11 +38,13 @@
                 Logger.WriteDebug(CallStack, "Warning: Unable to repair certificate store.")
                 Return
             End If
+
             If Not System.IO.File.Exists(CertStoreFile) Then
                 Logger.WriteDebug(CallStack, "Warning: Certificate store file does not exist: " + CertStoreFile)
                 Logger.WriteDebug(CallStack, "Warning: Unable to repair certificate store.")
                 Return
             End If
+
             If Not System.IO.File.Exists(KeyStoreFile) Then
                 Logger.WriteDebug(CallStack, "Warning: Private key store file does not exist: " + KeyStoreFile)
                 Logger.WriteDebug(CallStack, "Warning: Unable to repair certificate store.")
@@ -54,11 +56,13 @@
                 Logger.WriteDebug(CallStack, "Delete folder: " + CBBFolderSecondaryBackup)
                 System.IO.Directory.Delete(CBBFolderSecondaryBackup, True)
             End If
+
             If System.IO.Directory.Exists(CBBFolderPrimaryBackup) Then
                 Logger.WriteDebug(CallStack, "Move folder: " + CBBFolderPrimaryBackup)
                 Logger.WriteDebug(CallStack, "To: " + CBBFolderSecondaryBackup)
                 System.IO.Directory.Move(CBBFolderPrimaryBackup, CBBFolderSecondaryBackup)
             End If
+
             If System.IO.Directory.Exists(CBBFolder) Then
                 Logger.WriteDebug(CallStack, "Backup folder: " + CBBFolder)
                 Logger.WriteDebug(CallStack, "To: " + CBBFolderPrimaryBackup)

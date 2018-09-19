@@ -26,18 +26,22 @@ Partial Public Class WinOffline
                 Logger.WriteDebug(Callstack, "Error: ITCM is not installed.")
                 Return 0
             End If
+
             If Not Globals.ITCMFunction.ToLower.Contains("manager") Then
                 Logger.WriteDebug(Callstack, "Error: Database functions only available on ITCM managers.")
                 Return 0
             End If
+
             If Globals.DatabaseServer Is Nothing Then
                 Logger.WriteDebug(Callstack, "Error: Database server name from comstore is empty.")
                 Return 0
             End If
+
             If Globals.DbUser Is Nothing Then
                 Globals.DbUser = Globals.ProcessIdentity.Name
                 Logger.WriteDebug(Callstack, "Logon as: " + Globals.DbUser)
             End If
+
             If Globals.DbPassword Is Nothing Then
                 Console.WriteLine() ' Write directly to attached console (this is not logged)
                 Console.WriteLine(Callstack.Substring(Callstack.IndexOf("DatabaseAPI")) + "Logon as: " + Globals.DbUser)
