@@ -469,7 +469,7 @@
 
         ' Remove RC agent driver
         Try
-            If Utility.Is64BitOperatingSystem Then
+            If Environment.Is64BitOperatingSystem Then
                 If System.IO.File.Exists(Globals.DSMFolder + "bin\AMD64\rcMirrorInstall.exe") Then
                     CallStack += CallStack.Substring(0, CallStack.IndexOf("RemoveITCM|") + 11) + "RemoveRC|"
                     Logger.WriteDebug(CallStack, "Uninstalling RC smart card driver..")
