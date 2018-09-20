@@ -39,15 +39,12 @@ Public Class AlertBox
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
-
         If AutoCloseCounter >= AutoCloseTimeout Then
             Timer1.Stop()
             Me.Close()
         End If
-
         AutoCloseCounter += 1
         Text = FormTitle + " -- " + ((AutoCloseTimeout + 1) - AutoCloseCounter).ToString + " seconds."
-
     End Sub
 
     Private Sub OkayButton_Click(sender As System.Object, e As System.EventArgs) Handles btnOK.Click
