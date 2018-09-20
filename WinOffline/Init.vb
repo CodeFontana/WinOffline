@@ -318,11 +318,11 @@ Partial Public Class WinOffline
 
             CallStack += "InitProcess|"
 
-            ' The basics
             Globals.HostName = My.Computer.Name
             Globals.ProcessIdentity = WindowsIdentity.GetCurrent
             Globals.RunningAsSystemIdentity = WindowsIdentity.GetCurrent.IsSystem
             Globals.ProcessID = Process.GetCurrentProcess.Id
+
             Logger.WriteDebug(CallStack, "Process name: " + Globals.ProcessShortName)
             Logger.WriteDebug(CallStack, "Version: " + Globals.ProcessFriendlyName + " " + Globals.AppVersion)
             Logger.WriteDebug(CallStack, ".NET framework version: " + Globals.DotNetVersion)
@@ -346,7 +346,6 @@ Partial Public Class WinOffline
                 If Globals.ParentProcessName Is Nothing Then Globals.ParentProcessName = "noparent"
             End Try
 
-            ' More basics
             Globals.WorkingDirectory = Globals.ProcessName.Substring(0, Globals.ProcessName.LastIndexOf("\") + 1)
             Logger.WriteDebug(CallStack, "Working directory: " + Globals.WorkingDirectory)
             Logger.WriteDebug(CallStack, "Attached to console: " + Globals.AttachedtoConsole.ToString)
@@ -1250,12 +1249,15 @@ Partial Public Class WinOffline
             Try
                 Globals.MyAssembly = Reflection.Assembly.GetExecutingAssembly()
                 Globals.MyRoot = Globals.MyAssembly.GetName().Name
+
                 If Not System.IO.File.Exists(Globals.WorkingDirectory + "cazipxp.exe") Then
                     Logger.WriteDebug(CallStack, "Extract: " + Globals.WinOfflineTemp + "\cazipxp.exe")
+
                     Globals.MyResourceStream = Globals.MyAssembly.GetManifestResourceStream(Globals.MyRoot + "." + "Cazipxp.exe")
                     ReDim Globals.MyBuffer(Convert.ToInt32(Globals.MyResourceStream.Length) - 1)
                     Globals.MyResourceStream.Read(Globals.MyBuffer, 0, Globals.MyBuffer.Length)
                     Globals.MyResourceStream.Close()
+
                     If Globals.DumpCazipxpSwitch Then
                         Globals.MyFileStream = New System.IO.FileStream(Globals.WorkingDirectory +
                                                                         "\Cazipxp.exe",
@@ -1268,43 +1270,57 @@ Partial Public Class WinOffline
                                                                         System.IO.FileMode.Create,
                                                                         System.IO.FileAccess.Write)
                     End If
+
                     Globals.MyFileStream.Write(Globals.MyBuffer, 0, Globals.MyBuffer.Length)
                     Globals.MyFileStream.Close()
+
                 Else
                     Logger.WriteDebug(CallStack, "Alternative resource provided: " + Globals.WorkingDirectory + "cazipxp.exe")
+
                     Source = Globals.WorkingDirectory + "cazipxp.exe"
                     Destination = Globals.WinOfflineTemp + "\cazipxp.exe"
+
                     Logger.WriteDebug(CallStack, "Copy file: " + Source)
                     Logger.WriteDebug(CallStack, "To: " + Destination)
+
                     System.IO.File.Copy(Source, Destination, True)
                 End If
 
                 If Not System.IO.File.Exists(Globals.WorkingDirectory + "LaunchService.exe") Then
                     Logger.WriteDebug(CallStack, "Extract: " + Globals.WinOfflineTemp + "\LaunchService.exe")
+
                     Globals.MyResourceStream = Globals.MyAssembly.GetManifestResourceStream(Globals.MyRoot + "." + "LaunchService.exe")
                     ReDim Globals.MyBuffer(Convert.ToInt32(Globals.MyResourceStream.Length) - 1)
                     Globals.MyResourceStream.Read(Globals.MyBuffer, 0, Globals.MyBuffer.Length)
                     Globals.MyResourceStream.Close()
+
                     Utility.DeleteFile(CallStack, Globals.WinOfflineTemp + "\LaunchService.exe")
+
                     Globals.MyFileStream = New System.IO.FileStream(Globals.WinOfflineTemp + "\LaunchService.exe", System.IO.FileMode.Create, System.IO.FileAccess.Write)
                     Globals.MyFileStream.Write(Globals.MyBuffer, 0, Globals.MyBuffer.Length)
                     Globals.MyFileStream.Close()
                 Else
                     Logger.WriteDebug(CallStack, "Alternative resource provided: " + Globals.WorkingDirectory + "LaunchService.exe")
+
                     Source = Globals.WorkingDirectory + "LaunchService.exe"
                     Destination = Globals.WinOfflineTemp + "\LaunchService.exe"
+
                     Logger.WriteDebug(CallStack, "Copy file: " + Source)
                     Logger.WriteDebug(CallStack, "To: " + Destination)
+
                     System.IO.File.Copy(Source, Destination, True)
                 End If
 
                 If Not System.IO.File.Exists(Globals.WorkingDirectory + Globals.ProcessShortName + ".config") Then
                     Logger.WriteDebug(CallStack, "Extract: " + Globals.WindowsTemp + "\" + Globals.ProcessShortName + ".config")
+
                     Globals.MyResourceStream = Globals.MyAssembly.GetManifestResourceStream(Globals.MyRoot + "." + "app.config")
                     ReDim Globals.MyBuffer(Convert.ToInt32(Globals.MyResourceStream.Length) - 1)
                     Globals.MyResourceStream.Read(Globals.MyBuffer, 0, Globals.MyBuffer.Length)
                     Globals.MyResourceStream.Close()
+
                     Utility.DeleteFile(CallStack, Globals.WindowsTemp + "\" + Globals.ProcessShortName + ".config")
+
                     Globals.MyFileStream = New System.IO.FileStream(Globals.WindowsTemp + "\" + Globals.ProcessShortName + ".config", System.IO.FileMode.Create, System.IO.FileAccess.Write)
                     Globals.MyFileStream.Write(Globals.MyBuffer, 0, Globals.MyBuffer.Length)
                     Globals.MyFileStream.Close()
@@ -1335,6 +1351,7 @@ Partial Public Class WinOffline
 
             CallStack += "ReInit|"
 
+            ' Delete temp folder
             Try
                 Logger.WriteDebug(CallStack, "Delete Folder: " + Globals.WinOfflineTemp)
                 System.IO.Directory.Delete(Globals.WinOfflineTemp, True)
@@ -1348,6 +1365,7 @@ Partial Public Class WinOffline
                 Utility.DeleteFolderContents(CallStack, Globals.WinOfflineTemp, Nothing)
             End Try
 
+            ' Recreate it
             Try
                 Logger.WriteDebug(CallStack, "Create " + Globals.ProcessFriendlyName + " folder..")
                 If System.IO.Directory.Exists(Globals.WinOfflineTemp) Then
@@ -1363,10 +1381,15 @@ Partial Public Class WinOffline
                 Return 1
             End Try
 
+            ' Re-extract resources
             InitResources(CallStack)
+
+            ' Clear manifests
             Logger.WriteDebug(CallStack, "Flush ALL manifest data..")
             Manifest.FlushManifestData()
             Logger.WriteDebug(CallStack, "Manifest data has been RESET.")
+
+            ' Re-init debug log
             Logger.WriteDebug(CallStack, "Reinitialize debug log..")
             Logger.SDStageIReInitDebugLog()
             Logger.WriteDebug(CallStack, "Debug log reinitialized.")
@@ -1382,6 +1405,7 @@ Partial Public Class WinOffline
 
             CallStack += "DeInit|"
 
+            ' Delete temp folder
             Try
                 If Globals.WinOfflineTemp IsNot Nothing AndAlso System.IO.Directory.Exists(Globals.WinOfflineTemp) Then
                     Logger.WriteDebug(CallStack, "Delete Folder: " + Globals.WinOfflineTemp)
@@ -1399,6 +1423,7 @@ Partial Public Class WinOffline
                 Logger.WriteDebug(CallStack, "Fallback: Delete contents of temporary folder completed.")
             End Try
 
+            ' Delete WinOffline and config file
             Try
                 Utility.DeleteFile(CallStack, Globals.WindowsTemp + "\" + Globals.ProcessShortName)
                 Utility.DeleteFile(CallStack, Globals.WindowsTemp + "\" + Globals.ProcessShortName + ".config")
@@ -1409,7 +1434,7 @@ Partial Public Class WinOffline
                 Manifest.UpdateManifest(CallStack, Manifest.EXCEPTION_MANIFEST, {ex.Message, ex.StackTrace})
             End Try
 
-
+            ' Remove prior debug logs (anything not from today)
             Try
                 If System.IO.Directory.Exists(Globals.DSMFolder) Then
                     FileList = System.IO.Directory.GetFiles(Globals.DSMFolder)
