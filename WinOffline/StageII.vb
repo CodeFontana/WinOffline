@@ -2,19 +2,19 @@
 
     Public Shared Function StageII(ByVal CallStack As String) As Integer
 
-        Dim StateStreamWriter As System.IO.StreamWriter             ' Output stream for writing the execution state marker.
-        Dim ExecutionString As String                               ' Command line to be executed externally to the application.
-        Dim ArgumentString As String                                ' Arguments passed on the command line for the external execution.
-        Dim RunningProcess As Process                               ' A process shell for executing the command line.
-        Dim ProcessStartInfo As ProcessStartInfo                    ' Process startup settings for configuring the bahviour of the process.
-        Dim PatchErrorReported As Boolean = False                   ' Flag indicating a patch error was reported.
-        Dim HistoryFile As String                                   ' Name of patch history file.
-        Dim BackupFileStamp As String                               ' Timestamp for saving a copy of the cam.cfg file
-        Dim FileList As String()                                    ' Array for storing list of files.
-        Dim strFile As String                                       ' Used for filename comparison.
-        Dim hexString As String                                     ' Used for BHI temp file cleanup.
-        Dim HostUUIDKey As Microsoft.Win32.RegistryKey = Nothing    ' Used for HostUUID regeneration.
-        Dim RunLevel As Integer = 0                                 ' Tracks the health of the function and calls to external functions.
+        Dim StateStreamWriter As System.IO.StreamWriter
+        Dim ExecutionString As String
+        Dim ArgumentString As String
+        Dim RunningProcess As Process
+        Dim ProcessStartInfo As ProcessStartInfo
+        Dim PatchErrorReported As Boolean = False
+        Dim HistoryFile As String
+        Dim BackupFileStamp As String
+        Dim FileList As String()
+        Dim strFile As String
+        Dim hexString As String
+        Dim HostUUIDKey As Microsoft.Win32.RegistryKey = Nothing
+        Dim RunLevel As Integer = 0
 
         CallStack += "StageII|"
         Logger.SetCurrentTask("StageII..")
@@ -35,16 +35,20 @@
         ' Switch: Disable ENC client
         If Globals.DisableENCSwitch AndAlso System.IO.File.Exists(Globals.DSMFolder + "bin\encutilcmd.exe") Then
             Logger.WriteDebug(CallStack, "Switch: Disable ENC client.")
+
             ExecutionString = Globals.DSMFolder + "bin\encutilcmd.exe"
             ArgumentString = "client -state disabled"
+
             Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
             ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
             ProcessStartInfo.WorkingDirectory = Globals.DSMFolder + "bin"
             ProcessStartInfo.UseShellExecute = False
             ProcessStartInfo.RedirectStandardOutput = True
             ProcessStartInfo.CreateNoWindow = True
+
             RunningProcess = Process.Start(ProcessStartInfo)
             RunningProcess.WaitForExit()
+
             Logger.WriteDebug("------------------------------------------------------------")
             Logger.WriteDebug(RunningProcess.StandardOutput.ReadToEnd.ToString)
             Logger.WriteDebug("------------------------------------------------------------")
@@ -111,16 +115,20 @@
         Try
             If Globals.ResetCftraceSwitch Then
                 Logger.WriteDebug(CallStack, "Switch: Reset cftrace level.")
+
                 ExecutionString = Globals.DSMFolder + "bin\cftrace.exe"
                 ArgumentString = "-c reset"
+
                 Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
                 ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
                 ProcessStartInfo.WorkingDirectory = Globals.DSMFolder + "bin"
                 ProcessStartInfo.UseShellExecute = False
                 ProcessStartInfo.RedirectStandardOutput = True
                 ProcessStartInfo.CreateNoWindow = True
+
                 RunningProcess = Process.Start(ProcessStartInfo)
                 RunningProcess.WaitForExit()
+
                 Logger.WriteDebug("------------------------------------------------------------")
                 Logger.WriteDebug(RunningProcess.StandardOutput.ReadToEnd.ToString)
                 Logger.WriteDebug("------------------------------------------------------------")
@@ -343,16 +351,20 @@
         ' Switch: Launch DSM Explorer
         If Globals.LaunchGuiSwitch AndAlso Not Globals.RunningAsSystemIdentity AndAlso System.IO.File.Exists(Globals.DSMFolder + "bin\dsmgui.exe") Then
             Logger.WriteDebug(CallStack, "Switch: Launch DSM Explorer.")
+
             ExecutionString = Globals.DSMFolder + "bin\dsmgui.exe"
             ArgumentString = ""
+
             Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
             ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
             ProcessStartInfo.WorkingDirectory = Globals.DSMFolder + "bin"
             ProcessStartInfo.UseShellExecute = False
             ProcessStartInfo.RedirectStandardOutput = True
             ProcessStartInfo.CreateNoWindow = True
+
             RunningProcess = Process.Start(ProcessStartInfo)
             RunningProcess.WaitForExit()
+
             RunningProcess.Close()
             Logger.WriteDebug(CallStack, "DSM Explorer launched.")
         End If
