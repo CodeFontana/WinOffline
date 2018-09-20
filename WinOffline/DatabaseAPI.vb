@@ -19,6 +19,7 @@ Partial Public Class WinOffline
 
             Dim ConnectionString As String = Nothing
             Dim DbConnection As SqlConnection = Nothing
+
             Callstack += "DatabaseAPI|"
 
             ' Perform verifications
@@ -46,11 +47,14 @@ Partial Public Class WinOffline
                 Console.WriteLine() ' Write directly to attached console (this is not logged)
                 Console.WriteLine(Callstack.Substring(Callstack.IndexOf("DatabaseAPI")) + "Logon as: " + Globals.DbUser)
                 Console.Write(Callstack.Substring(Callstack.IndexOf("DatabaseAPI")) + "Enter password: ")
+
                 KeyboardHook.SetHook() ' Hook the keyboard for low-level input
+
                 While (KeyboardHook.KeyboardHooked) ' Wait for keyboard release
                     Windows.Forms.Application.DoEvents()
                     Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                 End While
+
                 Globals.DbPassword = KeyboardHook.CapturedString.ToString
             End If
 
@@ -119,6 +123,7 @@ Partial Public Class WinOffline
                     Dim SqlBatches As String()
                     Dim SqlCmd As SqlCommand
                     Dim SqlData As SqlDataReader
+
                     AddHandler DbConnection.InfoMessage, New SqlInfoMessageEventHandler(AddressOf OnMdbCleanAppsInfoMessage)
 
                     ' Enumerate sql batches based on "GO"
