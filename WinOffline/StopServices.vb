@@ -5,19 +5,19 @@ Partial Public Class WinOffline
 
     Public Shared Function StopServices(ByVal CallStack As String) As Integer
 
-        Dim ExecutionString As String               ' Command line to be executed externally to the application.
-        Dim ArgumentString As String                ' Arguments passed on the command line for the external execution.
-        Dim RunningProcess As Process               ' A process shell for executing the command line.
-        Dim ConsoleOutput As String                 ' Live output from an external application execution.
-        Dim StandardOutput As String                ' Output from an external application execution.
-        Dim RemainingOutput As String               ' Additional output flushed after a process has exited.
-        Dim PMLAService As ServiceController        ' Performance lite agent service controller.
-        Dim ProcessStartInfo As ProcessStartInfo    ' Process startup settings for configuring the bahviour of the process.
-        Dim CAMDirectory As String                  ' CAM service installation directory.
-        Dim CAFExitCode As Integer                  ' CAF command exit code.
-        Dim CAFStopHelperThread As Thread = Nothing ' Helper thread for expediting "caf stop" operation. 
-        Dim LoopCounter As Integer = 0              ' Re-usable loop counter.
-        Dim RunLevel As Integer = 0                 ' Tracks the health of the function and calls to external functions.
+        Dim ExecutionString As String
+        Dim ArgumentString As String
+        Dim RunningProcess As Process
+        Dim ConsoleOutput As String
+        Dim StandardOutput As String
+        Dim RemainingOutput As String
+        Dim PMLAService As ServiceController
+        Dim ProcessStartInfo As ProcessStartInfo
+        Dim CAMDirectory As String
+        Dim CAFExitCode As Integer
+        Dim CAFStopHelperThread As Thread = Nothing
+        Dim LoopCounter As Integer = 0
+        Dim RunLevel As Integer = 0
 
         CallStack += "StopServices|"
         Logger.SetCurrentTask("Stopping services..")
@@ -26,8 +26,10 @@ Partial Public Class WinOffline
         Try
             If Utility.IsProcessRunning("hmagent") And Not Globals.SkiphmAgent Then
                 Logger.WriteDebug(CallStack, "Health monitoring service: ACTIVE")
+
                 ExecutionString = Globals.DSMFolder + "bin\hmagent.exe"
                 ArgumentString = "stop"
+
                 Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
                 ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
                 ProcessStartInfo.WorkingDirectory = ExecutionString.Substring(0, ExecutionString.LastIndexOf("\"))
@@ -37,21 +39,27 @@ Partial Public Class WinOffline
                 StandardOutput = ""
                 RemainingOutput = ""
                 Logger.WriteDebug("------------------------------------------------------------")
+
                 RunningProcess = Process.Start(ProcessStartInfo)
+
                 While RunningProcess.HasExited = False
                     ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                     Logger.WriteDebug(ConsoleOutput)
                     StandardOutput += ConsoleOutput + Environment.NewLine
                     Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                 End While
+
                 RunningProcess.WaitForExit()
                 RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
                 StandardOutput += RemainingOutput
+
                 Logger.WriteDebug(RemainingOutput)
                 Logger.WriteDebug("------------------------------------------------------------")
                 Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
                 RunningProcess.Close()
+
                 Thread.Sleep(2000)
+
                 If Utility.IsProcessRunning("hmagent") Then
                     LoopCounter = 0
                     While Utility.IsProcessRunning("hmagent")
@@ -89,8 +97,10 @@ Partial Public Class WinOffline
         Try
             If Utility.IsProcessRunning("AlertCollector") And Not Globals.SkiphmAgent Then
                 Logger.WriteDebug(CallStack, "Alert collector service: ACTIVE")
+
                 ExecutionString = Globals.DSMFolder + "bin\AlertCollector.exe"
                 ArgumentString = "stop"
+
                 Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
                 ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
                 ProcessStartInfo.WorkingDirectory = ExecutionString.Substring(0, ExecutionString.LastIndexOf("\"))
@@ -100,21 +110,27 @@ Partial Public Class WinOffline
                 StandardOutput = ""
                 RemainingOutput = ""
                 Logger.WriteDebug("------------------------------------------------------------")
+
                 RunningProcess = Process.Start(ProcessStartInfo)
+
                 While RunningProcess.HasExited = False
                     ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                     Logger.WriteDebug(ConsoleOutput)
                     StandardOutput += ConsoleOutput + Environment.NewLine
                     Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                 End While
+
                 RunningProcess.WaitForExit()
                 RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
                 StandardOutput += RemainingOutput
+
                 Logger.WriteDebug(RemainingOutput)
                 Logger.WriteDebug("------------------------------------------------------------")
                 Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
                 RunningProcess.Close()
+
                 Thread.Sleep(2000)
+
                 If Utility.IsProcessRunning("AlertCollector") Then
                     LoopCounter = 0
                     While Utility.IsProcessRunning("AlertCollector")
@@ -218,6 +234,7 @@ Partial Public Class WinOffline
                     ExecutionString = Utility.GetProcessFileName("dm_primer")
                     ArgumentString = "stop"
                 End If
+
                 Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
                 ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
                 ProcessStartInfo.WorkingDirectory = ExecutionString.Substring(0, ExecutionString.LastIndexOf("\"))
@@ -227,21 +244,27 @@ Partial Public Class WinOffline
                 StandardOutput = ""
                 RemainingOutput = ""
                 Logger.WriteDebug("------------------------------------------------------------")
+
                 RunningProcess = Process.Start(ProcessStartInfo)
+
                 While RunningProcess.HasExited = False
                     ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                     Logger.WriteDebug(ConsoleOutput)
                     StandardOutput += ConsoleOutput + Environment.NewLine
                     Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                 End While
+
                 RunningProcess.WaitForExit()
                 RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
                 StandardOutput += RemainingOutput
+
                 Logger.WriteDebug(RemainingOutput)
                 Logger.WriteDebug("------------------------------------------------------------")
                 Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
                 RunningProcess.Close()
+
                 Thread.Sleep(2000)
+
                 If Utility.IsProcessRunning("dm_primer") Then
                     LoopCounter = 0
                     While Utility.IsProcessRunning("dm_primer")
@@ -370,8 +393,10 @@ Partial Public Class WinOffline
         Try
             If Utility.IsProcessRunning("caf") Then
                 Logger.WriteDebug(CallStack, "CAF service: ACTIVE")
+
                 ExecutionString = Globals.DSMFolder + "bin\caf.exe"
                 ArgumentString = "stop"
+
                 Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
                 ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
                 ProcessStartInfo.WorkingDirectory = Globals.DSMFolder + "bin"
@@ -381,7 +406,9 @@ Partial Public Class WinOffline
                 StandardOutput = ""
                 RemainingOutput = ""
                 Logger.WriteDebug("------------------------------------------------------------")
+
                 RunningProcess = Process.Start(ProcessStartInfo)
+
                 While RunningProcess.HasExited = False
                     ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                     Logger.WriteDebug(ConsoleOutput)
@@ -392,15 +419,19 @@ Partial Public Class WinOffline
                     End If
                     Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                 End While
+
                 RunningProcess.WaitForExit()
                 RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
                 StandardOutput += RemainingOutput
+
                 Logger.WriteDebug(RemainingOutput)
                 Logger.WriteDebug("------------------------------------------------------------")
                 Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
                 CAFExitCode = RunningProcess.ExitCode
                 RunningProcess.Close()
+
                 Thread.Sleep(2000)
+
                 Try
                     If CAFStopHelperThread IsNot Nothing AndAlso CAFStopHelperThread.IsAlive Then
                         Logger.WriteDebug(CallStack, "Waiting for helper thread to terminate.")
@@ -426,8 +457,10 @@ Partial Public Class WinOffline
                             If LoopCounter >= 10 Then
                                 Logger.WriteDebug(CallStack, "CAF service is not stopping gracefully.")
                                 Logger.WriteDebug(CallStack, "Send kill request to the CAF service..")
+
                                 ExecutionString = Globals.DSMFolder + "bin\caf.exe"
                                 ArgumentString = "kill all"
+
                                 Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
                                 ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
                                 ProcessStartInfo.WorkingDirectory = Globals.DSMFolder + "bin"
@@ -437,16 +470,20 @@ Partial Public Class WinOffline
                                 StandardOutput = ""
                                 RemainingOutput = ""
                                 Logger.WriteDebug("------------------------------------------------------------")
+
                                 RunningProcess = Process.Start(ProcessStartInfo)
+
                                 While RunningProcess.HasExited = False
                                     ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                                     Logger.WriteDebug(ConsoleOutput)
                                     StandardOutput += ConsoleOutput + Environment.NewLine
                                     Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                                 End While
+
                                 RunningProcess.WaitForExit()
                                 RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
                                 StandardOutput += RemainingOutput
+
                                 Logger.WriteDebug(RemainingOutput)
                                 Logger.WriteDebug("------------------------------------------------------------")
                                 Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
@@ -470,8 +507,10 @@ Partial Public Class WinOffline
                     If Utility.IsProcessRunning("caf") Then
                         Logger.WriteDebug(CallStack, "CAF service has not stopped gracefully.")
                         Logger.WriteDebug(CallStack, "Send first kill request to the CAF service..")
+
                         ExecutionString = Globals.DSMFolder + "bin\caf.exe"
                         ArgumentString = "kill all"
+
                         Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
                         ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
                         ProcessStartInfo.WorkingDirectory = Globals.DSMFolder + "bin"
@@ -481,23 +520,30 @@ Partial Public Class WinOffline
                         StandardOutput = ""
                         RemainingOutput = ""
                         Logger.WriteDebug("------------------------------------------------------------")
+
                         RunningProcess = Process.Start(ProcessStartInfo)
+
                         While RunningProcess.HasExited = False
                             ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                             Logger.WriteDebug(ConsoleOutput)
                             StandardOutput += ConsoleOutput + Environment.NewLine
                             Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                         End While
+
                         RunningProcess.WaitForExit()
                         RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
                         StandardOutput += RemainingOutput
+
                         Logger.WriteDebug(RemainingOutput)
                         Logger.WriteDebug("------------------------------------------------------------")
                         Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
                         RunningProcess.Close()
+
                         Logger.WriteDebug(CallStack, "Send second kill request to the CAF service..")
+
                         ExecutionString = Globals.DSMFolder + "bin\caf.exe"
                         ArgumentString = "kill all"
+
                         Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
                         ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
                         ProcessStartInfo.WorkingDirectory = Globals.DSMFolder + "bin"
@@ -507,20 +553,25 @@ Partial Public Class WinOffline
                         StandardOutput = ""
                         RemainingOutput = ""
                         Logger.WriteDebug("------------------------------------------------------------")
+
                         RunningProcess = Process.Start(ProcessStartInfo)
+
                         While RunningProcess.HasExited = False
                             ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                             Logger.WriteDebug(ConsoleOutput)
                             StandardOutput += ConsoleOutput + Environment.NewLine
                             Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                         End While
+
                         RunningProcess.WaitForExit()
                         RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
                         StandardOutput += RemainingOutput
+
                         Logger.WriteDebug(RemainingOutput)
                         Logger.WriteDebug("------------------------------------------------------------")
                         Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
                         RunningProcess.Close()
+
                         Thread.Sleep(2000)
                     End If
                     If Utility.IsProcessRunning("caf") Then
@@ -553,8 +604,10 @@ Partial Public Class WinOffline
             If Utility.IsProcessRunning("cam") AndAlso Not Globals.SkipCAM Then
                 Logger.WriteDebug(CallStack, "CAM service: ACTIVE")
                 CAMDirectory = Environment.GetEnvironmentVariable("CAI_MSQ")
+
                 ExecutionString = CAMDirectory + "\bin\cam.exe"
                 ArgumentString = "change disabled"
+
                 Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
                 ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
                 ProcessStartInfo.WorkingDirectory = CAMDirectory + "\bin"
@@ -564,23 +617,30 @@ Partial Public Class WinOffline
                 StandardOutput = ""
                 RemainingOutput = ""
                 Logger.WriteDebug("------------------------------------------------------------")
+
                 RunningProcess = Process.Start(ProcessStartInfo)
+
                 While RunningProcess.HasExited = False
                     ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                     Logger.WriteDebug(ConsoleOutput)
                     StandardOutput += ConsoleOutput + Environment.NewLine
                     Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                 End While
+
                 RunningProcess.WaitForExit()
                 RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
                 StandardOutput += RemainingOutput
+
                 Logger.WriteDebug(RemainingOutput)
                 Logger.WriteDebug("------------------------------------------------------------")
                 Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
                 RunningProcess.Close()
+
                 Logger.WriteDebug(CallStack, "CAM service has been disabled.")
+
                 ExecutionString = CAMDirectory + "\bin\camclose.exe"
                 ArgumentString = ""
+
                 Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
                 ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
                 ProcessStartInfo.WorkingDirectory = CAMDirectory + "\bin"
@@ -590,21 +650,27 @@ Partial Public Class WinOffline
                 StandardOutput = ""
                 RemainingOutput = ""
                 Logger.WriteDebug("------------------------------------------------------------")
+
                 RunningProcess = Process.Start(ProcessStartInfo)
+
                 While RunningProcess.HasExited = False
                     ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                     Logger.WriteDebug(ConsoleOutput)
                     StandardOutput += ConsoleOutput + Environment.NewLine
                     Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                 End While
+
                 RunningProcess.WaitForExit()
                 RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
                 StandardOutput += RemainingOutput
+
                 Logger.WriteDebug(RemainingOutput)
                 Logger.WriteDebug("------------------------------------------------------------")
                 Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
                 RunningProcess.Close()
+
                 Thread.Sleep(2000)
+
                 If Utility.IsProcessRunning("cam") Then
                     LoopCounter = 0
                     While Utility.IsProcessRunning("cam")
@@ -642,8 +708,10 @@ Partial Public Class WinOffline
         Try
             If Utility.IsProcessRunning("csampmux") AndAlso Not Globals.SkipCAM Then
                 Logger.WriteDebug(CallStack, "Port multiplexer service: ACTIVE")
+
                 ExecutionString = Globals.SSAFolder + "bin\csampmux.exe"
                 ArgumentString = "stop"
+
                 Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
                 ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
                 ProcessStartInfo.WorkingDirectory = Globals.SSAFolder + "bin"
@@ -653,20 +721,25 @@ Partial Public Class WinOffline
                 StandardOutput = ""
                 RemainingOutput = ""
                 Logger.WriteDebug("------------------------------------------------------------")
+
                 RunningProcess = Process.Start(ProcessStartInfo)
+
                 While RunningProcess.HasExited = False
                     ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                     Logger.WriteDebug(ConsoleOutput)
                     StandardOutput += ConsoleOutput + Environment.NewLine
                     Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                 End While
+
                 RunningProcess.WaitForExit()
                 RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
                 StandardOutput += RemainingOutput
+
                 Logger.WriteDebug(RemainingOutput)
                 Logger.WriteDebug("------------------------------------------------------------")
                 Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
                 RunningProcess.Close()
+
                 Thread.Sleep(2000)
                 If Utility.IsProcessRunning("csampmux") Then
                     LoopCounter = 0
@@ -766,17 +839,17 @@ Partial Public Class WinOffline
 
     Public Shared Function StopCAFOnDemand(ByVal CallStack As String) As Integer
 
-        Dim ExecutionString As String               ' Command line to be executed externally to the application.
-        Dim ArgumentString As String                ' Arguments passed on the command line for the external execution.
-        Dim RunningProcess As Process               ' A process shell for executing the command line.
-        Dim ConsoleOutput As String                 ' Live output from an external application execution.
-        Dim StandardOutput As String                ' Output from an external application execution.
-        Dim RemainingOutput As String               ' Additional output flushed after a process has exited.
-        Dim ProcessStartInfo As ProcessStartInfo    ' Process startup settings for configuring the bahviour of the process.
-        Dim CAFExitCode As Integer                  ' CAF command exit code.
-        Dim CAFStopHelperThread As Thread = Nothing ' Helper thread for expediting "caf stop" operation. 
-        Dim LoopCounter As Integer = 0              ' Re-usable loop counter.
-        Dim RestCounter As Integer = 0              ' Used for resting the thread in short intervals.
+        Dim ExecutionString As String
+        Dim ArgumentString As String
+        Dim RunningProcess As Process
+        Dim ConsoleOutput As String
+        Dim StandardOutput As String
+        Dim RemainingOutput As String
+        Dim ProcessStartInfo As ProcessStartInfo
+        Dim CAFExitCode As Integer
+        Dim CAFStopHelperThread As Thread = Nothing
+        Dim LoopCounter As Integer = 0
+        Dim RestCounter As Integer = 0
 
         CallStack += "StopCAF|"
 
@@ -834,8 +907,10 @@ Partial Public Class WinOffline
         Try
             If Utility.IsProcessRunning("caf") Then
                 Logger.WriteDebug(CallStack, "CAF service: ACTIVE")
+
                 ExecutionString = Globals.DSMFolder + "bin\caf.exe"
                 ArgumentString = "stop"
+
                 Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
                 ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
                 ProcessStartInfo.WorkingDirectory = Globals.DSMFolder + "bin"
@@ -845,7 +920,9 @@ Partial Public Class WinOffline
                 StandardOutput = ""
                 RemainingOutput = ""
                 Logger.WriteDebug("------------------------------------------------------------")
+
                 RunningProcess = Process.Start(ProcessStartInfo)
+
                 While RunningProcess.HasExited = False
                     ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                     Logger.WriteDebug(ConsoleOutput)
@@ -856,15 +933,19 @@ Partial Public Class WinOffline
                     End If
                     Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                 End While
+
                 RunningProcess.WaitForExit()
                 RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
                 StandardOutput += RemainingOutput
+
                 Logger.WriteDebug(RemainingOutput)
                 Logger.WriteDebug("------------------------------------------------------------")
                 Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
                 CAFExitCode = RunningProcess.ExitCode
                 RunningProcess.Close()
+
                 Thread.Sleep(2000)
+
                 Try
                     If CAFStopHelperThread IsNot Nothing AndAlso CAFStopHelperThread.IsAlive Then
                         Logger.WriteDebug(CallStack, "Waiting for helper thread to terminate.")
@@ -878,8 +959,11 @@ Partial Public Class WinOffline
                 If CAFExitCode <> 0 Then
                     If StandardOutput.ToLower.Contains("access is denied") Then
                         Logger.WriteDebug(CallStack, "Administrator unable to stop CAF service.")
+
                         LaunchPad(CallStack, "System", Globals.DSMFolder + "bin\caf.exe", Globals.DSMFolder + "bin\", "stop")
+
                         LoopCounter = 0
+
                         While Utility.IsProcessRunning("caf.exe", "stop") Or Utility.IsProcessRunning("caf")
                             If LoopCounter = 0 Then
                                 Logger.WriteDebug(CallStack, "CAF service: STOPPING  [This may take up to 5 minutes!]")
@@ -890,8 +974,10 @@ Partial Public Class WinOffline
                             If LoopCounter >= 10 Then
                                 Logger.WriteDebug(CallStack, "CAF service is not stopping gracefully.")
                                 Logger.WriteDebug(CallStack, "Send kill request to the CAF service..")
+
                                 ExecutionString = Globals.DSMFolder + "bin\caf.exe"
                                 ArgumentString = "kill all"
+
                                 Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
                                 ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
                                 ProcessStartInfo.WorkingDirectory = Globals.DSMFolder + "bin"
@@ -901,20 +987,25 @@ Partial Public Class WinOffline
                                 StandardOutput = ""
                                 RemainingOutput = ""
                                 Logger.WriteDebug("------------------------------------------------------------")
+
                                 RunningProcess = Process.Start(ProcessStartInfo)
+
                                 While RunningProcess.HasExited = False
                                     ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                                     Logger.WriteDebug(ConsoleOutput)
                                     StandardOutput += ConsoleOutput + Environment.NewLine
                                     Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                                 End While
+
                                 RunningProcess.WaitForExit()
                                 RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
                                 StandardOutput += RemainingOutput
+
                                 Logger.WriteDebug(RemainingOutput)
                                 Logger.WriteDebug("------------------------------------------------------------")
                                 Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
                                 RunningProcess.Close()
+
                                 Exit While
                             End If
                             RestCounter = 0
@@ -935,8 +1026,10 @@ Partial Public Class WinOffline
                     If Utility.IsProcessRunning("caf") Then
                         Logger.WriteDebug(CallStack, "CAF service has not stopped gracefully.")
                         Logger.WriteDebug(CallStack, "Send first kill request to the CAF service..")
+
                         ExecutionString = Globals.DSMFolder + "bin\caf.exe"
                         ArgumentString = "kill all"
+
                         Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
                         ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
                         ProcessStartInfo.WorkingDirectory = Globals.DSMFolder + "bin"
@@ -946,23 +1039,30 @@ Partial Public Class WinOffline
                         StandardOutput = ""
                         RemainingOutput = ""
                         Logger.WriteDebug("------------------------------------------------------------")
+
                         RunningProcess = Process.Start(ProcessStartInfo)
+
                         While RunningProcess.HasExited = False
                             ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                             Logger.WriteDebug(ConsoleOutput)
                             StandardOutput += ConsoleOutput + Environment.NewLine
                             Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                         End While
+
                         RunningProcess.WaitForExit()
                         RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
                         StandardOutput += RemainingOutput
+
                         Logger.WriteDebug(RemainingOutput)
                         Logger.WriteDebug("------------------------------------------------------------")
                         Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
                         RunningProcess.Close()
+
                         Logger.WriteDebug(CallStack, "Send second kill request to the CAF service..")
+
                         ExecutionString = Globals.DSMFolder + "bin\caf.exe"
                         ArgumentString = "kill all"
+
                         Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
                         ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
                         ProcessStartInfo.WorkingDirectory = Globals.DSMFolder + "bin"
@@ -972,16 +1072,20 @@ Partial Public Class WinOffline
                         StandardOutput = ""
                         RemainingOutput = ""
                         Logger.WriteDebug("------------------------------------------------------------")
+
                         RunningProcess = Process.Start(ProcessStartInfo)
+
                         While RunningProcess.HasExited = False
                             ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                             Logger.WriteDebug(ConsoleOutput)
                             StandardOutput += ConsoleOutput + Environment.NewLine
                             Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                         End While
+
                         RunningProcess.WaitForExit()
                         RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
                         StandardOutput += RemainingOutput
+
                         Logger.WriteDebug(RemainingOutput)
                         Logger.WriteDebug("------------------------------------------------------------")
                         Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
