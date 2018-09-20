@@ -9,12 +9,10 @@ Partial Public Class WinOfflineUI
 
     Private Sub InitSqlAgentGrid()
 
-        ' Disable buttons
         Delegate_Sub_Enable_Red_Button(btnSqlDisconnectAgentGrid, False)
         Delegate_Sub_Enable_Blue_Button(btnSqlRefreshAgentGrid, False)
         Delegate_Sub_Enable_Blue_Button(btnSqlExportAgentGrid, False)
 
-        ' Set grid properties
         dgvAgentGrid.AllowUserToAddRows = False
         dgvAgentGrid.AllowUserToDeleteRows = False
         dgvAgentGrid.AllowUserToResizeRows = False
@@ -38,7 +36,6 @@ Partial Public Class WinOfflineUI
         dgvAgentGrid.ShowEditingIcon = False
         dgvAgentGrid.ShowRowErrors = False
 
-        ' Set grid properties
         dgvAgentObsolete90.AllowUserToAddRows = False
         dgvAgentObsolete90.AllowUserToDeleteRows = False
         dgvAgentObsolete90.AllowUserToResizeRows = False
@@ -62,7 +59,6 @@ Partial Public Class WinOfflineUI
         dgvAgentObsolete90.ShowEditingIcon = False
         dgvAgentObsolete90.ShowRowErrors = False
 
-        ' Set grid properties
         dgvAgentObsolete365.AllowUserToAddRows = False
         dgvAgentObsolete365.AllowUserToDeleteRows = False
         dgvAgentObsolete365.AllowUserToResizeRows = False
