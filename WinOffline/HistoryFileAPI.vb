@@ -10,6 +10,7 @@
     Public Shared Function ProcessHistoryFiles(ByVal CallStack As String)
 
         Dim Runlevel As Integer = 0
+
         CallStack += "HistoryFile|"
 
         ' Read component history files
@@ -375,26 +376,26 @@
                                 DirectCast(HistoryFileArray.Item(j - 8), String).Contains("]") AndAlso
                                 DirectCast(HistoryFileArray.Item(j - 8), String).ToLower.Contains("installed") Then
                                 If j - 9 >= 0 AndAlso Not DirectCast(HistoryFileArray.Item(j - 9), String).Equals("") Then
-                                    HistoryFileArray.Insert(j - 9, "")
+                                    HistoryFileArray.Insert(j - 9, "") ' Good stuff, keep it
                                 End If
                                 i = j - 9
                                 Exit For
-                            Else
-                                For k As Integer = i To j Step -1
-                                    HistoryFileArray.RemoveAt(k)
+                            Else ' Sorry, you lose
+                                For k As Integer = i To j Step -1 ' Walk i to j
+                                    HistoryFileArray.RemoveAt(k) ' Remove each line
                                 Next
-                                i = j
-                                Exit For
+                                i = j ' Move i up to j
+                                Exit For ' Get out
                             End If
                         Else
-                            For k As Integer = i To j Step -1
-                                HistoryFileArray.RemoveAt(k)
+                            For k As Integer = i To j Step -1 ' Walk i to j
+                                HistoryFileArray.RemoveAt(k) ' Remove each line
                             Next
-                            i = j
-                            Exit For
+                            i = j ' Move i up to j
+                            Exit For ' Get out
                         End If
                     Next
-                    Continue For
+                    Continue For ' From the top
 
                 ElseIf CurrentLine.ToLower.StartsWith("#") OrElse
                     CurrentLine.Equals("") OrElse
