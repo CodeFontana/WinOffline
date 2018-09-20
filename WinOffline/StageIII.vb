@@ -2,10 +2,10 @@
 
     Public Shared Function StageIII(ByVal CallStack As String) As Integer
 
-        Dim ExecutionString As String                           ' Command line to be executed externally to the application.
-        Dim ArgumentString As String                            ' Arguments passed on the command line for the external execution.
-        Dim RunningProcess As Process                           ' A process shell for executing the command line.
-        Dim SignalReRunProcessStartInfo As ProcessStartInfo     ' Process startup settings for configuring the bahviour of the process.
+        Dim ExecutionString As String
+        Dim ArgumentString As String
+        Dim RunningProcess As Process
+        Dim SignalReRunProcessStartInfo As ProcessStartInfo
         Dim RunLevel As Integer = 0
 
         CallStack += "StageIII|"
@@ -43,22 +43,27 @@
 
         ' Switch: Signal software delivery reboot request [SD EXECUTION ONLY]
         If Globals.SDBasedMode And Globals.SDSignalRebootSwitch Then
+
             ExecutionString = Globals.DSMFolder + "bin\" + "sd_acmd.exe"
             ArgumentString = "signal reboot"
+
             Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
             SignalReRunProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
             SignalReRunProcessStartInfo.WorkingDirectory = Globals.DSMFolder + "bin"
             SignalReRunProcessStartInfo.UseShellExecute = False
             SignalReRunProcessStartInfo.RedirectStandardOutput = True
             SignalReRunProcessStartInfo.CreateNoWindow = True
+
             RunningProcess = Process.Start(SignalReRunProcessStartInfo)
             RunningProcess.WaitForExit()
+
             Logger.WriteDebug("------------------------------------------------------------")
             Logger.WriteDebug(RunningProcess.StandardOutput.ReadToEnd.ToString)
             Logger.WriteDebug("------------------------------------------------------------")
             RunLevel = RunningProcess.ExitCode
             Logger.WriteDebug(CallStack, "Exit code: " + RunLevel.ToString)
             RunningProcess.Close()
+
             If RunLevel <> 0 Then
                 Logger.WriteDebug(CallStack, "Error: Failed to signal reboot request.")
                 Manifest.UpdateManifest(CallStack,
