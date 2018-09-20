@@ -4,18 +4,18 @@ Partial Public Class WinOffline
 
     Public Shared Function StartServices(ByVal CallStack As String) As Integer
 
-        Dim ExecutionString As String                           ' Command line to be executed externally to the application.
-        Dim ArgumentString As String                            ' Arguments passed on the command line for the external execution.
-        Dim RunningProcess As Process                           ' A process shell for executing the command line.
-        Dim ConsoleOutput As String                             ' Live output from an external application execution.
-        Dim StandardOutput As String = ""                       ' Output from an external application execution.
-        Dim RemainingOutput As String                           ' Additional output flushed after a process has exited.
-        Dim PMUXService As ServiceController                    ' Port multiplexer service controller.
-        Dim ProcessStartInfo As ProcessStartInfo                ' Process startup settings for configuring the bahviour of the process.
-        Dim CAMDirectory As String                              ' CAM service installation directory.
-        Dim CAFExitCode As Integer = 0                          ' Exit code from caf service startup.
-        Dim LoopCounter As Integer = 0                          ' Re-usable loop counter.
-        Dim RunLevel As Integer = 0                             ' Tracks the health of the function and calls to external functions.
+        Dim ExecutionString As String
+        Dim ArgumentString As String
+        Dim RunningProcess As Process
+        Dim ConsoleOutput As String
+        Dim StandardOutput As String = ""
+        Dim RemainingOutput As String
+        Dim PMUXService As ServiceController
+        Dim ProcessStartInfo As ProcessStartInfo
+        Dim CAMDirectory As String
+        Dim CAFExitCode As Integer = 0
+        Dim LoopCounter As Integer = 0
+        Dim RunLevel As Integer = 0
 
         CallStack += "StartServices|"
         Logger.SetCurrentTask("Starting services..")
@@ -55,8 +55,10 @@ Partial Public Class WinOffline
                 Exit Try
             End If
             CAMDirectory = Environment.GetEnvironmentVariable("CAI_MSQ")
+
             ExecutionString = CAMDirectory + "\bin\cam.exe"
             ArgumentString = "change auto"
+
             Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
             ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
             ProcessStartInfo.WorkingDirectory = CAMDirectory + "\bin"
@@ -66,23 +68,30 @@ Partial Public Class WinOffline
             StandardOutput = ""
             RemainingOutput = ""
             Logger.WriteDebug("------------------------------------------------------------")
+
             RunningProcess = Process.Start(ProcessStartInfo)
+
             While RunningProcess.HasExited = False
                 ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                 Logger.WriteDebug(ConsoleOutput)
                 StandardOutput += ConsoleOutput + Environment.NewLine
                 Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
             End While
+
             RunningProcess.WaitForExit()
             RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
             StandardOutput += RemainingOutput
+
             Logger.WriteDebug(RemainingOutput)
             Logger.WriteDebug("------------------------------------------------------------")
             Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
             RunningProcess.Close()
+
             Logger.WriteDebug(CallStack, "CAM service: ENABLED")
+
             ExecutionString = CAMDirectory + "\bin\cam.exe"
             ArgumentString = "start -c -l"
+
             Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
             ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
             ProcessStartInfo.WorkingDirectory = CAMDirectory + "\bin"
@@ -92,20 +101,25 @@ Partial Public Class WinOffline
             StandardOutput = ""
             RemainingOutput = ""
             Logger.WriteDebug("------------------------------------------------------------")
+
             RunningProcess = Process.Start(ProcessStartInfo)
+
             While RunningProcess.HasExited = False
                 ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                 Logger.WriteDebug(ConsoleOutput)
                 StandardOutput += ConsoleOutput + Environment.NewLine
                 Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
             End While
+
             RunningProcess.WaitForExit()
             RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
             StandardOutput += RemainingOutput
+
             Logger.WriteDebug(RemainingOutput)
             Logger.WriteDebug("------------------------------------------------------------")
             Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
             RunningProcess.Close()
+
             Logger.WriteDebug(CallStack, "CAM service: STARTED")
         Catch ex As Exception
             Logger.WriteDebug(CallStack, "Error: Exception caught while starting CAM service.")
@@ -132,8 +146,10 @@ Partial Public Class WinOffline
                 Logger.WriteDebug(CallStack, "CAF service: STOPPED")
                 Exit Try
             End If
+
             ExecutionString = Globals.DSMFolder + "bin\caf.exe"
             ArgumentString = "start"
+
             Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
             ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
             ProcessStartInfo.WorkingDirectory = Globals.DSMFolder + "bin"
@@ -143,21 +159,26 @@ Partial Public Class WinOffline
             StandardOutput = ""
             RemainingOutput = ""
             Logger.WriteDebug("------------------------------------------------------------")
+
             RunningProcess = Process.Start(ProcessStartInfo)
+
             While RunningProcess.HasExited = False
                 ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                 Logger.WriteDebug(ConsoleOutput)
                 StandardOutput += ConsoleOutput + Environment.NewLine
                 Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
             End While
+
             RunningProcess.WaitForExit()
             RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
             StandardOutput += RemainingOutput
+
             Logger.WriteDebug(RemainingOutput)
             Logger.WriteDebug("------------------------------------------------------------")
             CAFExitCode = RunningProcess.ExitCode
             Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
             RunningProcess.Close()
+
             Logger.WriteDebug(CallStack, "CAF service: STARTED")
         Catch ex As Exception
             Logger.WriteDebug(CallStack, "Error: Exception caught while starting CAF service.")
@@ -186,8 +207,10 @@ Partial Public Class WinOffline
                 Logger.WriteDebug(CallStack, "Health monitoring service: ACTIVE")
                 Exit Try
             End If
+
             ExecutionString = Globals.DSMFolder + "bin\hmagent.exe"
             ArgumentString = "start"
+
             Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
             ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
             ProcessStartInfo.WorkingDirectory = Globals.DSMFolder + "bin"
@@ -197,21 +220,26 @@ Partial Public Class WinOffline
             StandardOutput = ""
             RemainingOutput = ""
             Logger.WriteDebug("------------------------------------------------------------")
+
             RunningProcess = Process.Start(ProcessStartInfo)
+
             While RunningProcess.HasExited = False
                 ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                 Logger.WriteDebug(ConsoleOutput)
                 StandardOutput += ConsoleOutput + Environment.NewLine
                 Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
             End While
+
             RunningProcess.WaitForExit()
             RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
             StandardOutput += RemainingOutput
+
             Logger.WriteDebug(RemainingOutput)
             Logger.WriteDebug("------------------------------------------------------------")
             CAFExitCode = RunningProcess.ExitCode
             Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
             RunningProcess.Close()
+
             Logger.WriteDebug(CallStack, "Health monitoring service: STARTED")
         Catch ex As Exception
             Logger.WriteDebug(CallStack, "Error: Exception caught while starting health monitoring service.")
@@ -246,16 +274,16 @@ Partial Public Class WinOffline
 
     Public Shared Function StartCAFOnDemand(ByVal CallStack As String) As Integer
 
-        Dim ExecutionString As String                           ' Command line to be executed externally to the application.
-        Dim ArgumentString As String                            ' Arguments passed on the command line for the external execution.
-        Dim RunningProcess As Process                           ' A process shell for executing the command line.
-        Dim ConsoleOutput As String                             ' Live output from an external application execution.
-        Dim StandardOutput As String = ""                       ' Output from an external application execution.
-        Dim RemainingOutput As String                           ' Additional output flushed after a process has exited.
-        Dim PMUXService As ServiceController                    ' Port multiplexer service controller.
-        Dim ProcessStartInfo As ProcessStartInfo                ' Process startup settings for configuring the bahviour of the process.
-        Dim CAMDirectory As String                              ' CAM service installation directory.
-        Dim CAFExitCode As Integer = 0                          ' Exit code from caf service startup.
+        Dim ExecutionString As String
+        Dim ArgumentString As String
+        Dim RunningProcess As Process
+        Dim ConsoleOutput As String
+        Dim StandardOutput As String = ""
+        Dim RemainingOutput As String
+        Dim PMUXService As ServiceController
+        Dim ProcessStartInfo As ProcessStartInfo
+        Dim CAMDirectory As String
+        Dim CAFExitCode As Integer = 0
 
         CallStack += "StartCAF|"
 
@@ -292,8 +320,10 @@ Partial Public Class WinOffline
                 Exit Try
             End If
             CAMDirectory = Environment.GetEnvironmentVariable("CAI_MSQ")
+
             ExecutionString = CAMDirectory + "\bin\cam.exe"
             ArgumentString = "change auto"
+
             Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
             ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
             ProcessStartInfo.WorkingDirectory = CAMDirectory + "\bin"
@@ -303,23 +333,30 @@ Partial Public Class WinOffline
             StandardOutput = ""
             RemainingOutput = ""
             Logger.WriteDebug("------------------------------------------------------------")
+
             RunningProcess = Process.Start(ProcessStartInfo)
+
             While RunningProcess.HasExited = False
                 ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                 Logger.WriteDebug(ConsoleOutput)
                 StandardOutput += ConsoleOutput + Environment.NewLine
                 Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
             End While
+
             RunningProcess.WaitForExit()
             RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
             StandardOutput += RemainingOutput
+
             Logger.WriteDebug(RemainingOutput)
             Logger.WriteDebug("------------------------------------------------------------")
             Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
             RunningProcess.Close()
+
             Logger.WriteDebug(CallStack, "CAM service: ENABLED")
+
             ExecutionString = CAMDirectory + "\bin\cam.exe"
             ArgumentString = "start -c -l"
+
             Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
             ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
             ProcessStartInfo.WorkingDirectory = CAMDirectory + "\bin"
@@ -329,20 +366,25 @@ Partial Public Class WinOffline
             StandardOutput = ""
             RemainingOutput = ""
             Logger.WriteDebug("------------------------------------------------------------")
+
             RunningProcess = Process.Start(ProcessStartInfo)
+
             While RunningProcess.HasExited = False
                 ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                 Logger.WriteDebug(ConsoleOutput)
                 StandardOutput += ConsoleOutput + Environment.NewLine
                 Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
             End While
+
             RunningProcess.WaitForExit()
             RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
             StandardOutput += RemainingOutput
+
             Logger.WriteDebug(RemainingOutput)
             Logger.WriteDebug("------------------------------------------------------------")
             Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
             RunningProcess.Close()
+
             Logger.WriteDebug(CallStack, "CAM service: STARTED")
         Catch ex As Exception
             Logger.WriteDebug(CallStack, "Error: Exception caught while starting CAM service.")
@@ -350,7 +392,6 @@ Partial Public Class WinOffline
         End Try
 
         ' Start the CAF service
-
         Try
             If Not Utility.ServiceExists("caf") Then
                 Logger.WriteDebug(CallStack, "CAF service: NOT INSTALLED")
@@ -368,8 +409,10 @@ Partial Public Class WinOffline
                 Logger.WriteDebug(CallStack, "CAF service: STOPPED")
                 Exit Try
             End If
+
             ExecutionString = Globals.DSMFolder + "bin\caf.exe"
             ArgumentString = "start"
+
             Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
             ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
             ProcessStartInfo.WorkingDirectory = Globals.DSMFolder + "bin"
@@ -379,21 +422,26 @@ Partial Public Class WinOffline
             StandardOutput = ""
             RemainingOutput = ""
             Logger.WriteDebug("------------------------------------------------------------")
+
             RunningProcess = Process.Start(ProcessStartInfo)
+
             While RunningProcess.HasExited = False
                 ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                 Logger.WriteDebug(ConsoleOutput)
                 StandardOutput += ConsoleOutput + Environment.NewLine
                 Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
             End While
+
             RunningProcess.WaitForExit()
             RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
             StandardOutput += RemainingOutput
+
             Logger.WriteDebug(RemainingOutput)
             Logger.WriteDebug("------------------------------------------------------------")
             CAFExitCode = RunningProcess.ExitCode
             Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
             RunningProcess.Close()
+
             Logger.WriteDebug(CallStack, "CAF service: STARTED")
         Catch ex As Exception
             Logger.WriteDebug(CallStack, "Error: Exception caught while starting CAF service.")
