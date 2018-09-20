@@ -6,6 +6,7 @@
         Dim RunLevel As Integer = 0
 
         Logger.SetCurrentTask("Starting up..")
+
         Globals.ProcessName = Process.GetCurrentProcess.MainModule.FileName
         Globals.ProcessFilePath = FileVector.GetFilePath(Globals.ProcessName)
         Globals.ProcessShortName = FileVector.GetShortName(Globals.ProcessName)
@@ -26,17 +27,21 @@
         If Globals.ParentProcessTree.Contains("sd_jexec") Then
             Logger.WriteDebug(CallStack, "Entry point: Software Delivery")
             Globals.SDBasedMode = True
-            RunLevel = JobContainer(CallStack) ' Establish software delivery output ID and location
+
+            ' Establish software delivery output ID and location
+            RunLevel = JobContainer(CallStack)
             If RunLevel <> 0 OrElse Globals.JobOutputFile Is Nothing OrElse Globals.JobOutputFile.Equals("") Then
                 Globals.WriteSDJobOutput = False
             Else
                 Logger.WriteDebug(CallStack, "Software delivery job output file: " + Globals.JobOutputFile)
                 Globals.WriteSDJobOutput = True
             End If
+
             Globals.DispatcherReturnCode = Dispatcher(CallStack)
         Else
             Logger.WriteDebug(CallStack, "Entry point: Non-Software Delivery")
             Globals.SDBasedMode = False
+
             If Not Globals.RunningAsSystemIdentity Then
                 If Globals.AttachedtoConsole Then
                     If Globals.ITCMInstalled = False Then
@@ -69,7 +74,9 @@
         ' Check for DIRTY execution flag
         If Globals.DirtyFlag Then
             Logger.WriteDebug(CallStack, "Dirty execution flag was set.")
-            RunLevel = JobContainer(CallStack) ' Reset the job output ID
+
+            ' Reset the job output ID
+            RunLevel = JobContainer(CallStack)
             If RunLevel <> 0 OrElse Globals.JobOutputFile Is Nothing OrElse Globals.JobOutputFile.Equals("") Then
                 Logger.WriteDebug(CallStack, "Error: Exception caught processing software delivery container file.")
                 Globals.WriteSDJobOutput = False
@@ -77,6 +84,7 @@
                 Logger.WriteDebug(CallStack, "Software delivery job output file: " + Globals.JobOutputFile)
                 Globals.WriteSDJobOutput = True
             End If
+
             Globals.DirtyFlag = False
             Globals.PatchErrorDetected = False
         End If
