@@ -196,40 +196,50 @@
             Try
                 Globals.DebugStreamWriter.Close()
                 Logger.WriteDebug(CallStack, "Debug stream closed.")
+
                 DebugStreamReader = New System.IO.StreamReader(Globals.WindowsTemp + "\" + Globals.ProcessFriendlyName + ".txt")
                 CloneStreamWriter = New System.IO.StreamWriter(Globals.WindowsTemp + "\" + Globals.ProcessFriendlyName + ".clone", False)
                 CloneStreamWriter.AutoFlush = True
                 Logger.WriteDebug(CallStack, "Clone stream created.")
+
                 Globals.DebugLogSummary = Manifest.DebugLogSummary
                 Logger.WriteDebug(CallStack, "Debug summary created.")
+
                 Globals.ProgressGUISummary = Manifest.DebugConsoleSummary ' Completely unrelated, but for consistency, get the console at the same time
                 CloneStreamWriter.Write(Globals.DebugLogSummary)
                 Logger.WriteDebug(CallStack, "Debug summary written to clone stream.")
+
                 Do While DebugStreamReader.Peek() >= 0
                     strLine = DebugStreamReader.ReadLine
                     CloneStreamWriter.WriteLine(strLine)
                 Loop
                 Logger.WriteDebug(CallStack, "Debug log appended to clone stream.")
+
                 DebugStreamReader.Close()
                 CloneStreamWriter.Close()
+
                 Utility.DeleteFile(CallStack, Globals.WindowsTemp + "\" + Globals.ProcessFriendlyName + ".txt")
                 Logger.WriteDebug(CallStack, "Move file: " + Globals.WindowsTemp + "\" + Globals.ProcessFriendlyName + ".clone")
                 Logger.WriteDebug(CallStack, "To: " + Globals.WindowsTemp + "\" + Globals.ProcessFriendlyName + ".txt")
                 System.IO.File.Move(Globals.WindowsTemp + "\" + Globals.ProcessFriendlyName + ".clone",
                                     Globals.WindowsTemp + "\" + Globals.ProcessFriendlyName + ".txt")
+
                 Logger.WriteDebug(CallStack, "Debug log successfully recreated with summary.")
             Catch ex As Exception
                 Logger.WriteDebug(ex.Message)
                 Logger.WriteDebug(ex.StackTrace)
                 Logger.WriteDebug(CallStack, "Exception caught creating debug log summary.")
+
                 If DebugStreamReader IsNot Nothing Then
                     DebugStreamReader.Close()
                     Logger.WriteDebug(CallStack, "Debug stream reader closed.")
                 End If
+
                 If CloneStreamWriter IsNot Nothing Then
                     CloneStreamWriter.Close()
                     Logger.WriteDebug(CallStack, "Clone stream writer closed.")
                 End If
+
                 If System.IO.File.Exists(Globals.WindowsTemp + "\" + Globals.ProcessFriendlyName + ".clone") Then
                     Logger.WriteDebug(CallStack, "Delete file: " + Globals.WindowsTemp + "\" + Globals.ProcessFriendlyName + ".clone")
                     Utility.DeleteFile(CallStack, Globals.WindowsTemp + "\" + Globals.ProcessFriendlyName + ".clone")
@@ -266,7 +276,9 @@
 
             Dim DebugIncrement As Integer = 0
             Dim DebugLog As String = Globals.WindowsTemp + "\" + Globals.ProcessFriendlyName + DebugIncrement.ToString + ".txt"
+
             CallStack += "InitAltDebug|"
+
             While System.IO.File.Exists(DebugLog)
                 Logger.WriteDebug(CallStack, "Alternate debug stream already exists: " + DebugLog)
                 DebugIncrement += 1
@@ -296,6 +308,7 @@
             Dim DebugLog As String = Globals.WindowsTemp + "\" + Globals.ProcessFriendlyName + DebugIncrement.ToString + ".txt"
             Dim AlternateReader As System.IO.StreamReader
             Dim strLine As String
+
             CallStack += "Logger|"
 
             ' Iterate additional debug logs
@@ -369,7 +382,9 @@
                 DebugLog = DebugLog + ".txt"
                 DebugLog = DebugLog.Replace(":", ".")
                 Logger.WriteDebug(CallStack, "Archive Log: " + Globals.DSMFolder + DebugLog)
+
                 Globals.DebugStreamWriter.Close()
+
                 Try
                     Logger.WriteDebug(CallStack, "Move File: " + Globals.WindowsTemp + "\" + Globals.ProcessFriendlyName + ".txt")
                     Logger.WriteDebug(CallStack, "To: " + Globals.DSMFolder + DebugLog)
