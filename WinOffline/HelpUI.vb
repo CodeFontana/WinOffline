@@ -5,12 +5,17 @@
     End Sub
 
     Private Sub OptionsGui_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+
         Dim rtbText As New ArrayList
+
         rtbHelp.Text = WinOffline.Utility.ReplaceWord(rtbHelp.Text, "WinOffline", Globals.ProcessFriendlyName)
+
         For Each line As String In rtbHelp.Lines
             rtbText.Add(line)
         Next
+
         rtbHelp.Text = ""
+
         For Each line As String In rtbText
             rtbHelp.AppendText(line + Environment.NewLine)
             If line.Contains(Globals.ProcessFriendlyName + " Command Line Switches:") Or
@@ -21,8 +26,10 @@
                 rtbHelp.SelectionFont = New Drawing.Font("Calibri", 12, Drawing.FontStyle.Underline Or Drawing.FontStyle.Bold)
             End If
         Next
+
         rtbHelp.SelectionStart = 0
         rtbHelp.SelectionLength = 0
+
     End Sub
 
 End Class
