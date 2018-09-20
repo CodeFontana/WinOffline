@@ -445,7 +445,9 @@ Partial Public Class WinOffline
                 If CAFExitCode <> 0 Then
                     If StandardOutput.ToLower.Contains("access is denied") Then
                         Logger.WriteDebug(CallStack, "Administrator unable to stop CAF service.")
+
                         RunLevel = LaunchPad(CallStack, "System", Globals.DSMFolder + "bin\caf.exe", Globals.DSMFolder + "bin", "stop")
+
                         LoopCounter = 0
                         While Utility.IsProcessRunning("caf.exe", "stop") Or Utility.IsProcessRunning("caf")
                             If LoopCounter = 0 Then
@@ -793,14 +795,18 @@ Partial Public Class WinOffline
 
         Try
             Logger.WriteDebug("Helper thread: Expediting ""caf stop"" operation..")
+
             While Utility.IsProcessRunning("caf.exe", "stop")
                 CafProcessList = Utility.GetProcessChildren("caf.exe", "service", New ArrayList({"cfsmsmd.exe", "ccnfagent.exe", "encclient.exe"}))
+
                 If CafProcessList.Count = 0 Then
                     Logger.WriteDebug("Helper thread: Finished.")
                     Return
                 End If
+
                 Logger.WriteDebug("Helper thread: Monitoring (" + CafProcessList.Count.ToString + ") processes.")
                 LoopCounter = 0
+
                 While LoopCounter < 50
                     If Not Utility.IsProcessRunning("caf.exe", "stop") Then
                         Logger.WriteDebug("Helper thread: Finished.")
@@ -809,22 +815,27 @@ Partial Public Class WinOffline
                     LoopCounter += 1
                     Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                 End While
+
                 For x As Integer = CafProcessList.Count - 1 To 0 Step -1
                     ChildProcess = CafProcessList(x)
                     Logger.WriteDebug("Helper thread: Analyzing PID " + ChildProcess.Item(0).ToString + " -- " + ChildProcess.Item(1).ToString)
+
                     If Not Utility.IsProcessRunning(Integer.Parse(ChildProcess.Item(0))) Then
                         Logger.WriteDebug("Helper thread: Self-terminated PID " + ChildProcess.Item(0).ToString + " -- " + ChildProcess.Item(1).ToString)
                         CafProcessList.RemoveAt(x)
                         Continue For
                     End If
+
                     WorkingMemoryBase = Double.Parse(ChildProcess.Item(4))
                     WorkingMemoryCurrent = Utility.GetProcessWorkingSetMemorySize(ChildProcess.Item(0))
+
                     If WorkingMemoryCurrent >= WorkingMemoryBase Then
                         Utility.KillProcess(Integer.Parse(ChildProcess.Item(0)))
                         CafProcessList.RemoveAt(x)
                         Logger.WriteDebug("Helper thread: Killed PID " + ChildProcess.Item(0).ToString + " -- " + ChildProcess.Item(1).ToString)
                         Continue For
                     End If
+
                     Logger.WriteDebug("Helper thread: Memory decrease PID " + ChildProcess.Item(0).ToString + " -- " + ChildProcess.Item(1).ToString)
                 Next
             End While
