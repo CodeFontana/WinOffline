@@ -16,23 +16,28 @@ Partial Public Class WinOffline
 
         CallStack += "LaunchPad|"
 
-        ' Launch Service pre-check
+        ' Launch pre-checks
         If Utility.ServiceExists(Globals.ProcessFriendlyName + " Launch Service") Then
             LaunchControl = New ServiceController(Globals.ProcessFriendlyName + " Launch Service")
+
             ExecutionString = "sc.exe"
             ArgumentString = "delete """ + Globals.ProcessFriendlyName + " Launch Service"""
+
             Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
             ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
             ProcessStartInfo.WorkingDirectory = Globals.WorkingDirectory
             ProcessStartInfo.UseShellExecute = False
             ProcessStartInfo.RedirectStandardOutput = True
             ProcessStartInfo.CreateNoWindow = True
+
             RunningProcess = Process.Start(ProcessStartInfo)
             RunningProcess.WaitForExit()
+
             Logger.WriteDebug("------------------------------------------------------------")
             Logger.WriteDebug(RunningProcess.StandardOutput.ReadToEnd)
             Logger.WriteDebug("------------------------------------------------------------")
             Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
+
             If (RunningProcess.ExitCode <> 0) Then
                 RunningProcess.Close()
                 Return 1
@@ -58,18 +63,22 @@ Partial Public Class WinOffline
         ArgumentString = "create """ + Globals.ProcessFriendlyName + " Launch Service"" binPath= """ +
                 Globals.WinOfflineTemp + "\LaunchService.exe"" " +
                 "start= demand"
+
         Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
         ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
         ProcessStartInfo.WorkingDirectory = Globals.WorkingDirectory
         ProcessStartInfo.UseShellExecute = False
         ProcessStartInfo.RedirectStandardOutput = True
         ProcessStartInfo.CreateNoWindow = True
+
         RunningProcess = Process.Start(ProcessStartInfo)
         RunningProcess.WaitForExit()
+
         Logger.WriteDebug("------------------------------------------------------------")
         Logger.WriteDebug(RunningProcess.StandardOutput.ReadToEnd)
         Logger.WriteDebug("------------------------------------------------------------")
         Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
+
         If (RunningProcess.ExitCode <> 0) Then
             RunningProcess.Close()
             Return 3
@@ -91,14 +100,17 @@ Partial Public Class WinOffline
         ' Delete the Launcher Service
         ExecutionString = "sc.exe"
         ArgumentString = "delete """ + Globals.ProcessFriendlyName + " Launch Service"""
+
         Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
         ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
         ProcessStartInfo.WorkingDirectory = Globals.WorkingDirectory
         ProcessStartInfo.UseShellExecute = False
         ProcessStartInfo.RedirectStandardOutput = True
         ProcessStartInfo.CreateNoWindow = True
+
         RunningProcess = Process.Start(ProcessStartInfo)
         RunningProcess.WaitForExit()
+
         Logger.WriteDebug("------------------------------------------------------------")
         Logger.WriteDebug(RunningProcess.StandardOutput.ReadToEnd)
         Logger.WriteDebug("------------------------------------------------------------")
