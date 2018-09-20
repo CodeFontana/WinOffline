@@ -6,20 +6,21 @@
         Dim StateStreamReader As System.IO.StreamReader
         Dim StateLine As String
         Dim RunLevel As Integer = 0
+
         CallStack += "Dispatcher|"
         StateFile = Globals.WinOfflineTemp + "\" + Globals.ProcessFriendlyName + ".state"
 
         Try
             If System.IO.File.Exists(StateFile) Then
-
-                ' Read state file and set execution mode
                 Logger.WriteDebug(CallStack, "Found prior execution marker.")
-                Logger.WriteDebug(CallStack, "Upgrade execution mode: Software Delivery")
+
+                Logger.WriteDebug(CallStack, "Set execution mode: Software Delivery")
+                Globals.SDBasedMode = True
+
                 Logger.WriteDebug(CallStack, "Open file: " + StateFile)
                 StateStreamReader = New System.IO.StreamReader(StateFile)
                 StateLine = StateStreamReader.ReadLine()
                 StateStreamReader.Close()
-                Globals.SDBasedMode = True
 
                 ' Dispatch based on state file contents
                 If StateLine.Equals("StageI completed.") Then
@@ -32,13 +33,16 @@
                                                 Manifest.EXCEPTION_MANIFEST,
                                                 {"Error: StageII requested in software delivery online mode.",
                                                  "Reason: A prior " + Globals.ProcessFriendlyName + " execution was incomplete."})
+
                         ' Set the DIRTY flag [Cached job output ID is invalid]
                         '   This signals MAIN that we should re-collect the job output ID from software delivery.
                         '   If collected from temp cache, we have the output ID from the wrong/previous job.
                         '   Re-init will wipe the cache, along with all temps, then we will pickup the new/current job ID.
                         Globals.DirtyFlag = True
                         Init.SDStageIReInit(CallStack)
-                        RunLevel = StageI(CallStack) ' StageI
+
+                        ' StageI
+                        RunLevel = StageI(CallStack)
                         If RunLevel <> 0 Then
                             Logger.WriteDebug(CallStack, "Set final stage marker: True")
                             Globals.FinalStage = True
@@ -59,7 +63,9 @@
 
                 ElseIf StateLine.Equals("StageII completed.") Then
                     Logger.WriteDebug(CallStack, "Execution marker: StageII Completed.")
-                    RunLevel = StageIII(CallStack) ' Dispatch StageIII
+
+                    ' Dispatch StageIII
+                    RunLevel = StageIII(CallStack)
                     If RunLevel <> 0 Then
                         Logger.WriteDebug(CallStack, "Error: StageIII reports failure.")
                         Manifest.UpdateManifest(CallStack,
@@ -137,7 +143,9 @@
 
                 Else
                     Logger.WriteDebug(CallStack, "Execution mode: Software delivery")
-                    RunLevel = StageI(CallStack) ' Dispatch StageI
+
+                    ' Dispatch StageI
+                    RunLevel = StageI(CallStack)
                     If RunLevel <> 0 Then
                         Logger.WriteDebug(CallStack, "Error: StageI reports failure.")
                         Manifest.UpdateManifest(CallStack,
