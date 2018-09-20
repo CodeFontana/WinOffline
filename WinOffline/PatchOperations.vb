@@ -3,6 +3,7 @@
     Public Shared Function PatchOperations(ByVal CallStack As String) As Integer
 
         Dim Runlevel As Integer = 0
+
         CallStack += "PatchOperations|"
         Logger.SetCurrentTask("Executing..")
 
@@ -148,6 +149,7 @@
         For Each strLine As String In pVector.GetPreCommandList
             ExecutionString = pVector.PatchFile.GetFilePath + "\" + strLine
             Logger.WriteDebug(CallStack, "Execute pre-script: " + ExecutionString)
+
             ProcessStartInfo = New ProcessStartInfo(ExecutionString)
             ProcessStartInfo.WorkingDirectory = pVector.PatchFile.GetFilePath
             ProcessStartInfo.UseShellExecute = False
@@ -156,19 +158,24 @@
             StandardOutput = ""
             RemainingOutput = ""
             Logger.WriteDebug("------------------------------------------------------------")
+
             RunningProcess = Process.Start(ProcessStartInfo)
+
             While RunningProcess.HasExited = False
                 ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                 Logger.WriteDebug(ConsoleOutput)
                 StandardOutput += ConsoleOutput + Environment.NewLine
                 Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
             End While
+
             RunningProcess.WaitForExit()
             RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
             StandardOutput += RemainingOutput
+
             Logger.WriteDebug(RemainingOutput)
             Logger.WriteDebug("------------------------------------------------------------")
             Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
+
             pVector.PreCmdReturnCodes.Add(RunningProcess.ExitCode.ToString)
             RunningProcess.Close()
         Next
@@ -188,6 +195,7 @@
         For Each strLine As String In pVector.GetSysCommandList
             ExecutionString = pVector.PatchFile.GetFilePath + "\" + strLine
             Logger.WriteDebug(CallStack, "Execute script: " + ExecutionString)
+
             ProcessStartInfo = New ProcessStartInfo(ExecutionString)
             ProcessStartInfo.WorkingDirectory = pVector.PatchFile.GetFilePath
             ProcessStartInfo.UseShellExecute = False
@@ -196,19 +204,24 @@
             StandardOutput = ""
             RemainingOutput = ""
             Logger.WriteDebug("------------------------------------------------------------")
+
             RunningProcess = Process.Start(ProcessStartInfo)
+
             While RunningProcess.HasExited = False
                 ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                 Logger.WriteDebug(ConsoleOutput)
                 StandardOutput += ConsoleOutput + Environment.NewLine
                 Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
             End While
+
             RunningProcess.WaitForExit()
             RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
             StandardOutput += RemainingOutput
+
             Logger.WriteDebug(RemainingOutput)
             Logger.WriteDebug("------------------------------------------------------------")
             Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
+
             pVector.SysCmdReturnCodes.Add(RunningProcess.ExitCode.ToString)
             RunningProcess.Close()
         Next
@@ -244,6 +257,7 @@
         ' Check if patch if already applied (file replacement check)
         If pVector.SourceReplaceList.Count > 0 Then
             Logger.WriteDebug(CallStack, "Check if patch is already applied..")
+
             For x As Integer = 0 To pVector.SourceReplaceList.Count - 1
                 Logger.WriteDebug(CallStack, "Compare: " + pVector.SourceReplaceList.Item(x).ToString)
                 Logger.WriteDebug(CallStack, "Compare: " + pVector.DestReplaceList.Item(x).ToString)
