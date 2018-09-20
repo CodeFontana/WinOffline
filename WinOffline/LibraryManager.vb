@@ -422,6 +422,7 @@ Partial Public Class WinOffline
             Logger.WriteDebug(CallStack, "Library items to cleanup: " + (DctMissingArcCount + DctMissingVolCount + DctMissingRegInfoCount + DctDuplicateCount + DctNotInDbCount).ToString)
             Logger.WriteDebug(CallStack, "Library folders to cleanup: " + (ArcsForDeletion.Count + RcpsForDeletion.Count).ToString)
             Logger.WriteDebug(CallStack, "Database items to cleanup: " + DbNotInDct.Count.ToString)
+
             LibraryEvents.Add("Software read from database: " + DbRegSwUUID.Count.ToString)
             LibraryEvents.Add("Software read from library: " + (DctRegSw.Count + DctMissingArcCount + DctMissingVolCount + DctMissingRegInfoCount + DctDuplicateCount + DctNotInDbCount).ToString)
             LibraryEvents.Add("Library items to cleanup: " + (DctMissingArcCount + DctMissingVolCount + DctMissingRegInfoCount + DctDuplicateCount + DctNotInDbCount).ToString)
@@ -431,6 +432,7 @@ Partial Public Class WinOffline
             ' Cleanup database
             If Globals.CleanupSDLibrarySwitch AndAlso Not Globals.CheckSDLibrarySwitch Then
                 If DbNotInDct.Count > 0 Then
+
                     Dim SoftwareAffectedCount As Integer = 0
                     Dim ProcedureAffectedCount As Integer = 0
                     Dim ApplicationAffectedCount As Integer = 0
@@ -438,16 +440,21 @@ Partial Public Class WinOffline
                     Dim RetryCount As Integer = 0
                     Dim RetryLimit As Integer = 3
                     Dim WasSuccessful As Boolean = False
+
                     Do
                         Try
                             For i As Integer = DbNotInDct.Count - 1 To 0 Step -1
+
                                 ' Convert the uniqueidentifier into string (really binary(16) for the package's usd_rsw.objectid)
                                 Dim rsw_objectid As String = "0x" + BitConverter.ToString(Guid.Parse(DbNotInDct.Item(i)).ToByteArray).Replace("-", "")
                                 Dim rsw_itemname As String = DatabaseAPI.SqlSelectScalar(CallStack, DbConnection, "select itemname from usd_rsw where objectid=" + rsw_objectid)
                                 Dim rsw_itemversion As String = DatabaseAPI.SqlSelectScalar(CallStack, DbConnection, "select itemversion from usd_rsw where objectid=" + rsw_objectid)
+
                                 Logger.WriteDebug(CallStack, "Delete from database: " + rsw_itemname + " " + rsw_itemversion + "(objectid=" + rsw_objectid + ")")
+
                                 ' Retrive list of procedures associated with the rsw
                                 Dim actproc_list As List(Of String) = DatabaseAPI.SqlSelectScalarList(CallStack, DbConnection, "select objectid from usd_actproc where rsw=" + rsw_objectid)
+
                                 For Each actproc_uuid As String In actproc_list
                                     ' Retrieve procedure name
                                     Dim actproc_name As String = DatabaseAPI.SqlSelectScalar(CallStack, DbConnection, "select itemname from usd_actproc where objectid=" + actproc_uuid)
@@ -460,10 +467,12 @@ Partial Public Class WinOffline
                                     ProcedureAffectedCount += SqlData.RecordsAffected
                                     SqlData.Close()
                                 Next
+
                                 SqlCmd = New SqlCommand("delete from usd_rsw where objectid=" + rsw_objectid, DbConnection) ' Delete the software
                                 SqlData = SqlCmd.ExecuteReader()
                                 SoftwareAffectedCount += SqlData.RecordsAffected
                                 SqlData.Close()
+
                                 SqlCmd = New SqlCommand("delete from usd_link_swg_sw where sw=" + rsw_objectid, DbConnection) ' Delete the software group links
                                 SqlData = SqlCmd.ExecuteReader()
                                 GroupLinksAffectedCount += SqlData.RecordsAffected
@@ -473,6 +482,7 @@ Partial Public Class WinOffline
                                 Logger.WriteDebug(CallStack, "Procedures deleted: " + ProcedureAffectedCount.ToString)
                                 Logger.WriteDebug(CallStack, "Applications deleted: " + ApplicationAffectedCount.ToString)
                                 Logger.WriteDebug(CallStack, "Group links deleted: " + GroupLinksAffectedCount.ToString)
+
                                 LibraryEvents.Add("Software deleted: " + SoftwareAffectedCount.ToString)
                                 LibraryEvents.Add("Procedures deleted: " + ProcedureAffectedCount.ToString)
                                 LibraryEvents.Add("Applications deleted: " + ApplicationAffectedCount.ToString)
