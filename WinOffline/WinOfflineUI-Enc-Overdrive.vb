@@ -121,8 +121,7 @@ Partial Public Class WinOfflineUI
                                           " -s " + MsgSize.ToString +
                                           " -w " + WaitTime.ToString +
                                           " -t " + ReplyTimeout.ToString,
-                                          ,
-                                          Output)
+                                          , Output)
 
             ' Tokenize the output
             TokenizedOutput = Output.Split(New String() {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries)
@@ -138,10 +137,10 @@ Partial Public Class WinOfflineUI
         Else
 
             ' Run caf ping and read output
-            WinOffline.Utility.RunCommand(Globals.DSMFolder + "bin\caf.exe", "ping " + Victim +
-                                          " timeout " + ReplyTimeout.ToString +
-                                          " repeat " + NumPings.ToString,
-                                          Output)
+            WinOffline.Utility.RunCommand(Globals.DSMFolder +
+                                          "bin\caf.exe",
+                                          "ping " + Victim + " timeout " + ReplyTimeout.ToString + " repeat " + NumPings.ToString,
+                                          , Output)
 
             ' Tokenize the output
             TokenizedOutput = Output.Split(New String() {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries)
