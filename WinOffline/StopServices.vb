@@ -463,9 +463,7 @@ Partial Public Class WinOffline
                                                 "Reason: Access to the CAF service was denied."})
                         Return 8
                     End If
-
                 Else
-
                     If StandardOutput.ToLower.Contains("access is denied") Then
                         Logger.WriteDebug(CallStack, "Administrator unable to stop CAF service.")
 
@@ -492,10 +490,23 @@ Partial Public Class WinOffline
                                                     Manifest.EXCEPTION_MANIFEST,
                                                     {"Error: Unable to terminate CAF service.",
                                                     "Reason: Access to the CAF service was denied."})
-                            Return 8
+                            Return 9
                         End If
                     Else
                         Logger.WriteDebug(CallStack, "Warning: ""caf stop"" terminated abnormally.")
+
+                        ' Escalate to caf-kill
+                        If Utility.IsProcessRunning("caf", True) Then KillCAF(CallStack)
+
+                        ' Check for success
+                        If Utility.IsProcessRunning("caf", True) Then
+                            Logger.WriteDebug(CallStack, "Error: Unable to terminate CAF service.")
+                            Manifest.UpdateManifest(CallStack,
+                                                    Manifest.EXCEPTION_MANIFEST,
+                                                    {"Error: Unable to terminate CAF service.",
+                                                    "Reason: Access to the CAF service was denied."})
+                            Return 10
+                        End If
                     End If
                 End If
                 Logger.WriteDebug(CallStack, "CAF service: STOPPED")
@@ -814,7 +825,7 @@ Partial Public Class WinOffline
         Dim StandardOutput As String
         Dim RemainingOutput As String
         Dim ProcessStartInfo As ProcessStartInfo
-        Dim CAFExitCode As Integer
+        Dim CAFStopExitCode As Integer
         Dim CAFStopHelperThread As Thread = Nothing
         Dim LoopCounter As Integer = 0
         Dim RestCounter As Integer = 0
@@ -891,6 +902,7 @@ Partial Public Class WinOffline
 
                 RunningProcess = Process.Start(ProcessStartInfo)
 
+                ' If CAF reaches the 260 second countdown, deploy the helper-thread
                 While RunningProcess.HasExited = False
                     ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                     Logger.WriteDebug(ConsoleOutput)
@@ -908,11 +920,10 @@ Partial Public Class WinOffline
                 Logger.WriteDebug(RemainingOutput)
                 Logger.WriteDebug("------------------------------------------------------------")
                 Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
-                CAFExitCode = RunningProcess.ExitCode
+                CAFStopExitCode = RunningProcess.ExitCode
                 RunningProcess.Close()
 
-                Thread.Sleep(2000)
-
+                ' Join helper-thread (wait for thread to terminate)
                 Try
                     If CAFStopHelperThread IsNot Nothing AndAlso CAFStopHelperThread.IsAlive Then
                         Logger.WriteDebug(CallStack, "Waiting for helper thread to terminate.")
@@ -923,141 +934,63 @@ Partial Public Class WinOffline
                     Logger.WriteDebug(ex.Message)
                     Logger.WriteDebug(ex.StackTrace)
                 End Try
-                If CAFExitCode <> 0 Then
+
+                If CAFStopExitCode = 0 Then
+                    Thread.Sleep(1000) ' Just give it a second
+
+                    ' Wait up to 12 more seconds after successful "caf stop" completion, for CAF to actually stop
+                    LoopCounter = 0
+                    While Utility.IsProcessRunning("caf", True)
+                        Logger.WriteDebug(CallStack, "CAF service: ACTIVE")
+                        LoopCounter += 1
+                        Thread.Sleep(3000)
+                        If LoopCounter >= 4 Then Exit While
+                    End While
+
+                    ' Otherwise kill CAF
+                    If Utility.IsProcessRunning("caf", True) Then KillCAF(CallStack)
+
+                    ' We tried diligently
+                    If Utility.IsProcessRunning("caf") Then
+                        Logger.WriteDebug(CallStack, "Error: Unable to terminate CAF service.")
+                        Return 1
+                    End If
+                Else
                     If StandardOutput.ToLower.Contains("access is denied") Then
                         Logger.WriteDebug(CallStack, "Administrator unable to stop CAF service.")
 
                         LaunchPad(CallStack, "System", Globals.DSMFolder + "bin\caf.exe", Globals.DSMFolder + "bin\", "stop")
 
                         LoopCounter = 0
-
-                        While Utility.IsProcessRunning("caf.exe", "stop") Or Utility.IsProcessRunning("caf")
+                        While Utility.IsProcessRunning("caf.exe", "stop") OrElse Utility.IsProcessRunning("caf", True)
                             If LoopCounter = 0 Then
                                 Logger.WriteDebug(CallStack, "CAF service: STOPPING  [This may take up to 5 minutes!]")
                             Else
                                 Logger.WriteDebug(CallStack, "CAF service: STOPPING")
                             End If
                             LoopCounter += 1
-                            If LoopCounter >= 10 Then
-                                Logger.WriteDebug(CallStack, "CAF service is not stopping gracefully.")
-                                Logger.WriteDebug(CallStack, "Send kill request to the CAF service..")
-
-                                ExecutionString = Globals.DSMFolder + "bin\caf.exe"
-                                ArgumentString = "kill all"
-
-                                Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
-                                ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
-                                ProcessStartInfo.WorkingDirectory = Globals.DSMFolder + "bin"
-                                ProcessStartInfo.UseShellExecute = False
-                                ProcessStartInfo.RedirectStandardOutput = True
-                                ProcessStartInfo.CreateNoWindow = True
-                                StandardOutput = ""
-                                RemainingOutput = ""
-                                Logger.WriteDebug("------------------------------------------------------------")
-
-                                RunningProcess = Process.Start(ProcessStartInfo)
-
-                                While RunningProcess.HasExited = False
-                                    ConsoleOutput = RunningProcess.StandardOutput.ReadLine
-                                    Logger.WriteDebug(ConsoleOutput)
-                                    StandardOutput += ConsoleOutput + Environment.NewLine
-                                End While
-
-                                RunningProcess.WaitForExit()
-                                RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
-                                StandardOutput += RemainingOutput
-
-                                Logger.WriteDebug(RemainingOutput)
-                                Logger.WriteDebug("------------------------------------------------------------")
-                                Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
-                                RunningProcess.Close()
-
+                            If LoopCounter >= 12 Then ' Wait 120s before killiing CAF
+                                KillCAF(CallStack)
                                 Exit While
                             End If
-                            RestCounter = 0
-                            While RestCounter < 199
-                                RestCounter += 1
-                                Thread.Sleep(50)
-                            End While
+                            Thread.Sleep(10000)
                         End While
+
                         If Utility.IsProcessRunning("caf") Then
                             Logger.WriteDebug(CallStack, "Error: Unable to terminate CAF service.")
-                            Return 1
+                            Return 2
                         End If
                     Else
-                        Logger.WriteDebug(CallStack, "CAF service: WARNING [Terminated with non-zero exit code]")
-                    End If
+                        Logger.WriteDebug(CallStack, "Warning: ""caf stop"" terminated abnormally.")
 
-                Else
-                    If Utility.IsProcessRunning("caf") Then
-                        Logger.WriteDebug(CallStack, "CAF service has not stopped gracefully.")
-                        Logger.WriteDebug(CallStack, "Send first kill request to the CAF service..")
+                        ' Escalate to caf-kill
+                        If Utility.IsProcessRunning("caf", True) Then KillCAF(CallStack)
 
-                        ExecutionString = Globals.DSMFolder + "bin\caf.exe"
-                        ArgumentString = "kill all"
-
-                        Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
-                        ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
-                        ProcessStartInfo.WorkingDirectory = Globals.DSMFolder + "bin"
-                        ProcessStartInfo.UseShellExecute = False
-                        ProcessStartInfo.RedirectStandardOutput = True
-                        ProcessStartInfo.CreateNoWindow = True
-                        StandardOutput = ""
-                        RemainingOutput = ""
-                        Logger.WriteDebug("------------------------------------------------------------")
-
-                        RunningProcess = Process.Start(ProcessStartInfo)
-
-                        While RunningProcess.HasExited = False
-                            ConsoleOutput = RunningProcess.StandardOutput.ReadLine
-                            Logger.WriteDebug(ConsoleOutput)
-                            StandardOutput += ConsoleOutput + Environment.NewLine
-                        End While
-
-                        RunningProcess.WaitForExit()
-                        RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
-                        StandardOutput += RemainingOutput
-
-                        Logger.WriteDebug(RemainingOutput)
-                        Logger.WriteDebug("------------------------------------------------------------")
-                        Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
-                        RunningProcess.Close()
-
-                        Logger.WriteDebug(CallStack, "Send second kill request to the CAF service..")
-
-                        ExecutionString = Globals.DSMFolder + "bin\caf.exe"
-                        ArgumentString = "kill all"
-
-                        Logger.WriteDebug(CallStack, "Detached process: " + ExecutionString + " " + ArgumentString)
-                        ProcessStartInfo = New ProcessStartInfo(ExecutionString, ArgumentString)
-                        ProcessStartInfo.WorkingDirectory = Globals.DSMFolder + "bin"
-                        ProcessStartInfo.UseShellExecute = False
-                        ProcessStartInfo.RedirectStandardOutput = True
-                        ProcessStartInfo.CreateNoWindow = True
-                        StandardOutput = ""
-                        RemainingOutput = ""
-                        Logger.WriteDebug("------------------------------------------------------------")
-
-                        RunningProcess = Process.Start(ProcessStartInfo)
-
-                        While RunningProcess.HasExited = False
-                            ConsoleOutput = RunningProcess.StandardOutput.ReadLine
-                            Logger.WriteDebug(ConsoleOutput)
-                            StandardOutput += ConsoleOutput + Environment.NewLine
-                        End While
-
-                        RunningProcess.WaitForExit()
-                        RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
-                        StandardOutput += RemainingOutput
-
-                        Logger.WriteDebug(RemainingOutput)
-                        Logger.WriteDebug("------------------------------------------------------------")
-                        Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
-                        RunningProcess.Close()
-                    End If
-                    If Utility.IsProcessRunning("caf") Then
-                        Logger.WriteDebug(CallStack, "Error: Unable to terminate CAF service.")
-                        Return 2
+                        ' Check for success
+                        If Utility.IsProcessRunning("caf", True) Then
+                            Logger.WriteDebug(CallStack, "Error: Unable to terminate CAF service.")
+                            Return 3
+                        End If
                     End If
                 End If
                 Logger.WriteDebug(CallStack, "CAF service: STOPPED")
@@ -1068,7 +1001,7 @@ Partial Public Class WinOffline
             Logger.WriteDebug(CallStack, "Error: Exception caught while stopping the CAF service.")
             Logger.WriteDebug(ex.Message)
             Logger.WriteDebug(ex.StackTrace)
-            Return 3
+            Return 4
         End Try
 
         ' Stop external CAF processes
