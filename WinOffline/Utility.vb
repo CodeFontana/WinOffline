@@ -844,7 +844,6 @@ Partial Public Class WinOffline
                 While RunningProcess.HasExited = False
                     If StandardOut IsNot Nothing Then StandardOut += RunningProcess.StandardOutput.ReadLine + Environment.NewLine
                     System.Windows.Forms.Application.DoEvents()
-                    Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                 End While
                 RunningProcess.WaitForExit()
                 If StandardOut IsNot Nothing Then StandardOut += RunningProcess.StandardOutput.ReadToEnd.ToString
