@@ -46,7 +46,6 @@ Partial Public Class WinOffline
                     ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                     Logger.WriteDebug(ConsoleOutput)
                     StandardOutput += ConsoleOutput + Environment.NewLine
-                    Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                 End While
 
                 RunningProcess.WaitForExit()
@@ -117,7 +116,6 @@ Partial Public Class WinOffline
                     ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                     Logger.WriteDebug(ConsoleOutput)
                     StandardOutput += ConsoleOutput + Environment.NewLine
-                    Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                 End While
 
                 RunningProcess.WaitForExit()
@@ -251,7 +249,6 @@ Partial Public Class WinOffline
                     ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                     Logger.WriteDebug(ConsoleOutput)
                     StandardOutput += ConsoleOutput + Environment.NewLine
-                    Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                 End While
 
                 RunningProcess.WaitForExit()
@@ -417,7 +414,6 @@ Partial Public Class WinOffline
                         CAFStopHelperThread = New Thread(Sub() CafStopWorker())
                         CAFStopHelperThread.Start()
                     End If
-                    Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                 End While
 
                 RunningProcess.WaitForExit()
@@ -479,7 +475,6 @@ Partial Public Class WinOffline
                                     ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                                     Logger.WriteDebug(ConsoleOutput)
                                     StandardOutput += ConsoleOutput + Environment.NewLine
-                                    Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                                 End While
 
                                 RunningProcess.WaitForExit()
@@ -529,7 +524,6 @@ Partial Public Class WinOffline
                             ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                             Logger.WriteDebug(ConsoleOutput)
                             StandardOutput += ConsoleOutput + Environment.NewLine
-                            Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                         End While
 
                         RunningProcess.WaitForExit()
@@ -562,7 +556,6 @@ Partial Public Class WinOffline
                             ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                             Logger.WriteDebug(ConsoleOutput)
                             StandardOutput += ConsoleOutput + Environment.NewLine
-                            Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                         End While
 
                         RunningProcess.WaitForExit()
@@ -626,7 +619,6 @@ Partial Public Class WinOffline
                     ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                     Logger.WriteDebug(ConsoleOutput)
                     StandardOutput += ConsoleOutput + Environment.NewLine
-                    Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                 End While
 
                 RunningProcess.WaitForExit()
@@ -659,7 +651,6 @@ Partial Public Class WinOffline
                     ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                     Logger.WriteDebug(ConsoleOutput)
                     StandardOutput += ConsoleOutput + Environment.NewLine
-                    Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                 End While
 
                 RunningProcess.WaitForExit()
@@ -730,7 +721,6 @@ Partial Public Class WinOffline
                     ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                     Logger.WriteDebug(ConsoleOutput)
                     StandardOutput += ConsoleOutput + Environment.NewLine
-                    Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                 End While
 
                 RunningProcess.WaitForExit()
@@ -813,7 +803,7 @@ Partial Public Class WinOffline
                         Return
                     End If
                     LoopCounter += 1
-                    Thread.Sleep(Globals.THREAD_REST_INTERVAL)
+                    Thread.Sleep(50)
                 End While
 
                 For x As Integer = CafProcessList.Count - 1 To 0 Step -1
@@ -942,7 +932,6 @@ Partial Public Class WinOffline
                         CAFStopHelperThread = New Thread(Sub() CafStopWorker())
                         CAFStopHelperThread.Start()
                     End If
-                    Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                 End While
 
                 RunningProcess.WaitForExit()
@@ -1005,7 +994,6 @@ Partial Public Class WinOffline
                                     ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                                     Logger.WriteDebug(ConsoleOutput)
                                     StandardOutput += ConsoleOutput + Environment.NewLine
-                                    Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                                 End While
 
                                 RunningProcess.WaitForExit()
@@ -1022,7 +1010,7 @@ Partial Public Class WinOffline
                             RestCounter = 0
                             While RestCounter < 199
                                 RestCounter += 1
-                                Thread.Sleep(Globals.THREAD_REST_INTERVAL)
+                                Thread.Sleep(50)
                             End While
                         End While
                         If Utility.IsProcessRunning("caf") Then
@@ -1057,7 +1045,6 @@ Partial Public Class WinOffline
                             ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                             Logger.WriteDebug(ConsoleOutput)
                             StandardOutput += ConsoleOutput + Environment.NewLine
-                            Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                         End While
 
                         RunningProcess.WaitForExit()
@@ -1090,7 +1077,6 @@ Partial Public Class WinOffline
                             ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                             Logger.WriteDebug(ConsoleOutput)
                             StandardOutput += ConsoleOutput + Environment.NewLine
-                            Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                         End While
 
                         RunningProcess.WaitForExit()

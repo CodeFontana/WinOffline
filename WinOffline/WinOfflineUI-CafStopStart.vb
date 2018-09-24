@@ -48,7 +48,6 @@ Partial Public Class WinOfflineUI
                 ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                 Delegate_Sub_Append_Text(UIOutputControl, ConsoleOutput)
                 StandardOutput += ConsoleOutput + Environment.NewLine
-                Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
             End While
 
             RunningProcess.WaitForExit()
@@ -141,7 +140,6 @@ Partial Public Class WinOfflineUI
                         CAFStopHelperThread = New Thread(Sub() CafStopWorker(UIOutputControl))
                         CAFStopHelperThread.Start()
                     End If
-                    Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                 End While
 
                 RunningProcess.WaitForExit()
@@ -200,7 +198,6 @@ Partial Public Class WinOfflineUI
                                     ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                                     Delegate_Sub_Append_Text(UIOutputControl, ConsoleOutput)
                                     StandardOutput += ConsoleOutput + Environment.NewLine
-                                    Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                                 End While
 
                                 RunningProcess.WaitForExit()
@@ -230,7 +227,6 @@ Partial Public Class WinOfflineUI
                                     ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                                     Delegate_Sub_Append_Text(UIOutputControl, ConsoleOutput)
                                     StandardOutput += ConsoleOutput + Environment.NewLine
-                                    Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                                 End While
 
                                 RunningProcess.WaitForExit()
@@ -248,7 +244,7 @@ Partial Public Class WinOfflineUI
                             While RestCounter < 199
                                 If TerminateSignal Then Return
                                 RestCounter += 1
-                                Thread.Sleep(Globals.THREAD_REST_INTERVAL)
+                                Thread.Sleep(50)
                             End While
 
                         End While
@@ -287,7 +283,6 @@ Partial Public Class WinOfflineUI
                             ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                             Delegate_Sub_Append_Text(UIOutputControl, ConsoleOutput)
                             StandardOutput += ConsoleOutput + Environment.NewLine
-                            Threading.Thread.Sleep(Globals.THREAD_REST_INTERVAL)
                         End While
 
                         RunningProcess.WaitForExit()
@@ -365,7 +360,7 @@ Partial Public Class WinOfflineUI
                         Return
                     End If
                     LoopCounter += 1
-                    Thread.Sleep(Globals.THREAD_REST_INTERVAL)
+                    Thread.Sleep(50)
                 End While
 
                 For x As Integer = CafProcessList.Count - 1 To 0 Step -1
