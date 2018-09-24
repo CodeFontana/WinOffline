@@ -631,35 +631,36 @@ Partial Public Class WinOffline
             Return False
         End Function
 
-        Public Shared Function IsProcessRunning(ByVal ProcessFriendlyName As String) As Boolean
+        Public Shared Function IsProcessRunning(ByVal ProcessFriendlyName As String, Optional ByVal MoreInfo As Boolean = False) As Boolean
             For Each RunningProcess As Process In Process.GetProcesses()
                 If RunningProcess.ProcessName.ToLower.Equals(ProcessFriendlyName.ToLower) Then
-                    ' Debug output for caf-stop-detection
-                    Dim ProcessWMI As ManagementObject = Nothing
-                    Dim CurrentID As Integer = Nothing
-                    Dim ParentID As Integer = Nothing
-                    Dim ParentName As String = Nothing
-                    Dim WMIQuery As ManagementObjectSearcher
-                    Dim CommandLine As String = Nothing
-                    WMIQuery = New ManagementObjectSearcher("SELECT * FROM Win32_Process WHERE ProcessId='" + RunningProcess.Id.ToString + "'")
-                    For Each WMIProcess As ManagementObject In WMIQuery.Get()
-                        CommandLine = WMIProcess("CommandLine").ToString
-                    Next
-                    Logger.WriteDebug(Logger.LastCallStack, "IsProcessRunning() found: " + RunningProcess.Id.ToString + "/" + RunningProcess.ProcessName + " " + CommandLine)
-                    Try
-                        CurrentID = RunningProcess.Id
-                        While True
-                            ProcessWMI = New ManagementObject("Win32_Process.Handle='" & CurrentID & "'")
-                            ParentID = ProcessWMI("ParentProcessID")
-                            ParentName = Process.GetProcessById(ParentID).ProcessName.ToString
-                            Logger.WriteDebug(Logger.LastCallStack, "IsProcessRunning() parent: " + ParentID.ToString + "/" + ParentName)
-                            If Globals.ParentProcessName Is Nothing Then Globals.ParentProcessName = ParentName.ToLower
-                            Globals.ParentProcessTree.Add(ParentName.ToLower)
-                            CurrentID = ParentID
-                        End While
-                    Catch ex As Exception
-                        If Globals.ParentProcessName Is Nothing Then Globals.ParentProcessName = "noparent"
-                    End Try
+                    If MoreInfo Then
+                        Dim ProcessWMI As ManagementObject = Nothing
+                        Dim CurrentID As Integer = Nothing
+                        Dim ParentID As Integer = Nothing
+                        Dim ParentName As String = Nothing
+                        Dim WMIQuery As ManagementObjectSearcher
+                        Dim CommandLine As String = Nothing
+                        WMIQuery = New ManagementObjectSearcher("SELECT * FROM Win32_Process WHERE ProcessId='" + RunningProcess.Id.ToString + "'")
+                        For Each WMIProcess As ManagementObject In WMIQuery.Get()
+                            CommandLine = WMIProcess("CommandLine").ToString
+                        Next
+                        Logger.WriteDebug(Logger.LastCallStack, "IsProcessRunning() found: " + RunningProcess.Id.ToString + "/" + RunningProcess.ProcessName + " " + CommandLine)
+                        Try
+                            CurrentID = RunningProcess.Id
+                            While True
+                                ProcessWMI = New ManagementObject("Win32_Process.Handle='" & CurrentID & "'")
+                                ParentID = ProcessWMI("ParentProcessID")
+                                ParentName = Process.GetProcessById(ParentID).ProcessName.ToString
+                                Logger.WriteDebug(Logger.LastCallStack, "IsProcessRunning() parent: " + ParentID.ToString + "/" + ParentName)
+                                If Globals.ParentProcessName Is Nothing Then Globals.ParentProcessName = ParentName.ToLower
+                                Globals.ParentProcessTree.Add(ParentName.ToLower)
+                                CurrentID = ParentID
+                            End While
+                        Catch ex As Exception
+                            If Globals.ParentProcessName Is Nothing Then Globals.ParentProcessName = "noparent"
+                        End Try
+                    End If
                     Return True
                 End If
             Next
