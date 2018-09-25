@@ -721,11 +721,11 @@ Partial Public Class WinOffline
             End If
         End Function
 
-        Public Shared Function KillProcess(ByVal FileName As String) As Boolean
+        Public Shared Function KillProcess(ByVal FriendlyName As String) As Boolean
             Dim MatchFound As Boolean = False
             Try
                 For Each RunningProcess As Process In Process.GetProcesses()
-                    If RunningProcess.ProcessName.ToLower.Equals(FileName.ToLower) Then
+                    If RunningProcess.ProcessName.ToLower.Equals(FriendlyName.ToLower) Then
                         MatchFound = True
                         RunningProcess.Kill()
                     End If
