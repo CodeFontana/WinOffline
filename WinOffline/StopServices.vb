@@ -704,7 +704,7 @@ Partial Public Class WinOffline
 
     End Function
 
-    Public Shared Sub KillCAF(ByVal CallStack As String)
+    Private Shared Sub KillCAF(ByVal CallStack As String)
 
         Dim ExecutionString As String
         Dim ArgumentString As String
