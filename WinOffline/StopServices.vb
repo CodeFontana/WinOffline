@@ -792,10 +792,8 @@ Partial Public Class WinOffline
 
                 For x As Integer = CafProcessList.Count - 1 To 0 Step -1
                     ChildProcess = CafProcessList(x)
-                    Logger.WriteDebug("Helper thread: Analyzing PID " + ChildProcess.Item(0).ToString + " -- " + ChildProcess.Item(1).ToString)
 
                     If Not Utility.IsProcessRunning(Integer.Parse(ChildProcess.Item(0))) Then
-                        Logger.WriteDebug("Helper thread: Self-terminated PID " + ChildProcess.Item(0).ToString + " -- " + ChildProcess.Item(1).ToString)
                         CafProcessList.RemoveAt(x)
                         Continue For
                     End If

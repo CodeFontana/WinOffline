@@ -331,9 +331,7 @@ Partial Public Class WinOfflineUI
 
                 For x As Integer = CafProcessList.Count - 1 To 0 Step -1
                     ChildProcess = CafProcessList(x)
-                    Delegate_Sub_Append_Text(UIOutputControl, "Helper thread: Analyzing PID " + ChildProcess.Item(0).ToString + " -- " + ChildProcess.Item(1).ToString)
                     If Not WinOffline.Utility.IsProcessRunning(Integer.Parse(ChildProcess.Item(0))) Then
-                        Delegate_Sub_Append_Text(UIOutputControl, "Helper thread: Self-terminated PID " + ChildProcess.Item(0).ToString + " -- " + ChildProcess.Item(1).ToString)
                         CafProcessList.RemoveAt(x)
                         Continue For
                     End If
