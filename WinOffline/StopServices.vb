@@ -414,7 +414,7 @@ Partial Public Class WinOffline
                     ConsoleOutput = RunningProcess.StandardOutput.ReadLine
                     Logger.WriteDebug(ConsoleOutput)
                     StandardOutput += ConsoleOutput + Environment.NewLine
-                    If ConsoleOutput IsNot Nothing AndAlso ConsoleOutput.ToLower.Contains(" 260 ") Then
+                    If ConsoleOutput IsNot Nothing AndAlso ConsoleOutput.ToLower.Contains(" 240 ") Then
                         CAFStopHelperThread = New Thread(Sub() CafStopWorker())
                         CAFStopHelperThread.Start()
                     End If
@@ -781,13 +781,13 @@ Partial Public Class WinOffline
                 Logger.WriteDebug("Helper thread: Monitoring (" + CafProcessList.Count.ToString + ") processes.")
                 LoopCounter = 0
 
-                While LoopCounter < 50
+                While LoopCounter < 20
                     If Not Utility.IsProcessRunning("caf.exe", "stop") Then
                         Logger.WriteDebug("Helper thread: Finished.")
                         Return
                     End If
                     LoopCounter += 1
-                    Thread.Sleep(50)
+                    Thread.Sleep(500)
                 End While
 
                 For x As Integer = CafProcessList.Count - 1 To 0 Step -1
