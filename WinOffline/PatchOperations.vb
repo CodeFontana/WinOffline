@@ -20,7 +20,6 @@
                             Manifest.GetRemovalFromManifest(i).RemovalAction = RemovalVector.REMOVAL_FAIL
                             Manifest.GetRemovalFromManifest(i).CommentString = "Reason: This is a patch error simulation."
                         Else
-
                             Logger.WriteDebug(CallStack, "Switch: Simulate removing patch.")
                             Manifest.GetRemovalFromManifest(i).RemovalAction = RemovalVector.SKIPPED
                             Manifest.GetRemovalFromManifest(i).CommentString = "Reason: This is a simulation."
@@ -54,6 +53,7 @@
                 For i As Integer = 0 To Manifest.PatchManifestCount - 1
                     Logger.WriteDebug(CallStack, "Read patch manifest index: [" + i.ToString() + "]")
                     Logger.WriteDebug(CallStack, "Patch file: " + Manifest.GetPatchFromManifest(i).PatchFile.GetFileName)
+
                     If Globals.SimulatePatchSwitch Then
                         If Globals.SimulatePatchErrorSwitch Then
                             Logger.WriteDebug(CallStack, "Switch: Simulate patching error.")
@@ -64,6 +64,10 @@
                             Manifest.GetPatchFromManifest(i).PatchAction = PatchVector.SKIPPED
                             Manifest.GetPatchFromManifest(i).CommentString = "Reason: This is a simulation."
                         End If
+                    ElseIf Not System.IO.File.Exists(Manifest.GetPatchFromManifest(i).PatchFile.GetFileName) Then
+                        Logger.WriteDebug(CallStack, "Result: UNAVAILABLE.")
+                        Manifest.GetPatchFromManifest(i).PatchAction = PatchVector.UNAVAILABLE
+                        Manifest.GetPatchFromManifest(i).CommentString = "Reason: Patch file [" + Manifest.GetPatchFromManifest(i).PatchFile.GetShortName + "] missing from [" + Manifest.GetPatchFromManifest(i).PatchFile.GetFilePath + "] folder.NEWLINE"
                     ElseIf Not Manifest.GetPatchFromManifest(i).GetInstruction("VERSIONCHECK").Equals("") AndAlso
                         Not Manifest.GetPatchFromManifest(i).GetInstruction("VERSIONCHECK").Equals(Globals.ITCMComstoreVersion) Then
                         Logger.WriteDebug(CallStack, "Result: SKIPPED.")
@@ -147,36 +151,40 @@
 
         ' Run PRESYSCMD sripts
         For Each strLine As String In pVector.GetPreCommandList
-            ExecutionString = pVector.PatchFile.GetFilePath + "\" + strLine
-            Logger.WriteDebug(CallStack, "Execute pre-script: " + ExecutionString)
+            Try
+                ExecutionString = pVector.PatchFile.GetFilePath + "\" + strLine
+                Logger.WriteDebug(CallStack, "Execute pre-script: " + ExecutionString)
 
-            ProcessStartInfo = New ProcessStartInfo(ExecutionString)
-            ProcessStartInfo.WorkingDirectory = pVector.PatchFile.GetFilePath
-            ProcessStartInfo.UseShellExecute = False
-            ProcessStartInfo.RedirectStandardOutput = True
-            ProcessStartInfo.CreateNoWindow = True
-            StandardOutput = ""
-            RemainingOutput = ""
-            Logger.WriteDebug("------------------------------------------------------------")
+                ProcessStartInfo = New ProcessStartInfo(ExecutionString)
+                ProcessStartInfo.WorkingDirectory = pVector.PatchFile.GetFilePath
+                ProcessStartInfo.UseShellExecute = False
+                ProcessStartInfo.RedirectStandardOutput = True
+                ProcessStartInfo.CreateNoWindow = True
+                StandardOutput = ""
+                RemainingOutput = ""
+                Logger.WriteDebug("------------------------------------------------------------")
 
-            RunningProcess = Process.Start(ProcessStartInfo)
+                RunningProcess = Process.Start(ProcessStartInfo)
 
-            While RunningProcess.HasExited = False
-                ConsoleOutput = RunningProcess.StandardOutput.ReadLine
-                Logger.WriteDebug(ConsoleOutput)
-                StandardOutput += ConsoleOutput + Environment.NewLine
-            End While
+                While RunningProcess.HasExited = False
+                    ConsoleOutput = RunningProcess.StandardOutput.ReadLine
+                    Logger.WriteDebug(ConsoleOutput)
+                    StandardOutput += ConsoleOutput + Environment.NewLine
+                End While
 
-            RunningProcess.WaitForExit()
-            RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
-            StandardOutput += RemainingOutput
+                RunningProcess.WaitForExit()
+                RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
+                StandardOutput += RemainingOutput
 
-            Logger.WriteDebug(RemainingOutput)
-            Logger.WriteDebug("------------------------------------------------------------")
-            Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
+                Logger.WriteDebug(RemainingOutput)
+                Logger.WriteDebug("------------------------------------------------------------")
+                Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
 
-            pVector.PreCmdReturnCodes.Add(RunningProcess.ExitCode.ToString)
-            RunningProcess.Close()
+                pVector.PreCmdReturnCodes.Add(RunningProcess.ExitCode.ToString)
+                RunningProcess.Close()
+            Catch ex As Exception
+                Throw ex ' Continue exception
+            End Try
         Next
 
     End Sub
@@ -192,36 +200,40 @@
 
         ' Run SYSCMD sripts
         For Each strLine As String In pVector.GetSysCommandList
-            ExecutionString = pVector.PatchFile.GetFilePath + "\" + strLine
-            Logger.WriteDebug(CallStack, "Execute script: " + ExecutionString)
+            Try
+                ExecutionString = pVector.PatchFile.GetFilePath + "\" + strLine
+                Logger.WriteDebug(CallStack, "Execute script: " + ExecutionString)
 
-            ProcessStartInfo = New ProcessStartInfo(ExecutionString)
-            ProcessStartInfo.WorkingDirectory = pVector.PatchFile.GetFilePath
-            ProcessStartInfo.UseShellExecute = False
-            ProcessStartInfo.RedirectStandardOutput = True
-            ProcessStartInfo.CreateNoWindow = True
-            StandardOutput = ""
-            RemainingOutput = ""
-            Logger.WriteDebug("------------------------------------------------------------")
+                ProcessStartInfo = New ProcessStartInfo(ExecutionString)
+                ProcessStartInfo.WorkingDirectory = pVector.PatchFile.GetFilePath
+                ProcessStartInfo.UseShellExecute = False
+                ProcessStartInfo.RedirectStandardOutput = True
+                ProcessStartInfo.CreateNoWindow = True
+                StandardOutput = ""
+                RemainingOutput = ""
+                Logger.WriteDebug("------------------------------------------------------------")
 
-            RunningProcess = Process.Start(ProcessStartInfo)
+                RunningProcess = Process.Start(ProcessStartInfo)
 
-            While RunningProcess.HasExited = False
-                ConsoleOutput = RunningProcess.StandardOutput.ReadLine
-                Logger.WriteDebug(ConsoleOutput)
-                StandardOutput += ConsoleOutput + Environment.NewLine
-            End While
+                While RunningProcess.HasExited = False
+                    ConsoleOutput = RunningProcess.StandardOutput.ReadLine
+                    Logger.WriteDebug(ConsoleOutput)
+                    StandardOutput += ConsoleOutput + Environment.NewLine
+                End While
 
-            RunningProcess.WaitForExit()
-            RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
-            StandardOutput += RemainingOutput
+                RunningProcess.WaitForExit()
+                RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
+                StandardOutput += RemainingOutput
 
-            Logger.WriteDebug(RemainingOutput)
-            Logger.WriteDebug("------------------------------------------------------------")
-            Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
+                Logger.WriteDebug(RemainingOutput)
+                Logger.WriteDebug("------------------------------------------------------------")
+                Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
 
-            pVector.SysCmdReturnCodes.Add(RunningProcess.ExitCode.ToString)
-            RunningProcess.Close()
+                pVector.SysCmdReturnCodes.Add(RunningProcess.ExitCode.ToString)
+                RunningProcess.Close()
+            Catch ex As Exception
+                Throw ex ' Continue exception
+            End Try
         Next
 
     End Sub
@@ -294,7 +306,17 @@
         End If
 
         ' Run PRESYSCMD sripts
-        ExecutePreCmd(CallStack, pVector)
+        Try
+            ExecutePreCmd(CallStack, pVector)
+        Catch ex As Exception
+            Logger.WriteDebug(CallStack, "Error: Execution of PRESYSCMD script(s) failed.")
+            Logger.WriteDebug(ex.Message)
+            Logger.WriteDebug(ex.StackTrace)
+            Manifest.UpdateManifest(CallStack, Manifest.EXCEPTION_MANIFEST, {ex.Message, ex.StackTrace})
+            Logger.WriteDebug(CallStack, "Patch failed: " + pVector.PatchFile.GetFriendlyName)
+            pVector.CommentString = "Reason: Execution of PRESYSCMD script(s) failed."
+            Return 4
+        End Try
 
         ' Prepare REPLACED subfolder
         If pVector.SourceReplaceList.Count > 0 Then
@@ -314,9 +336,8 @@
                             Logger.WriteDebug(ex.StackTrace)
                             Manifest.UpdateManifest(CallStack, Manifest.EXCEPTION_MANIFEST, {ex.Message, ex.StackTrace})
                             Logger.WriteDebug(CallStack, "Patch skipped: " + pVector.PatchFile.GetFriendlyName)
-                            Logger.WriteDebug(CallStack, "Reason: Failed to create REPLACED subfolder.")
                             pVector.CommentString = "Reason: Failed to create REPLACED subfolder."
-                            Return 4
+                            Return 5
                         End Try
                     End If
                 End While
@@ -331,9 +352,8 @@
                     Logger.WriteDebug(ex.StackTrace)
                     Manifest.UpdateManifest(CallStack, Manifest.EXCEPTION_MANIFEST, {ex.Message, ex.StackTrace})
                     Logger.WriteDebug(CallStack, "Patch skipped: " + pVector.PatchFile.GetFriendlyName)
-                    Logger.WriteDebug(CallStack, "Reason: Failed to create REPLACED subfolder.")
                     pVector.CommentString = "Reason: Failed to create REPLACED subfolder."
-                    Return 5
+                    Return 6
                 End Try
             End If
         End If
@@ -360,9 +380,8 @@
                     System.IO.Directory.Delete(ReplacedFolder, True)
                     pVector.FileReplaceResult.Item(x) = PatchVector.FILE_FAILED
                     Logger.WriteDebug(CallStack, "Patch failed: " + pVector.PatchFile.GetFriendlyName)
-                    Logger.WriteDebug(CallStack, "Reason: Failed to save original file(s).")
                     pVector.CommentString = "Reason: Failed to save original file(s)."
-                    Return 6
+                    Return 7
                 End Try
             Else
                 ' Add to new file list (We may need to skip replacing these new files later)
@@ -398,7 +417,7 @@
                     Logger.WriteDebug(ex.Message)
                     Logger.WriteDebug(ex.StackTrace)
                     Manifest.UpdateManifest(CallStack, Manifest.EXCEPTION_MANIFEST, {ex.Message, ex.StackTrace})
-                    If x > 0 Then ' Undo changes
+                    If x >= 0 Then ' Undo changes
                         For y As Integer = 0 To pVector.DestReplaceList.Count - 1
                             DestinationFileName = ReplacedFolder + "\" + pVector.ReplaceSubFolder.Item(y) + "\" + FileVector.GetShortName(pVector.DestReplaceList.Item(y))
                             DestinationFileName = DestinationFileName.Replace("\\", "\")
@@ -416,9 +435,8 @@
                     System.IO.Directory.Delete(ReplacedFolder, True)
                     pVector.FileReplaceResult.Item(x) = PatchVector.FILE_FAILED
                     Logger.WriteDebug(CallStack, "Patch failed: " + pVector.PatchFile.GetFriendlyName)
-                    Logger.WriteDebug(CallStack, "Reason: Failed to delete original file(s), or schedule their removal.")
                     pVector.CommentString = "Reason: Failed to delete original file(s), or schedule their removal."
-                    Return 7
+                    Return 8
                 End Try
             End If
         Next
@@ -443,7 +461,7 @@
                 Logger.WriteDebug(ex.Message)
                 Logger.WriteDebug(ex.StackTrace)
                 Manifest.UpdateManifest(CallStack, Manifest.EXCEPTION_MANIFEST, {ex.Message, ex.StackTrace})
-                If x > 0 Then ' Undo changes
+                If x >= 0 Then ' Undo changes
                     For y As Integer = 0 To pVector.DestReplaceList.Count - 1
                         Logger.WriteDebug(CallStack, "Delete replacement file: " + pVector.DestReplaceList.Item(y))
                         System.IO.File.Delete(pVector.DestReplaceList.Item(y))
@@ -463,9 +481,8 @@
                 System.IO.Directory.Delete(ReplacedFolder, True)
                 pVector.FileReplaceResult.Item(x) = PatchVector.FILE_FAILED
                 Logger.WriteDebug(CallStack, "Patch failed: " + pVector.PatchFile.GetFriendlyName)
-                Logger.WriteDebug(CallStack, "Reason: Failed to copy replacement file(s) to destination.")
                 pVector.CommentString = "Reason: Failed to copy replacement file(s) to destination."
-                Return 8
+                Return 9
             End Try
         Next
 
@@ -477,7 +494,17 @@
         End If
 
         ' Run SYSCMD sripts
-        ExecutePostCmd(CallStack, pVector)
+        Try
+            ExecutePostCmd(CallStack, pVector)
+        Catch ex As Exception
+            Logger.WriteDebug(CallStack, "Error: Execution of SYSCMD script(s) failed.")
+            Logger.WriteDebug(ex.Message)
+            Logger.WriteDebug(ex.StackTrace)
+            Manifest.UpdateManifest(CallStack, Manifest.EXCEPTION_MANIFEST, {ex.Message, ex.StackTrace})
+            Logger.WriteDebug(CallStack, "Patch failed: " + pVector.PatchFile.GetFriendlyName)
+            pVector.CommentString = "Reason: Execution of SYSCMD script(s) failed."
+            Return 10
+        End Try
 
         Return 0
 
