@@ -14,6 +14,7 @@
         Private _ReplaceFolder As String                    ' Replacement location folder for storing original files.
         Private _ReplaceSubFolder As New ArrayList          ' Sub folder within replacement folder, for storing each original file.
         Private _SkipIfNotFoundList As New ArrayList        ' File replacements to skip, if destination file is not originally present (i.e. source file is new).
+        Public Const UNAVAILABLE As Integer = -5            ' Apply action code: Unavailable. (JCL is missing from TEMP)
         Public Const NOT_APPLICABLE As Integer = -4         ' Apply action code: Not applicable.
         Public Const ALREADY_APPLIED As Integer = -3        ' Apply action code: Already applied.
         Public Const NO_ACTION As Integer = -2              ' Apply action code: No action.
