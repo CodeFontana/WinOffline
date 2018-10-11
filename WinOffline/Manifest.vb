@@ -413,10 +413,17 @@
                                 CommandFile = GetPatchFromManifest(i).GetPreCommandList.Item(x)
                                 If GetPatchFromManifest(i).PreCmdReturnCodes.Count > x Then
                                     ReturnCode = GetPatchFromManifest(i).PreCmdReturnCodes.Item(x)
+                                    PatchSummary += "- " + CommandFile + " [Return Code: " + ReturnCode + "]" + Environment.NewLine
                                 Else
-                                    ReturnCode = "SKIPPED"
+                                    If GetPatchFromManifest(i).PatchAction = PatchVector.EXECUTE_FAIL OrElse
+                                        GetPatchFromManifest(i).PatchAction = PatchVector.APPLY_FAIL Then
+                                        ReturnCode = "FAILED"
+                                        PatchSummary += "- " + CommandFile + " [" + ReturnCode + "]" + Environment.NewLine
+                                    Else
+                                        ReturnCode = "SKIPPED"
+                                        PatchSummary += "- " + CommandFile + " [" + ReturnCode + "]" + Environment.NewLine
+                                    End If
                                 End If
-                                PatchSummary += "- " + CommandFile + " [Return Code: " + ReturnCode + "]" + Environment.NewLine
                             Next
 
                             For x As Integer = 0 To GetPatchFromManifest(i).DestReplaceList.Count - 1
@@ -438,9 +445,15 @@
                                 If GetPatchFromManifest(i).SysCmdReturnCodes.Count > x Then
                                     ReturnCode = GetPatchFromManifest(i).SysCmdReturnCodes.Item(x)
                                 Else
-                                    ReturnCode = "SKIPPED"
+                                    If GetPatchFromManifest(i).PatchAction = PatchVector.EXECUTE_FAIL OrElse
+                                        GetPatchFromManifest(i).PatchAction = PatchVector.APPLY_FAIL Then
+                                        ReturnCode = "FAILED"
+                                        PatchSummary += "- " + CommandFile + " [" + ReturnCode + "]" + Environment.NewLine
+                                    Else
+                                        ReturnCode = "SKIPPED"
+                                        PatchSummary += "- " + CommandFile + " [" + ReturnCode + "]" + Environment.NewLine
+                                    End If
                                 End If
-                                PatchSummary += "- " + CommandFile + " [Return Code: " + ReturnCode + "]" + Environment.NewLine
                             Next
 
                         End If
