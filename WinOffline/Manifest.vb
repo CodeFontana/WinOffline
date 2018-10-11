@@ -40,6 +40,7 @@
                 For Each strLine As String In NewItem
                     ExceptionManifest.Add(strLine)
                 Next
+                ExceptionManifest.Add("//BREAK//")
             End If
 
             Return
@@ -107,7 +108,6 @@
                 CacheWriter = New System.IO.StreamWriter(CacheFile, False)
                 For n As Integer = 0 To ExceptionManifest.Count() - 1
                     strLine = ExceptionManifest.Item(n)
-                    Logger.WriteDebug(CallStack, "Write: " + strLine)
                     CacheWriter.WriteLine(strLine)
                 Next
                 Logger.WriteDebug(CallStack, "Close file: " + CacheFile)
@@ -234,11 +234,18 @@
             If ExceptionManifest.Count = 0 Then
                 PatchSummary += "No exceptions thrown." + Environment.NewLine
             Else
-                For i As Integer = 0 To ExceptionManifest.Count() - 2 Step 2
+                For i As Integer = 0 To ExceptionManifest.Count() - 1
                     PatchSummary += Environment.NewLine + "Exception #" + ExceptionCounter.ToString + ":" + Environment.NewLine
                     PatchSummary += "----------------" + Environment.NewLine
                     PatchSummary += ExceptionManifest.Item(i).ToString + Environment.NewLine
-                    PatchSummary += ExceptionManifest.Item(i + 1).ToString + Environment.NewLine
+                    For j As Integer = i + 1 To ExceptionManifest.Count() - 1
+                        If ExceptionManifest.Item(j).ToString.Equals("//BREAK//") Then
+                            i = j
+                            Exit For
+                        Else
+                            PatchSummary += ExceptionManifest.Item(j).ToString + Environment.NewLine
+                        End If
+                    Next
                     PatchSummary += "----------------" + Environment.NewLine
                     ExceptionCounter += 1
                 Next
@@ -296,11 +303,18 @@
             If ExceptionManifest.Count = 0 Then
                 PatchSummary += "No exceptions thrown." + Environment.NewLine
             Else
-                For i As Integer = 0 To ExceptionManifest.Count() - 2 Step 2
+                For i As Integer = 0 To ExceptionManifest.Count() - 1
                     PatchSummary += Environment.NewLine + "Exception #" + ExceptionCounter.ToString + ":" + Environment.NewLine
-                    PatchSummary += "----------------" + Environment.NewLine
                     PatchSummary += ExceptionManifest.Item(i).ToString + Environment.NewLine
-                    PatchSummary += ExceptionManifest.Item(i + 1).ToString + Environment.NewLine
+                    PatchSummary += "----------------" + Environment.NewLine
+                    For j As Integer = i + 1 To ExceptionManifest.Count() - 1
+                        If ExceptionManifest.Item(j).ToString.Equals("//BREAK//") Then
+                            i = j
+                            Exit For
+                        Else
+                            PatchSummary += ExceptionManifest.Item(j).ToString + Environment.NewLine
+                        End If
+                    Next
                     PatchSummary += "----------------" + Environment.NewLine
                     ExceptionCounter += 1
                 Next
