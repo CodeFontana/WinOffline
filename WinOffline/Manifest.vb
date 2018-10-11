@@ -377,7 +377,10 @@
                 Else
                     For i As Integer = 0 To PatchManifest.Count - 1
                         PatchSummary += GetPatchFromManifest(i).PatchFile.GetFriendlyName + ": "
-                        If GetPatchFromManifest(i).PatchAction = PatchVector.NOT_APPLICABLE Then
+                        If GetPatchFromManifest(i).PatchAction = PatchVector.UNAVAILABLE Then
+                            PatchSummary += "UNAVAILABLE" + Environment.NewLine
+                            PatchSummary += GetPatchFromManifest(i).CommentString.Replace("NEWLINE", Environment.NewLine) + Environment.NewLine
+                        ElseIf GetPatchFromManifest(i).PatchAction = PatchVector.NOT_APPLICABLE Then
                             PatchSummary += "NOT APPLICABLE" + Environment.NewLine
                             PatchSummary += GetPatchFromManifest(i).CommentString.Replace("NEWLINE", Environment.NewLine) + Environment.NewLine
                         ElseIf GetPatchFromManifest(i).PatchAction = PatchVector.ALREADY_APPLIED Then
