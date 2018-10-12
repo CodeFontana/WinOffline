@@ -301,6 +301,7 @@
             PatchSummary += Environment.NewLine
             If ExceptionManifest.Count = 0 Then
                 PatchSummary += "No exceptions thrown." + Environment.NewLine
+                PatchSummary += Environment.NewLine
             Else
                 For i As Integer = 0 To ExceptionManifest.Count() - 1
                     PatchSummary += "Exception #" + ExceptionCounter.ToString + ": " + ExceptionManifest.Item(i).ToString + Environment.NewLine
@@ -316,7 +317,6 @@
                     ExceptionCounter += 1
                 Next
             End If
-            PatchSummary += Environment.NewLine
             For i As Integer = 0 To Globals.ProcessFriendlyName.Length + 14
                 PatchSummary += "-"
             Next
