@@ -23,7 +23,8 @@
         Public Const APPLY_FAIL As Integer = 1              ' Apply action code: Apply fail.
         Public Const EXECUTE_OK As Integer = 2              ' Apply action code: Execute ok.
         Public Const EXECUTE_FAIL As Integer = 3            ' Apply action code: Execute fail.
-        Public Const FILE_REVERSED As Integer = -2          ' File replacement code: Changes reversed.
+        Public Const FILE_REMOVED As Integer = -3           ' File replacement code: New file removed.
+        Public Const FILE_RESTORED As Integer = -2          ' File replacement code: Original restored.
         Public Const FILE_SKIPPED As Integer = -1           ' File replacement code: Skipped.
         Public Const FILE_OK As Integer = 0                 ' File replacement code: File ok.
         Public Const FILE_REBOOT_REQUIRED As Integer = 1    ' File replacement code: Reboot required.
