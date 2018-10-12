@@ -419,7 +419,8 @@
                             If System.IO.File.Exists(DestinationFileName) Then
                                 Logger.WriteDebug(CallStack, "Restore original file: " + DestinationFileName)
                                 Logger.WriteDebug(CallStack, "To: " + pVector.DestReplaceList.Item(y))
-                                System.IO.File.Copy(DestinationFileName, pVector.DestReplaceList.Item(y), True)
+                                System.IO.File.Copy(DestinationFileName, pVector.DestReplaceList.Item(y), True) ' Dangerous copy without try/catch
+                                pVector.FileReplaceResult.Item(y) = PatchVector.FILE_REVERSED
                             End If
                         Next
                     End If
@@ -465,7 +466,8 @@
                         If System.IO.File.Exists(DestinationFileName) Then
                             Logger.WriteDebug(CallStack, "Restore original file: " + DestinationFileName)
                             Logger.WriteDebug(CallStack, "To: " + pVector.DestReplaceList.Item(y))
-                            System.IO.File.Copy(DestinationFileName, pVector.DestReplaceList.Item(y), True)
+                            System.IO.File.Copy(DestinationFileName, pVector.DestReplaceList.Item(y), True) ' Dangerous copy without try/catch
+                            pVector.FileReplaceResult.Item(y) = PatchVector.FILE_REVERSED
                         End If
                     Next
                 End If
