@@ -415,9 +415,9 @@
                         Else
                             PatchSummary += "UNKNOWN" + Environment.NewLine
                         End If
-                        If GetPatchFromManifest(i).PatchAction = PatchVector.APPLY_OK Or
-                            GetPatchFromManifest(i).PatchAction = PatchVector.APPLY_FAIL Or
-                            GetPatchFromManifest(i).PatchAction = PatchVector.EXECUTE_OK Or
+                        If GetPatchFromManifest(i).PatchAction = PatchVector.APPLY_OK OrElse
+                            GetPatchFromManifest(i).PatchAction = PatchVector.APPLY_FAIL OrElse
+                            GetPatchFromManifest(i).PatchAction = PatchVector.EXECUTE_OK OrElse
                             GetPatchFromManifest(i).PatchAction = PatchVector.EXECUTE_FAIL Then
 
                             For x As Integer = 0 To GetPatchFromManifest(i).GetPreCommandList.Count - 1
@@ -440,8 +440,10 @@
                             For x As Integer = 0 To GetPatchFromManifest(i).DestReplaceList.Count - 1
                                 ReplaceFile = GetPatchFromManifest(i).DestReplaceList.Item(x)
                                 PatchSummary += "- " + ReplaceFile + " ["
-                                If GetPatchFromManifest(i).FileReplaceResult.Item(x) = PatchVector.FILE_REVERSED Then
-                                    PatchSummary += "CHANGES REVERSED]" + Environment.NewLine
+                                If GetPatchFromManifest(i).FileReplaceResult.Item(x) = PatchVector.FILE_REMOVED Then
+                                    PatchSummary += "NEW FILE REMOVED]" + Environment.NewLine
+                                ElseIf GetPatchFromManifest(i).FileReplaceResult.Item(x) = PatchVector.FILE_RESTORED Then
+                                    PatchSummary += "ORIGINAL RESTORED]" + Environment.NewLine
                                 ElseIf GetPatchFromManifest(i).FileReplaceResult.Item(x) = PatchVector.FILE_SKIPPED Then
                                     PatchSummary += "SKIPPED]" + Environment.NewLine
                                 ElseIf GetPatchFromManifest(i).FileReplaceResult.Item(x) = PatchVector.FILE_OK Then
