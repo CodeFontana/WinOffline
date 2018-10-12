@@ -233,6 +233,7 @@
             PatchSummary += Environment.NewLine
             If ExceptionManifest.Count = 0 Then
                 PatchSummary += "No exceptions thrown." + Environment.NewLine
+                PatchSummary += Environment.NewLine
             Else
                 For i As Integer = 0 To ExceptionManifest.Count() - 1
                     PatchSummary += "Exception #" + ExceptionCounter.ToString + ": " + ExceptionManifest.Item(i).ToString + Environment.NewLine
@@ -248,7 +249,7 @@
                     ExceptionCounter += 1
                 Next
             End If
-            PatchSummary += Environment.NewLine
+
             For i As Integer = 0 To Globals.ProcessFriendlyName.Length + 12
                 PatchSummary += "-"
             Next
@@ -389,7 +390,7 @@
                         PatchSummary += GetPatchFromManifest(i).PatchFile.GetFriendlyName + ": "
                         If GetPatchFromManifest(i).PatchAction = PatchVector.UNAVAILABLE Then
                             PatchSummary += "UNAVAILABLE" + Environment.NewLine
-                            PatchSummary += GetPatchFromManifest(i).CommentString.Replace("NEWLINE", Environment.NewLine) + Environment.NewLine
+                            PatchSummary += GetPatchFromManifest(i).CommentString.Replace("NEWLINE", Environment.NewLine)
                         ElseIf GetPatchFromManifest(i).PatchAction = PatchVector.NOT_APPLICABLE Then
                             PatchSummary += "NOT APPLICABLE" + Environment.NewLine
                             PatchSummary += GetPatchFromManifest(i).CommentString.Replace("NEWLINE", Environment.NewLine) + Environment.NewLine
@@ -454,6 +455,7 @@
                                 CommandFile = GetPatchFromManifest(i).GetSysCommandList.Item(x)
                                 If GetPatchFromManifest(i).SysCmdReturnCodes.Count > x Then
                                     ReturnCode = GetPatchFromManifest(i).SysCmdReturnCodes.Item(x)
+                                    PatchSummary += "- " + CommandFile + " [Return Code: " + ReturnCode + "]" + Environment.NewLine
                                 Else
                                     If GetPatchFromManifest(i).PatchAction = PatchVector.EXECUTE_FAIL OrElse
                                         GetPatchFromManifest(i).PatchAction = PatchVector.APPLY_FAIL Then
