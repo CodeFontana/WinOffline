@@ -64,7 +64,7 @@
                             Manifest.GetPatchFromManifest(i).PatchAction = PatchVector.SKIPPED
                             Manifest.GetPatchFromManifest(i).CommentString = "Reason: This is a simulation."
                         End If
-                    ElseIf Not System.IO.File.Exists(Manifest.GetPatchFromManifest(i).PatchFile.GetFileName) Then
+                    ElseIf Not System.IO.Directory.Exists(Manifest.GetPatchFromManifest(i).PatchFile.GetFilePath) Then
                         Logger.WriteDebug(CallStack, "Result: UNAVAILABLE.")
                         Manifest.GetPatchFromManifest(i).PatchAction = PatchVector.UNAVAILABLE
                         Manifest.GetPatchFromManifest(i).CommentString = "Reason: Patch file [" + Manifest.GetPatchFromManifest(i).PatchFile.GetShortName + "] missing from [" + Manifest.GetPatchFromManifest(i).PatchFile.GetFilePath + "] folder.NEWLINE"
@@ -151,40 +151,36 @@
 
         ' Run PRESYSCMD sripts
         For Each strLine As String In pVector.GetPreCommandList
-            Try
-                ExecutionString = pVector.PatchFile.GetFilePath + "\" + strLine
-                Logger.WriteDebug(CallStack, "Execute pre-script: " + ExecutionString)
+            ExecutionString = pVector.PatchFile.GetFilePath + "\" + strLine
+            Logger.WriteDebug(CallStack, "Execute pre-script: " + ExecutionString)
 
-                ProcessStartInfo = New ProcessStartInfo(ExecutionString)
-                ProcessStartInfo.WorkingDirectory = pVector.PatchFile.GetFilePath
-                ProcessStartInfo.UseShellExecute = False
-                ProcessStartInfo.RedirectStandardOutput = True
-                ProcessStartInfo.CreateNoWindow = True
-                StandardOutput = ""
-                RemainingOutput = ""
-                Logger.WriteDebug("------------------------------------------------------------")
+            ProcessStartInfo = New ProcessStartInfo(ExecutionString)
+            ProcessStartInfo.WorkingDirectory = pVector.PatchFile.GetFilePath
+            ProcessStartInfo.UseShellExecute = False
+            ProcessStartInfo.RedirectStandardOutput = True
+            ProcessStartInfo.CreateNoWindow = True
+            StandardOutput = ""
+            RemainingOutput = ""
+            Logger.WriteDebug("------------------------------------------------------------")
 
-                RunningProcess = Process.Start(ProcessStartInfo)
+            RunningProcess = Process.Start(ProcessStartInfo)
 
-                While RunningProcess.HasExited = False
-                    ConsoleOutput = RunningProcess.StandardOutput.ReadLine
-                    Logger.WriteDebug(ConsoleOutput)
-                    StandardOutput += ConsoleOutput + Environment.NewLine
-                End While
+            While RunningProcess.HasExited = False
+                ConsoleOutput = RunningProcess.StandardOutput.ReadLine
+                Logger.WriteDebug(ConsoleOutput)
+                StandardOutput += ConsoleOutput + Environment.NewLine
+            End While
 
-                RunningProcess.WaitForExit()
-                RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
-                StandardOutput += RemainingOutput
+            RunningProcess.WaitForExit()
+            RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
+            StandardOutput += RemainingOutput
 
-                Logger.WriteDebug(RemainingOutput)
-                Logger.WriteDebug("------------------------------------------------------------")
-                Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
+            Logger.WriteDebug(RemainingOutput)
+            Logger.WriteDebug("------------------------------------------------------------")
+            Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
 
-                pVector.PreCmdReturnCodes.Add(RunningProcess.ExitCode.ToString)
-                RunningProcess.Close()
-            Catch ex As Exception
-                Throw ex ' Continue exception
-            End Try
+            pVector.PreCmdReturnCodes.Add(RunningProcess.ExitCode.ToString)
+            RunningProcess.Close()
         Next
 
     End Sub
@@ -200,40 +196,36 @@
 
         ' Run SYSCMD sripts
         For Each strLine As String In pVector.GetSysCommandList
-            Try
-                ExecutionString = pVector.PatchFile.GetFilePath + "\" + strLine
-                Logger.WriteDebug(CallStack, "Execute script: " + ExecutionString)
+            ExecutionString = pVector.PatchFile.GetFilePath + "\" + strLine
+            Logger.WriteDebug(CallStack, "Execute script: " + ExecutionString)
 
-                ProcessStartInfo = New ProcessStartInfo(ExecutionString)
-                ProcessStartInfo.WorkingDirectory = pVector.PatchFile.GetFilePath
-                ProcessStartInfo.UseShellExecute = False
-                ProcessStartInfo.RedirectStandardOutput = True
-                ProcessStartInfo.CreateNoWindow = True
-                StandardOutput = ""
-                RemainingOutput = ""
-                Logger.WriteDebug("------------------------------------------------------------")
+            ProcessStartInfo = New ProcessStartInfo(ExecutionString)
+            ProcessStartInfo.WorkingDirectory = pVector.PatchFile.GetFilePath
+            ProcessStartInfo.UseShellExecute = False
+            ProcessStartInfo.RedirectStandardOutput = True
+            ProcessStartInfo.CreateNoWindow = True
+            StandardOutput = ""
+            RemainingOutput = ""
+            Logger.WriteDebug("------------------------------------------------------------")
 
-                RunningProcess = Process.Start(ProcessStartInfo)
+            RunningProcess = Process.Start(ProcessStartInfo)
 
-                While RunningProcess.HasExited = False
-                    ConsoleOutput = RunningProcess.StandardOutput.ReadLine
-                    Logger.WriteDebug(ConsoleOutput)
-                    StandardOutput += ConsoleOutput + Environment.NewLine
-                End While
+            While RunningProcess.HasExited = False
+                ConsoleOutput = RunningProcess.StandardOutput.ReadLine
+                Logger.WriteDebug(ConsoleOutput)
+                StandardOutput += ConsoleOutput + Environment.NewLine
+            End While
 
-                RunningProcess.WaitForExit()
-                RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
-                StandardOutput += RemainingOutput
+            RunningProcess.WaitForExit()
+            RemainingOutput = RunningProcess.StandardOutput.ReadToEnd.ToString
+            StandardOutput += RemainingOutput
 
-                Logger.WriteDebug(RemainingOutput)
-                Logger.WriteDebug("------------------------------------------------------------")
-                Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
+            Logger.WriteDebug(RemainingOutput)
+            Logger.WriteDebug("------------------------------------------------------------")
+            Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
 
-                pVector.SysCmdReturnCodes.Add(RunningProcess.ExitCode.ToString)
-                RunningProcess.Close()
-            Catch ex As Exception
-                Throw ex ' Continue exception
-            End Try
+            pVector.SysCmdReturnCodes.Add(RunningProcess.ExitCode.ToString)
+            RunningProcess.Close()
         Next
 
     End Sub
