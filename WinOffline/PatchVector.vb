@@ -29,6 +29,7 @@
         Public Const FILE_OK As Integer = 0                 ' File replacement code: File ok.
         Public Const FILE_REBOOT_REQUIRED As Integer = 1    ' File replacement code: Reboot required.
         Public Const FILE_FAILED As Integer = 2             ' File replacement code: File fail.
+        Public Const FILE_UNCHANGED As Integer = 3          ' File replacement code: Unchanged.
         Private ClientAutoProductCodes = New ArrayList({"BITCM", "DTSVMG", "DTMGSU", "TNGAMO", "TNGSDO", "TNGRCO"})
         Private SharedComponentProductCodes As New ArrayList({"DTMINF"})
         Private CAMProductCodes As New ArrayList({"CCSCAM", "TNGCAM"})
@@ -48,7 +49,7 @@
 
             For Each ReplacedFile As String In GetShortNameReplaceList()
                 _SourceReplaceList.Add(_FileName.GetFilePath + "\" + ReplacedFile)
-                _FileReplaceResult.Add(-1)
+                _FileReplaceResult.Add(FILE_UNCHANGED)
             Next
 
             For Each ReplacedFile As String In GetRawReplaceList()
