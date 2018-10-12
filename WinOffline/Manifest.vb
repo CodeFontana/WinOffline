@@ -452,6 +452,8 @@
                                     PatchSummary += "REBOOT REQUIRED]" + Environment.NewLine
                                 ElseIf GetPatchFromManifest(i).FileReplaceResult.Item(x) = PatchVector.FILE_FAILED Then
                                     PatchSummary += "FAILED]" + Environment.NewLine
+                                ElseIf GetPatchFromManifest(i).FileReplaceResult.Item(x) = PatchVector.FILE_UNCHANGED Then
+                                    PatchSummary += "UNCHANGED]" + Environment.NewLine
                                 End If
                             Next
 
