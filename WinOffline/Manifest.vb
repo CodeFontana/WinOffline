@@ -440,7 +440,9 @@
                             For x As Integer = 0 To GetPatchFromManifest(i).DestReplaceList.Count - 1
                                 ReplaceFile = GetPatchFromManifest(i).DestReplaceList.Item(x)
                                 PatchSummary += "- " + ReplaceFile + " ["
-                                If GetPatchFromManifest(i).FileReplaceResult.Item(x) = PatchVector.FILE_SKIPPED Then
+                                If GetPatchFromManifest(i).FileReplaceResult.Item(x) = PatchVector.FILE_REVERSED Then
+                                    PatchSummary += "CHANGES REVERSED]" + Environment.NewLine
+                                ElseIf GetPatchFromManifest(i).FileReplaceResult.Item(x) = PatchVector.FILE_SKIPPED Then
                                     PatchSummary += "SKIPPED]" + Environment.NewLine
                                 ElseIf GetPatchFromManifest(i).FileReplaceResult.Item(x) = PatchVector.FILE_OK Then
                                     PatchSummary += "OK]" + Environment.NewLine
