@@ -441,9 +441,9 @@
                                 ReplaceFile = GetPatchFromManifest(i).DestReplaceList.Item(x)
                                 PatchSummary += "- " + ReplaceFile + " ["
                                 If GetPatchFromManifest(i).FileReplaceResult.Item(x) = PatchVector.FILE_REMOVED Then
-                                    PatchSummary += "REPLACED OK --> NEW FILE REMOVED]" + Environment.NewLine
+                                    PatchSummary += "REMOVED (NEW FILE)]" + Environment.NewLine
                                 ElseIf GetPatchFromManifest(i).FileReplaceResult.Item(x) = PatchVector.FILE_RESTORED Then
-                                    PatchSummary += "REPLACED OK --> ORIGINAL FILE RESTORED]" + Environment.NewLine
+                                    PatchSummary += "RESTORED (ORIGINAL FILE)]" + Environment.NewLine
                                 ElseIf GetPatchFromManifest(i).FileReplaceResult.Item(x) = PatchVector.FILE_SKIPPED Then
                                     PatchSummary += "SKIPPED]" + Environment.NewLine
                                 ElseIf GetPatchFromManifest(i).FileReplaceResult.Item(x) = PatchVector.FILE_OK Then
