@@ -373,7 +373,9 @@
                         For x As Integer = 0 To GetRemovalFromManifest(i).FileRemovalResult.Count - 1
                             ReplaceFile = GetRemovalFromManifest(i).RemovalFileName.Item(x)
                             PatchSummary += "- " + ReplaceFile + " ["
-                            If GetRemovalFromManifest(i).FileRemovalResult.Item(x) = RemovalVector.FILE_SKIPPED Then
+                            If GetRemovalFromManifest(i).FileRemovalResult.Item(x) = RemovalVector.FILE_REVERSED Then
+                                PatchSummary += "REVERSED]" + Environment.NewLine
+                            ElseIf GetRemovalFromManifest(i).FileRemovalResult.Item(x) = RemovalVector.FILE_SKIPPED Then
                                 PatchSummary += "SKIPPED]" + Environment.NewLine
                             ElseIf GetRemovalFromManifest(i).FileRemovalResult.Item(x) = RemovalVector.FILE_OK Then
                                 PatchSummary += "OK]" + Environment.NewLine
