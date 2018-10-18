@@ -514,6 +514,7 @@
         Dim RemovalMatchFound As Boolean = False
         Dim OriginalFilesFound As Boolean = False
         Dim ReplacedFolder As String = ""
+        Dim BackoutFolder As String = ""
         Dim ReplacedBaseFolder As String = ""
         Dim LatestReplacedFolder As String = ""
         Dim ReplacedIncrement As Integer = 0
@@ -578,6 +579,8 @@
             ReplacedFolder = Globals.EGCFolder + "REPLACED\" + hVector.GetPatchName
             rVector.HistoryFile = Globals.EGCFolder + Globals.HostName + ".his"
         End If
+
+        BackoutFolder = ReplacedFolder + "BACKOUT.OLD"
         LatestReplacedFolder = ReplacedFolder + ".OLD"
 
         If System.IO.Directory.Exists(ReplacedFolder + ".OLD") Then
@@ -794,6 +797,9 @@
         ' Remove REPLACED folder
         Logger.WriteDebug(CallStack, "Delete REPLACED subfolder: " + ReplacedFolder)
         Utility.DeleteFolder(CallStack, ReplacedFolder)
+
+        ' Remove an empty BACKOUT.OLD folder
+        If Utility.IsFolderEmpty(BackoutFolder) Then Utility.DeleteFolder(CallStack, BackoutFolder)
 
         Return 0
 
