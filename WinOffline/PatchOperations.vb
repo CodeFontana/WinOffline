@@ -733,6 +733,8 @@
                     Else
                         Logger.WriteDebug(CallStack, "Delete current file: " + hVector.GetInstalledFiles.Item(x))
                         Utility.DeleteFile(CallStack, hVector.GetInstalledFiles.Item(x))
+                        rVector.RemovalFileName.Add(hVector.GetInstalledFiles.Item(x))
+                        rVector.FileRemovalResult.Add(RemovalVector.FILE_OK)
                     End If
                 Catch ex As Exception
                     Logger.WriteDebug(CallStack, "Error: Failed to delete current file(s), or schedule their removal.")
