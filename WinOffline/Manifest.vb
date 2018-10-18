@@ -426,24 +426,16 @@
                                     ReturnCode = GetPatchFromManifest(i).PreCmdReturnCodes.Item(x)
                                     PatchSummary += "- " + CommandFile + " [Return Code: " + ReturnCode + "]" + Environment.NewLine
                                 Else
-                                    If GetPatchFromManifest(i).PatchAction = PatchVector.EXECUTE_FAIL OrElse
-                                        GetPatchFromManifest(i).PatchAction = PatchVector.APPLY_FAIL Then
-                                        ReturnCode = "FAILED"
-                                        PatchSummary += "- " + CommandFile + " [" + ReturnCode + "]" + Environment.NewLine
-                                    Else
-                                        ReturnCode = "SKIPPED"
-                                        PatchSummary += "- " + CommandFile + " [" + ReturnCode + "]" + Environment.NewLine
-                                    End If
+                                    ReturnCode = "NOT EXECUTED"
+                                    PatchSummary += "- " + CommandFile + " [" + ReturnCode + "]" + Environment.NewLine
                                 End If
                             Next
 
                             For x As Integer = 0 To GetPatchFromManifest(i).DestReplaceList.Count - 1
                                 ReplaceFile = GetPatchFromManifest(i).DestReplaceList.Item(x)
                                 PatchSummary += "- " + ReplaceFile + " ["
-                                If GetPatchFromManifest(i).FileReplaceResult.Item(x) = PatchVector.FILE_REMOVED Then
-                                    PatchSummary += "REMOVED NEW FILE]" + Environment.NewLine
-                                ElseIf GetPatchFromManifest(i).FileReplaceResult.Item(x) = PatchVector.FILE_RESTORED Then
-                                    PatchSummary += "RESTORED ORIGINAL FILE]" + Environment.NewLine
+                                If GetPatchFromManifest(i).FileReplaceResult.Item(x) = PatchVector.FILE_REVERSED Then
+                                    PatchSummary += "REVERSED]" + Environment.NewLine
                                 ElseIf GetPatchFromManifest(i).FileReplaceResult.Item(x) = PatchVector.FILE_SKIPPED Then
                                     PatchSummary += "SKIPPED]" + Environment.NewLine
                                 ElseIf GetPatchFromManifest(i).FileReplaceResult.Item(x) = PatchVector.FILE_OK Then
@@ -452,8 +444,6 @@
                                     PatchSummary += "REBOOT REQUIRED]" + Environment.NewLine
                                 ElseIf GetPatchFromManifest(i).FileReplaceResult.Item(x) = PatchVector.FILE_FAILED Then
                                     PatchSummary += "FAILED]" + Environment.NewLine
-                                ElseIf GetPatchFromManifest(i).FileReplaceResult.Item(x) = PatchVector.FILE_UNCHANGED Then
-                                    PatchSummary += "UNCHANGED]" + Environment.NewLine
                                 End If
                             Next
 
@@ -463,14 +453,8 @@
                                     ReturnCode = GetPatchFromManifest(i).SysCmdReturnCodes.Item(x)
                                     PatchSummary += "- " + CommandFile + " [Return Code: " + ReturnCode + "]" + Environment.NewLine
                                 Else
-                                    If GetPatchFromManifest(i).PatchAction = PatchVector.EXECUTE_FAIL OrElse
-                                        GetPatchFromManifest(i).PatchAction = PatchVector.APPLY_FAIL Then
-                                        ReturnCode = "FAILED"
-                                        PatchSummary += "- " + CommandFile + " [" + ReturnCode + "]" + Environment.NewLine
-                                    Else
-                                        ReturnCode = "SKIPPED"
-                                        PatchSummary += "- " + CommandFile + " [" + ReturnCode + "]" + Environment.NewLine
-                                    End If
+                                    ReturnCode = "NOT EXECUTED"
+                                    PatchSummary += "- " + CommandFile + " [" + ReturnCode + "]" + Environment.NewLine
                                 End If
                             Next
 
