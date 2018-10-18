@@ -4,7 +4,7 @@ Public Class Globals
 
     ' WinOffline and System Globals
     Public Shared CommandLineArgs As String() = Nothing                         ' Command line arguments passed to the application.
-    Public Shared AppVersion As String = "2018.10.12"                           ' Version string of the current build.
+    Public Shared AppVersion As String = "2018.10.18"                           ' Version string of the current build.
     Public Shared ProcessName As String = Nothing                               ' Fullpath including filename of the application process.
     Public Shared ProcessShortName As String = Nothing                          ' Filename of the application process.
     Public Shared ProcessFriendlyName As String = Nothing                       ' Friendly name of the application process.
