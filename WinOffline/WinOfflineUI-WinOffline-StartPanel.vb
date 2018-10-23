@@ -21,25 +21,25 @@ Partial Public Class WinOfflineUI
             Exit Sub
         End If
 
-        ReadHistoryFile("Client Automation", Globals.DSMFolder)
-        ReadHistoryFile("Shared Components", Globals.SharedCompFolder)
-        ReadHistoryFile("CA Message Queuing Service", Globals.CAMFolder + "\")
+        ReadHistoryFiles("Client Automation", Globals.DSMFolder)
+        ReadHistoryFiles("Shared Components", Globals.SharedCompFolder)
+        ReadHistoryFiles("CA Message Queuing Service", Globals.CAMFolder + "\")
 
         If Globals.SSAFolder IsNot Nothing Then
-            ReadHistoryFile("Secure Socket Adapter", Globals.SSAFolder)
+            ReadHistoryFiles("Secure Socket Adapter", Globals.SSAFolder)
         End If
         If Globals.DTSFolder IsNot Nothing Then
-            ReadHistoryFile("Data Transport Service", Globals.DTSFolder + "\")
+            ReadHistoryFiles("Data Transport Service", Globals.DTSFolder + "\")
         End If
         If Globals.EGCFolder IsNot Nothing Then
-            ReadHistoryFile("DSM Explorer GUI", Globals.EGCFolder + "\")
+            ReadHistoryFiles("DSM Explorer GUI", Globals.EGCFolder + "\")
         End If
 
         treHistory.Nodes(0).EnsureVisible()
 
     End Sub
 
-    Private Sub ReadHistoryFile(ByVal Component As String, ByVal HistoryBaseFolder As String)
+    Private Sub ReadHistoryFiles(ByVal Component As String, ByVal HistoryBaseFolder As String)
 
         Dim ComponentRootNode As New TreeNode(Component)
         Dim FileList As String()
