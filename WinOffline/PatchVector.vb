@@ -45,14 +45,22 @@
             _FileReplaceResult = New ArrayList
             _CommentString = ""
 
+            ' All these lists are built in parallel with each other:
+            '   _SourceReplaceList --> Replacement source file
+            '   _FileReplaceResult --> Replacement result code
+            '   _DestReplaceList --> Replacement destination file
+            '   _ReplaceSubFolder --> Replacement subfolder
+            '   _ReplaceFolder --> Replacement base folder
+
+            ' Generate source file list and stub SKIPPED for replacement status
             For Each ReplacedFile As String In GetShortNameReplaceList()
                 _SourceReplaceList.Add(_FileName.GetFilePath + "\" + ReplacedFile)
                 _FileReplaceResult.Add(FILE_SKIPPED)
             Next
 
-            Dim ReplaceDestination As String = Nothing
-
+            ' Generate destination file list
             For Each ReplacedFile As String In GetRawReplaceList()
+                Dim ReplaceDestination As String = Nothing
                 If IsClientAuto() Then
                     ReplaceDestination = Globals.DSMFolder + ReplacedFile
                 ElseIf IsSharedComponent() Then
@@ -80,6 +88,7 @@
                 End While
                 _DestReplaceList.Add(ReplaceDestination)
 
+                ' Generate a subfolder list
                 If ReplacedFile.Contains("\") Then
                     _ReplaceSubFolder.Add(ReplacedFile.Substring(0, ReplacedFile.LastIndexOf("\")))
                 Else
