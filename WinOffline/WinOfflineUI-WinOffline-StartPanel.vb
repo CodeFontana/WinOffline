@@ -39,7 +39,7 @@ Partial Public Class WinOfflineUI
 
     End Sub
 
-    Private Sub ReadHistoryFile(ByVal Component As String, ByVal HistoryFile As String)
+    Private Sub ReadHistoryFile(ByVal Component As String, ByVal HistoryBaseFolder As String)
 
         Dim ComponentRootNode As New TreeNode(Component)
         Dim HistoryFileReader As System.IO.StreamReader
@@ -57,9 +57,9 @@ Partial Public Class WinOfflineUI
 
         treHistory.Nodes.Add(ComponentRootNode)
 
-        If System.IO.File.Exists(HistoryFile) Then
+        If System.IO.File.Exists(HistoryBaseFolder) Then
             Try
-                HistoryFileReader = New System.IO.StreamReader(HistoryFile)
+                HistoryFileReader = New System.IO.StreamReader(HistoryBaseFolder)
 
                 Do While HistoryFileReader.Peek() >= 0
                     HistoryArray.Add(HistoryFileReader.ReadLine())
