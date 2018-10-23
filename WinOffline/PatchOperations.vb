@@ -606,15 +606,20 @@
         '       is to be considered a NEW FILE introduced by the application of the patch.
         '       Therefore, on removal of said patch, NEW FILES will simply be deleted, but
         '       also saved in the BACKOUT subfolder.
-        '
-        '       Maintaining a NewFile list is not really necessary, as lower sections of
-        '       code automatically save them to the BACKOUT subsolder and delete them
-        '       where they stand. But I'm leaving this code here for now, in case this
-        '       functionality is changed in the future.
         For Each InstalledFile As String In hVector.GetInstalledFiles
             If hVector.GetProductComponent.Equals(IT_CLIENT_MANAGER) Then
-                SubFolder = InstalledFile.ToLower.Replace(Globals.DSMFolder.ToLower, "")
-                SubFolder = SubFolder.Replace("\\", "\")
+                ' Sometimes the product code is a lie. For example, development coded the patch
+                ' as BITCM or DTSVMG, but then used a "FILE:..\SC\CBB\SomeFile.dat" to subvert the
+                ' product code, and go outside the parent folder to conduct a replacement. Therefore,
+                ' we need to check the InstalledFile path actually contains the DSMFolder, and if not,
+                ' we will check components within SC, followed by the generic SC folder.
+                If InstalledFile.ToLower.Contains(Globals.DSMFolder.ToLower) Then
+                    SubFolder = InstalledFile.ToLower.Replace(Globals.DSMFolder.ToLower, "")
+                    SubFolder = SubFolder.Replace("\\", "\")
+                ElseIf InstalledFile.ToLower.Contains(Globals.CAFolder.ToLower) Then
+                    SubFolder = InstalledFile.ToLower.Replace(Globals.CAFolder.ToLower, "")
+                    SubFolder = SubFolder.Replace("\\", "\")
+                End If
             ElseIf hVector.GetProductComponent.Equals(SHARED_COMPONENTS) Then
                 SubFolder = InstalledFile.ToLower.Replace(Globals.SharedCompFolder.ToLower, "")
                 SubFolder = SubFolder.Replace("\\", "\")
@@ -637,7 +642,7 @@
                 SubFolderList.Add(SubFolder) ' Add subfolder to list (so we don't have to recalculate this later)
             Else
                 NewFileList.Add(InstalledFile)
-                SubFolderList.Add(SubFolder) ' Add subfolder to list (so we don't have to recalculate this later)
+                SubFolderList.Add(SubFolder) ' Add subfolder to list
             End If
         Next
 
