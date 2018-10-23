@@ -76,24 +76,26 @@
         If System.IO.Directory.Exists(HistoryBaseFolder) Then
             Try
 
-                ' Iterate base folder for history files
+                ' Read all history files (Default is ComputerName.his, but system may have been renamed)
                 FileList = System.IO.Directory.GetFiles(HistoryBaseFolder)
+                For n As Integer = 0 To FileList.Length - 1
+                    If FileList(n).ToLower.EndsWith(".his") Then
+                        HistoryFileFound = True
+                        Logger.WriteDebug(CallStack, "Open file: " + FileList(n))
+                        Logger.WriteDebug("############################################################")
+                        HistoryFileReader = New System.IO.StreamReader(FileList(n))
+                        Do While HistoryFileReader.Peek() >= 0
+                            strLine = HistoryFileReader.ReadLine()
+                            Logger.WriteDebug(strLine)
+                            HistoryArray.Add(strLine)
+                        Loop
+                        Logger.WriteDebug("############################################################")
+                        Logger.WriteDebug(CallStack, "Close file: " + FileList(n))
+                        HistoryFileReader.Close()
+                    End If
+                Next
 
-                ' Read history file
-                HistoryFileFound = True
-                Logger.WriteDebug(CallStack, "Open file: " + HistoryBaseFolder)
-                Logger.WriteDebug("############################################################")
-                HistoryFileReader = New System.IO.StreamReader(HistoryBaseFolder)
-                Do While HistoryFileReader.Peek() >= 0
-                    strLine = HistoryFileReader.ReadLine()
-                    Logger.WriteDebug(strLine)
-                    HistoryArray.Add(strLine)
-                Loop
-                Logger.WriteDebug("############################################################")
-                Logger.WriteDebug(CallStack, "Close file: " + HistoryBaseFolder)
-                HistoryFileReader.Close()
-
-                ' Process history file
+                ' Process history
                 For i As Integer = 0 To HistoryArray.Count - 1
                     strLine = HistoryArray.Item(i)
                     If strLine.StartsWith("[") And strLine.ToLower.Contains("installed") Then
