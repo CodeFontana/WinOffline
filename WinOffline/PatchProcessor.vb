@@ -61,7 +61,7 @@
 
     Public Shared Function MigratePatch(ByVal CallStack As String, ByVal JCLFileName As String) As Integer
 
-        Dim TargetFileName As String        ' Destination filename (e.g. C:\Windows\Temp\WinOffline\SomePatch\SomePatch.jcl).
+        Dim TargetFileName As String ' Destination filename (e.g. C:\Windows\Temp\WinOffline\SomePatch\SomePatch.jcl).
         Dim RunLevel As Integer = 0
 
         CallStack += "Migrate|"
