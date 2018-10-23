@@ -45,8 +45,6 @@
             _FileReplaceResult = New ArrayList
             _CommentString = ""
 
-
-
             For Each ReplacedFile As String In GetShortNameReplaceList()
                 _SourceReplaceList.Add(_FileName.GetFilePath + "\" + ReplacedFile)
                 _FileReplaceResult.Add(FILE_SKIPPED)
