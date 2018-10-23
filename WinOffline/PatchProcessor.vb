@@ -59,8 +59,7 @@
 
     End Function
 
-    Public Shared Function MigratePatch(ByVal CallStack As String,
-                                        ByVal JCLFileName As String) As Integer
+    Public Shared Function MigratePatch(ByVal CallStack As String, ByVal JCLFileName As String) As Integer
 
         Dim TargetFileName As String        ' Destination filename (e.g. C:\Windows\Temp\WinOffline\SomePatch\SomePatch.jcl).
         Dim RunLevel As Integer = 0
@@ -89,7 +88,7 @@
 
     Public Shared Function DecompressPatch(ByVal CallStack As String, ByVal CAZFileName As String) As Integer
 
-        Dim TargetFileName As String                        ' Destination filename (e.g. C:\Windows\Temp\WinOffline\SomePatch\SomePatch.caz).
+        Dim TargetFileName As String ' Destination filename (e.g. C:\Windows\Temp\WinOffline\SomePatch\SomePatch.caz)
         Dim ExecutionString As String
         Dim ArgumentString As String
         Dim CAZipXPProcessStartInfo As ProcessStartInfo
