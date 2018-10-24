@@ -200,7 +200,7 @@
                         ReplaceDestination = Front + Back
                     End While
 
-                    ReturnList.Add(ReplacedFile.ToLower)
+                    ReturnList.Add(ReplaceDestination)
                 End If
             Next
             Return ReturnList
