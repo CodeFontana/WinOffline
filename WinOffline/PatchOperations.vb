@@ -265,10 +265,10 @@
                 Logger.WriteDebug(CallStack, "Compare: " + pVector.DestReplaceList.Item(x).ToString)
                 If Not Utility.IsFileEqual(pVector.SourceReplaceList.Item(x).ToString, pVector.DestReplaceList.Item(x).ToString) Then
                     If Not System.IO.File.Exists(pVector.DestReplaceList.Item(x).ToString) AndAlso
-                        pVector.SkipIfNotFoundList.Contains(FileVector.GetShortName(pVector.DestReplaceList.Item(x).ToString.ToLower)) Then
+                        pVector.SkipIfNotFoundList.Contains(pVector.DestReplaceList.Item(x).ToString.ToLower) Then
                         Logger.WriteDebug(CallStack, "Result: Mismatch [Skip file]") ' Skipped file -- no applicability information
                     ElseIf Not System.IO.File.Exists(pVector.DestReplaceList.Item(x).ToString) AndAlso
-                        Not pVector.SkipIfNotFoundList.Contains(FileVector.GetShortName(pVector.DestReplaceList.Item(x).ToString.ToLower)) Then
+                        Not pVector.SkipIfNotFoundList.Contains(pVector.DestReplaceList.Item(x).ToString.ToLower) Then
                         Logger.WriteDebug(CallStack, "Result: Mismatch [New file]")
                         AlreadyAppliedList.Add(False) ' New file -- not applied
                     Else
@@ -377,7 +377,7 @@
                 End Try
             Else
                 ' Add to "new file" list (We may need to skip replacing these new files later)
-                NewFileList.Add(FileVector.GetShortName(pVector.DestReplaceList.Item(x).ToString.ToLower))
+                NewFileList.Add(pVector.DestReplaceList.Item(x).ToString.ToLower)
             End If
         Next
 
@@ -430,8 +430,8 @@
         ' Copy in replacement files
         For x As Integer = 0 To pVector.SourceReplaceList.Count - 1
             Try
-                If pVector.SkipIfNotFoundList.Contains(FileVector.GetShortName(pVector.DestReplaceList.Item(x).ToString.ToLower)) And
-                NewFileList.Contains(FileVector.GetShortName(pVector.DestReplaceList.Item(x).ToString.ToLower)) Then
+                If pVector.SkipIfNotFoundList.Contains(pVector.DestReplaceList.Item(x).ToString.ToLower) AndAlso
+                NewFileList.Contains(pVector.DestReplaceList.Item(x).ToString.ToLower) Then
                     Logger.WriteDebug(CallStack, "Skip replacement file: " + pVector.SourceReplaceList.Item(x))
                     pVector.FileReplaceResult.Item(x) = PatchVector.SKIPPED
                     Continue For
