@@ -200,7 +200,7 @@
                         ReplaceDestination = Front + Back
                     End While
 
-                    ReturnList.Add(ReplaceDestination)
+                    ReturnList.Add(ReplaceDestination.ToLower)
                 End If
             Next
             Return ReturnList
