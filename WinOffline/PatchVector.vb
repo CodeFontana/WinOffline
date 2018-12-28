@@ -283,6 +283,9 @@
             For Each strLine As String In GetSysCommandList()
                 ReturnArray.Add(strLine)
             Next
+            For Each strLine As String In GetPostCommandList()
+                ReturnArray.Add(strLine)
+            Next
             For Each strLine As String In GetDependsList()
                 ReturnArray.Add(strLine)
             Next
