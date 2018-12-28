@@ -312,11 +312,11 @@
                 ReturnString += GetRawInstruction("RELEASE").Replace(":", "=") + Environment.NewLine
                 ReturnString += GetRawInstruction("GENLEVEL").Replace(":", "=") + Environment.NewLine
                 ReturnString += GetRawInstruction("COMPONENT").Replace(":", "=") + Environment.NewLine
-                If Not GetRawInstruction("PREREQS").Equals("") Then ReturnString += GetRawInstruction("PREREQS").Replace(":", "=") + Environment.NewLine
-                If Not GetRawInstruction("MPREREQS").Equals("") Then ReturnString += GetRawInstruction("MPREREQS").Replace(":", "=") + Environment.NewLine
-                If Not GetRawInstruction("COREQS").Equals("") Then ReturnString += GetRawInstruction("COREQS").Replace(":", "=") + Environment.NewLine
-                If Not GetRawInstruction("MCOREQS").Equals("") Then ReturnString += GetRawInstruction("MCOREQS").Replace(":", "=") + Environment.NewLine
-                If Not GetRawInstruction("SUPERSEDE").Equals("") Then ReturnString += GetRawInstruction("SUPERSEDE").Replace(":", "=")
+                If Not GetRawInstruction("PREREQS").Equals("") Then ReturnString += GetRawInstruction("PREREQS").Replace(":", "=") + Environment.NewLine Else ReturnString += "PREREQS=" + Environment.NewLine
+                If Not GetRawInstruction("MPREREQS").Equals("") Then ReturnString += GetRawInstruction("MPREREQS").Replace(":", "=") + Environment.NewLine Else ReturnString += "MPREREQS=" + Environment.NewLine
+                If Not GetRawInstruction("COREQS").Equals("") Then ReturnString += GetRawInstruction("COREQS").Replace(":", "=") + Environment.NewLine Else ReturnString += "COREQS=" + Environment.NewLine
+                If Not GetRawInstruction("MCOREQS").Equals("") Then ReturnString += GetRawInstruction("MCOREQS").Replace(":", "=") + Environment.NewLine Else ReturnString += "MCOREQS=" + Environment.NewLine
+                If Not GetRawInstruction("SUPERSEDE").Equals("") Then ReturnString += GetRawInstruction("SUPERSEDE").Replace(":", "=") Else ReturnString += "SUPERSEDE="
                 For x As Integer = 0 To _DestReplaceList.Count - 1
                     Dim strLine As String = _DestReplaceList.Item(x)
                     If _FileReplaceResult.Item(x) = FILE_OK Or _FileReplaceResult.Item(x) = FILE_REBOOT_REQUIRED Then
