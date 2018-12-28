@@ -269,7 +269,7 @@
             Logger.WriteDebug("------------------------------------------------------------")
             Logger.WriteDebug(CallStack, "Exit code: " + RunningProcess.ExitCode.ToString)
 
-            pVector.SysCmdReturnCodes.Add(RunningProcess.ExitCode.ToString)
+            pVector.PostCmdReturnCodes.Add(RunningProcess.ExitCode.ToString)
             RunningProcess.Close()
         Next
 
