@@ -64,7 +64,7 @@ VERSIONCHECK:12.9.0.338
 ```
 
 POSTSYSCMD
-> Execute additional script(s) after the CAF service has been restarted.
+> Execute additional script(s) after the CAF service has been restarted since patching.
 
 Sample JCL file with POSTSYSCMD:
 ```
@@ -118,20 +118,6 @@ JCL file requirements and formatting:
 > * WinOffline always runs the SYSCMD tags, in the order they are found, after performing FILE replacements.
 > * WinOffline always runs the POSTSYSCMD tags, in the order they are found, after the CAF service is restarted.
 > * Similar to the DEPENDS tag, WinOffline also supports multiple comma separated items in the PRESYSCMD or SYSCMD tags.
-
-Here's a sample JCL file:
-```
-PLATFORM:WINDOWS
-PRODUCT:BITCM
-PRESYSCMD:ScriptA.cmd
-DEPENDS:ScriptC.cmd
-FILE:bin\_SomeFile.txt
-FILE:bin\_SomeFile2.txt
-SYSCMD:ScriptB.cmd
-SYSCMD:ScriptF.cmd,ScriptG.cmd
-DEPENDS:ScriptD.cmd,ScriptE.cmd
-VERSIONCHECK:14.0.1000.194
-```
 
 ## WinOffline Command Line Switches
 
