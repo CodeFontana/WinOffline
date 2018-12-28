@@ -185,7 +185,7 @@
 
     End Sub
 
-    Public Shared Sub ExecutePostCmd(ByVal CallStack As String, ByRef pVector As PatchVector)
+    Public Shared Sub ExecuteSysCmd(ByVal CallStack As String, ByRef pVector As PatchVector)
 
         Dim ExecutionString As String
         Dim ProcessStartInfo As ProcessStartInfo
@@ -475,7 +475,7 @@
 
         ' Run SYSCMD sripts
         Try
-            ExecutePostCmd(CallStack, pVector)
+            ExecuteSysCmd(CallStack, pVector)
         Catch ex As Exception
             Logger.WriteDebug(CallStack, "Error: Execution of SYSCMD script(s) failed.")
             Logger.WriteDebug(ex.Message)
