@@ -352,6 +352,7 @@ Partial Public Class WinOffline
                     Globals.ParentProcessTree.Add(ParentName.ToLower)
                     CurrentID = ParentID
                     LoopCounter += 1
+                    If LoopCounter > 10 Then Exit While ' Infinite loop safety
                 End While
             Catch ex As Exception
                 If Globals.ParentProcessName Is Nothing Then Globals.ParentProcessName = "noparent"
