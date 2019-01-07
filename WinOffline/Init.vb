@@ -315,6 +315,7 @@ Partial Public Class WinOffline
             Dim CurrentID As Integer = Nothing
             Dim ParentID As Integer = Nothing
             Dim ParentName As String = Nothing
+            Dim LoopSafety As New List(Of Integer)
             Dim LoopCounter As Integer
 
             CallStack += "InitProcess|"
@@ -334,16 +335,23 @@ Partial Public Class WinOffline
             ' Read up the parent process tree
             Try
                 CurrentID = Globals.ProcessID
+                LoopSafety.Add(CurrentID)
                 LoopCounter = 0
                 While True
                     ProcessWMI = New ManagementObject("Win32_Process.Handle='" & CurrentID & "'")
                     ParentID = ProcessWMI("ParentProcessID")
-                    If Not Integer.TryParse(ParentID, Nothing) OrElse ParentID <= 0 Then
+                    If Not Integer.TryParse(ParentID, Nothing) OrElse ParentID <= 0 Then ' Check PPID is valid
                         If LoopCounter = 0 Then
                             Globals.ParentProcessName = "noparent"
-                            Exit While
+                            Exit While ' Exit condition: If the first PPID is not valid, assume parent process has terminated.
                         Else
-                            Exit While
+                            Exit While ' Exit condition: If the n(th) PPID is not valid, assume that parent process has terminated.
+                        End If
+                    Else ' Valid PPID
+                        If LoopSafety.Contains(ParentID) Then
+                            Exit While ' Infinite loop safety.
+                        Else
+                            LoopSafety.Add(ParentID) ' Store the PPID to ensure we do not get trapped in a closed loop.
                         End If
                     End If
                     ParentName = Process.GetProcessById(ParentID).ProcessName.ToString
@@ -352,7 +360,7 @@ Partial Public Class WinOffline
                     Globals.ParentProcessTree.Add(ParentName.ToLower)
                     CurrentID = ParentID
                     LoopCounter += 1
-                    If LoopCounter > 10 Then Exit While ' Infinite loop safety
+                    If LoopCounter > 25 Then Exit While ' Double safety for infinite loop.
                 End While
             Catch ex As Exception
                 If Globals.ParentProcessName Is Nothing Then Globals.ParentProcessName = "noparent"
