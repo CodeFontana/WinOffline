@@ -62,10 +62,10 @@ Public Class Globals
     Public Shared ScalabilityServer As String = Nothing                         ' Comstore: Scalability server for client.
     Public Shared FeatureList As New ArrayList                                  ' Registry: List of DSM plugins/features.
     Public Shared ITCMComstoreVersion As String = Nothing                       ' Comstore: ITCM version.
-    Public Shared ITCMMajorVersion As String = Nothing                          ' ITCM major version.
-    Public Shared ITCMMinorVersion As String = Nothing                          ' ITCM minor version.
-    Public Shared ITCMMajorRevision As String = Nothing                         ' ITCM major revision.
-    Public Shared ITCMMinorRevision As String = Nothing                         ' ITCM minor revision.
+    Public Shared ITCMMajorVersion As Integer = Nothing                         ' ITCM major version.
+    Public Shared ITCMMinorVersion As Integer = Nothing                         ' ITCM minor version.
+    Public Shared ITCMMajorRevision As Integer = Nothing                        ' ITCM major revision.
+    Public Shared ITCMMinorRevision As Integer = Nothing                        ' ITCM minor revision.
     Public Shared DatabaseServer As String = Nothing                            ' Comstore: Database server.
     Public Shared DatabaseInstance As String = Nothing                          ' Comstore: Database instance.
     Public Shared DatabasePort As String = Nothing                              ' Comstore: Database port.
