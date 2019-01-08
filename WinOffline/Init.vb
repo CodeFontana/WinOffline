@@ -733,6 +733,18 @@ Partial Public Class WinOffline
             Globals.ITCMComstoreVersion = ComstoreString
             Logger.WriteDebug(CallStack, "Agent version: " + Globals.ITCMComstoreVersion)
 
+            Try
+                Globals.ITCMMajorVersion = Version.Parse(Globals.ITCMComstoreVersion).Major
+                Globals.ITCMMinorVersion = Version.Parse(Globals.ITCMComstoreVersion).Minor
+                Globals.ITCMMajorRevision = Version.Parse(Globals.ITCMComstoreVersion).MajorRevision
+                Globals.ITCMMinorRevision = Version.Parse(Globals.ITCMComstoreVersion).MinorRevision
+            Catch ex As Exception
+                Globals.ITCMMajorVersion = -1
+                Globals.ITCMMinorVersion = -1
+                Globals.ITCMMajorRevision = -1
+                Globals.ITCMMinorRevision = -1
+            End Try
+
             If Globals.ITCMFunction.ToLower.Contains("manager") Then
                 ComstoreString = ComstoreAPI.GetParameterValue("itrm/database/default", "dbmsserver")
                 Globals.DatabaseServer = ComstoreString
