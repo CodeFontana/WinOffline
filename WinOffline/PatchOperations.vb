@@ -69,7 +69,7 @@
                         Manifest.GetPatchFromManifest(i).PatchAction = PatchVector.UNAVAILABLE
                         Manifest.GetPatchFromManifest(i).CommentString = "Reason: Patch file [" + Manifest.GetPatchFromManifest(i).PatchFile.GetShortName + "] missing from [" + Manifest.GetPatchFromManifest(i).PatchFile.GetFilePath + "] folder.NEWLINE"
                     ElseIf Not Manifest.GetPatchFromManifest(i).GetInstruction("VERSIONCHECK").Equals("") AndAlso
-                        Not Manifest.GetPatchFromManifest(i).GetInstruction("VERSIONCHECK").Equals(Globals.ITCMComstoreVersion) Then
+                            Not VersionCheck(Manifest.GetPatchFromManifest(i).GetInstruction("VERSIONCHECK"), Globals.ITCMComstoreVersion) Then
                         Logger.WriteDebug(CallStack, "Result: SKIPPED.")
                         Manifest.GetPatchFromManifest(i).PatchAction = PatchVector.SKIPPED
                         Manifest.GetPatchFromManifest(i).CommentString = "Reason: Agent version does not match JCL specification.NEWLINE"
@@ -845,6 +845,28 @@
 
         Return 0
 
+    End Function
+
+    Public Shared Function VersionCheck(ByVal VersionA As String, ByVal VersionB As String) As Boolean
+        Dim MajorA, MinorA, BuildA, RevisionA As String
+        Dim MajorB, MinorB, BuildB, RevisionB As String
+        Try
+            MajorA = Version.Parse(VersionA).Major
+            MinorA = Version.Parse(VersionA).Minor
+            BuildA = Version.Parse(VersionA).Build
+            RevisionA = Version.Parse(VersionA).Revision
+            MajorB = Version.Parse(VersionB).Major
+            MinorB = Version.Parse(VersionB).Minor
+            BuildB = Version.Parse(VersionB).Build
+            RevisionB = Version.Parse(VersionB).Revision
+            If Not (MajorA.Equals(MajorB) OrElse MajorA.Equals("*") OrElse MajorB.Equals("*")) Then Return False
+            If Not (MinorA.Equals(MinorB) OrElse MinorA.Equals("*") OrElse MinorB.Equals("*")) Then Return False
+            If Not (BuildA.Equals(BuildB) OrElse BuildA.Equals("*") OrElse BuildB.Equals("*")) Then Return False
+            If Not (RevisionA.Equals(RevisionB) OrElse RevisionA.Equals("*") OrElse RevisionB.Equals("*")) Then Return False
+        Catch ex As Exception
+            Return False
+        End Try
+        Return True
     End Function
 
 End Class
