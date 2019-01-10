@@ -868,12 +868,12 @@
             If MajorA.Equals("*") Then Return True
 
             CompareVersion = CompareVersion.Substring(CompareVersion.IndexOf(".") + 1)
-            MinorA = CompareVersion.Substring(0, CompareVersion.IndexOf("."))
+            If CompareVersion.Contains(".") Then MinorA = CompareVersion.Substring(0, CompareVersion.IndexOf(".")) Else MinorA = CompareVersion
             If Not (MinorA.Equals(itcmMinor) OrElse MinorA.Equals("*")) Then Return False
             If MinorA.Equals("*") Then Return True
 
             CompareVersion = CompareVersion.Substring(CompareVersion.IndexOf(".") + 1)
-            BuildA = CompareVersion.Substring(0, CompareVersion.IndexOf("."))
+            If CompareVersion.Contains(".") Then BuildA = CompareVersion.Substring(0, CompareVersion.IndexOf(".")) Else BuildA = CompareVersion
             If Not (BuildA.Equals(itcmBuild) OrElse BuildA.Equals("*")) Then Return False
             If BuildA.Equals("*") Then Return True
 
