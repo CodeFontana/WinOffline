@@ -155,7 +155,8 @@ Partial Public Class WinOfflineUI
 
                             Runlevel = EvaluatePatch(PatchFileName)
                             If Runlevel = 0 Then
-                                If Not GetPatchVector(PatchFileName).GetInstruction("VERSIONCHECK").Equals("") Then
+                                If Not GetPatchVector(PatchFileName).GetInstruction("VERSIONCHECK").Equals("") AndAlso
+                                    VersionCheck(GetPatchVector(PatchFileName).GetInstruction("VERSIONCHECK"), Globals.ITCMComstoreVersion) Then
                                     Delegate_Sub_Set_Patch_ListView(lvwPatchList, New ArrayList({PatchShortName,
                                                                                         GetPatchVector(PatchFileName).GetInstruction("PRODUCT"),
                                                                                         "READY [VERSIONCHECK=" + GetPatchVector(PatchFileName).GetInstruction("VERSIONCHECK") + "]"}))
@@ -359,7 +360,7 @@ Partial Public Class WinOfflineUI
             Return 6 ' Patch component is not installed
         End If
 
-        If Not NewPatch.GetInstruction("VERSIONCHECK").Equals("") AndAlso Not NewPatch.GetInstruction("VERSIONCHECK").Equals(Globals.ITCMComstoreVersion) Then
+        If Not NewPatch.GetInstruction("VERSIONCHECK").Equals("") AndAlso Not VersionCheck(NewPatch.GetInstruction("VERSIONCHECK"), Globals.ITCMComstoreVersion) Then
             Return 7 ' VERSIONCHECK mismatch
         End If
 
