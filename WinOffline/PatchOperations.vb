@@ -847,26 +847,41 @@
 
     End Function
 
-    Public Shared Function VersionCheck(ByVal VersionA As String, ByVal VersionB As String) As Boolean
+    Public Shared Function VersionCheck(ByVal CompareVersion As String, ByVal ITCMVersion As String) As Boolean
         Dim MajorA, MinorA, BuildA, RevisionA As String
-        Dim MajorB, MinorB, BuildB, RevisionB As String
+        Dim itcmMajor, itcmMinor, itcmBuild, itcmRevision As String
         Try
-            MajorA = Version.Parse(VersionA).Major
-            MinorA = Version.Parse(VersionA).Minor
-            BuildA = Version.Parse(VersionA).Build
-            RevisionA = Version.Parse(VersionA).Revision
-            MajorB = Version.Parse(VersionB).Major
-            MinorB = Version.Parse(VersionB).Minor
-            BuildB = Version.Parse(VersionB).Build
-            RevisionB = Version.Parse(VersionB).Revision
-            If Not (MajorA.Equals(MajorB) OrElse MajorA.Equals("*") OrElse MajorB.Equals("*")) Then Return False
-            If MajorA.Equals("*") OrElse MajorB.Equals("*") Then Return True
-            If Not (MinorA.Equals(MinorB) OrElse MinorA.Equals("*") OrElse MinorB.Equals("*")) Then Return False
-            If MinorA.Equals("*") OrElse MinorB.Equals("*") Then Return True
-            If Not (BuildA.Equals(BuildB) OrElse BuildA.Equals("*") OrElse BuildB.Equals("*")) Then Return False
-            If BuildA.Equals("*") OrElse BuildB.Equals("*") Then Return True
-            If Not (RevisionA.Equals(RevisionB) OrElse RevisionA.Equals("*") OrElse RevisionB.Equals("*")) Then Return False
-            If RevisionA.Equals("*") OrElse RevisionB.Equals("*") Then Return True
+            If CompareVersion.Equals(ITCMVersion) Then Return True
+            If CompareVersion.StartsWith("*") Then Return True
+            If Not ITCMVersion Like "*.*.*.*" Then Return False
+
+            itcmMajor = ITCMVersion.Substring(0, ITCMVersion.IndexOf("."))
+            ITCMVersion = ITCMVersion.Substring(ITCMVersion.IndexOf(".") + 1)
+            itcmMinor = ITCMVersion.Substring(0, ITCMVersion.IndexOf("."))
+            ITCMVersion = ITCMVersion.Substring(ITCMVersion.IndexOf(".") + 1)
+            itcmBuild = ITCMVersion.Substring(0, ITCMVersion.IndexOf("."))
+            ITCMVersion = ITCMVersion.Substring(ITCMVersion.IndexOf(".") + 1)
+            itcmRevision = ITCMVersion
+
+            MajorA = CompareVersion.Substring(0, CompareVersion.IndexOf("."))
+            If Not (MajorA.Equals(itcmMajor) OrElse MajorA.Equals("*")) Then Return False
+            If MajorA.Equals("*") Then Return True
+
+            CompareVersion = CompareVersion.Substring(CompareVersion.IndexOf(".") + 1)
+            MinorA = CompareVersion.Substring(0, CompareVersion.IndexOf("."))
+            If Not (MinorA.Equals(itcmMinor) OrElse MinorA.Equals("*")) Then Return False
+            If MinorA.Equals("*") Then Return True
+
+            CompareVersion = CompareVersion.Substring(CompareVersion.IndexOf(".") + 1)
+            BuildA = CompareVersion.Substring(0, CompareVersion.IndexOf("."))
+            If Not (BuildA.Equals(itcmBuild) OrElse BuildA.Equals("*")) Then Return False
+            If BuildA.Equals("*") Then Return True
+
+            CompareVersion = CompareVersion.Substring(CompareVersion.IndexOf(".") + 1)
+            RevisionA = CompareVersion
+            If Not (RevisionA.Equals(itcmRevision) OrElse RevisionA.Equals("*")) Then Return False
+            If RevisionA.Equals("*") Then Return True
+
         Catch ex As Exception
             Return False
         End Try
