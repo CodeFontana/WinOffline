@@ -1,8 +1,8 @@
 # WinOffline
-WinOffline is a utility designed to simplify CA IT Client Manager (ITCM) product self-patching and help automate common maintenance procedures, in order to make your day run much smoother.
+WinOffline is a utility designed to simplify IT Client Manager (ITCM) product self-patching and help automate common maintenance procedures, in order to make your day run much smoother.
 
 ## License
-> Not licensed, use at your own risk.  WinOffline is available on an as-is basis.  CA does not actively maintain or support this utility.  If you have a problem or question, we recommend filing a GitHub Issue.
+> Not licensed, use at your own risk.  WinOffline is available on an as-is basis.  If you have a problem or question, we recommend filing a GitHub Issue.
 
 ## Requirements
 > .NET Framework 4.0 or newer.
@@ -47,12 +47,13 @@ SYSCMD:ScriptA.cmd
 
 ## Custom Supported JCL tags
 VERSIONCHECK
-> Designate patch is ITCM version specific. The patch will be SKIPPED if the version does not match.
+> Designate patch is ITCM version specific. The patch will be SKIPPED if the version does not match. Wildcards may be used.
 
 > Examples:  
 VERSIONCHECK:14.0.0.199  
 VERSIONCHECK:14.0.1000.194  
 VERSIONCHECK:14.0.2000.255  
+VERSIONCHECK:14.*
 
 Sample JCL file with VERSIONCHECK:
 ```

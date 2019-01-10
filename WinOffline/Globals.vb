@@ -4,7 +4,7 @@ Public Class Globals
 
     ' WinOffline and System Globals
     Public Shared CommandLineArgs As String() = Nothing                         ' Command line arguments passed to the application.
-    Public Shared AppVersion As String = "2018.01.07"                           ' Version string of the current build.
+    Public Shared AppVersion As String = "2018.01.10"                           ' Version string of the current build.
     Public Shared ProcessName As String = Nothing                               ' Fullpath including filename of the application process.
     Public Shared ProcessShortName As String = Nothing                          ' Filename of the application process.
     Public Shared ProcessFriendlyName As String = Nothing                       ' Friendly name of the application process.
@@ -62,6 +62,10 @@ Public Class Globals
     Public Shared ScalabilityServer As String = Nothing                         ' Comstore: Scalability server for client.
     Public Shared FeatureList As New ArrayList                                  ' Registry: List of DSM plugins/features.
     Public Shared ITCMComstoreVersion As String = Nothing                       ' Comstore: ITCM version.
+    Public Shared ITCMMajorVersion As Integer = Nothing                         ' ITCM major version.
+    Public Shared ITCMMinorVersion As Integer = Nothing                         ' ITCM minor version.
+    Public Shared ITCMBuildVersion As Integer = Nothing                        ' ITCM major revision.
+    Public Shared ITCMRevisionVersion As Integer = Nothing                        ' ITCM minor revision.
     Public Shared DatabaseServer As String = Nothing                            ' Comstore: Database server.
     Public Shared DatabaseInstance As String = Nothing                          ' Comstore: Database instance.
     Public Shared DatabasePort As String = Nothing                              ' Comstore: Database port.
