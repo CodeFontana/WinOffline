@@ -860,9 +860,13 @@
             BuildB = Version.Parse(VersionB).Build
             RevisionB = Version.Parse(VersionB).Revision
             If Not (MajorA.Equals(MajorB) OrElse MajorA.Equals("*") OrElse MajorB.Equals("*")) Then Return False
+            If MajorA.Equals("*") OrElse MajorB.Equals("*") Then Return True
             If Not (MinorA.Equals(MinorB) OrElse MinorA.Equals("*") OrElse MinorB.Equals("*")) Then Return False
+            If MinorA.Equals("*") OrElse MinorB.Equals("*") Then Return True
             If Not (BuildA.Equals(BuildB) OrElse BuildA.Equals("*") OrElse BuildB.Equals("*")) Then Return False
+            If BuildA.Equals("*") OrElse BuildB.Equals("*") Then Return True
             If Not (RevisionA.Equals(RevisionB) OrElse RevisionA.Equals("*") OrElse RevisionB.Equals("*")) Then Return False
+            If RevisionA.Equals("*") OrElse RevisionB.Equals("*") Then Return True
         Catch ex As Exception
             Return False
         End Try
