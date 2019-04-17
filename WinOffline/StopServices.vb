@@ -534,7 +534,7 @@ Partial Public Class WinOffline
             If Utility.IsProcessRunning("cam") AndAlso Not Globals.SkipCAM Then
                 Logger.WriteDebug(CallStack, "CAM service: ACTIVE")
 
-                CAMDirectory = Environment.GetEnvironmentVariable("CAI_MSQ")
+                CAMDirectory = Environment.GetEnvironmentVariable("CAI_MSQ", EnvironmentVariableTarget.Machine)
                 ExecutionString = CAMDirectory + "\bin\cam.exe"
                 ArgumentString = "change disabled"
 
