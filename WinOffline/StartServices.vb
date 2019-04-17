@@ -54,7 +54,7 @@ Partial Public Class WinOffline
                 Logger.WriteDebug(CallStack, "CAM service: ACTIVE")
                 Exit Try
             End If
-            CAMDirectory = Environment.GetEnvironmentVariable("CAI_MSQ")
+            CAMDirectory = Environment.GetEnvironmentVariable("CAI_MSQ", EnvironmentVariableTarget.Machine)
 
             ExecutionString = CAMDirectory + "\bin\cam.exe"
             ArgumentString = "change auto"
