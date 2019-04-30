@@ -4,7 +4,7 @@ Public Class Globals
 
     ' WinOffline and System Globals
     Public Shared CommandLineArgs As String() = Nothing                         ' Command line arguments passed to the application.
-    Public Shared AppVersion As String = "2019.04.17"                           ' Version string of the current build.
+    Public Shared AppVersion As String = "2019.04.30"                           ' Version string of the current build.
     Public Shared ProcessName As String = Nothing                               ' Fullpath including filename of the application process.
     Public Shared ProcessShortName As String = Nothing                          ' Filename of the application process.
     Public Shared ProcessFriendlyName As String = Nothing                       ' Friendly name of the application process.
@@ -85,6 +85,7 @@ Public Class Globals
     Public Shared RebootOnTermination As Boolean = False                        ' Flag: Reboot upon termination of WinOffline.
 
     ' User Switch Globals
+    Public Shared GoSwitch As Boolean = False                                   ' Switch: Run without user interaction. (When invoked as a Windows app)
     Public Shared RemovePatchSwitch As Boolean = False                          ' Switch: Remove patches (instead of apply).
     Public Shared CleanupLogsSwitch As Boolean = False                          ' Switch: Cleanup various log folders.
     Public Shared ResetCftraceSwitch As Boolean = False                         ' Switch: Reset cftrace level.
