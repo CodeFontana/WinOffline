@@ -883,7 +883,12 @@ Partial Public Class WinOffline
 
             ' Iterate command line args
             For i As Integer = 0 To Globals.CommandLineArgs.Length - 1
-                If Globals.CommandLineArgs(i).ToString.ToLower.Equals("backout") Or
+                If Globals.CommandLineArgs(i).ToString.ToLower.Equals("go") Or
+                        Globals.CommandLineArgs(i).ToString.ToLower.Equals("-go") Or
+                        Globals.CommandLineArgs(i).ToString.ToLower.Equals("/go") Then
+                    Globals.GoSwitch = True
+                    Logger.WriteDebug(CallStack, "Switch: No user interaction.")
+                ElseIf Globals.CommandLineArgs(i).ToString.ToLower.Equals("backout") Or
                         Globals.CommandLineArgs(i).ToString.ToLower.Equals("-backout") Or
                         Globals.CommandLineArgs(i).ToString.ToLower.Equals("/backout") Or
                         Globals.CommandLineArgs(i).ToString.ToLower.Equals("remove") Or
