@@ -122,6 +122,9 @@ JCL file requirements and formatting:
 
 ## WinOffline Command Line Switches
 
+-go
+> Bypasses user interaction when WinOffline is run as a Windows app.  User interaction is automatically skipped if WinOffline is invoked via software delivery, command line, or as a background process.
+
 -gethistory
 > Report agent patch history only. CAF is not recycled and no patch operations are performed. Available in Software Delivery mode only.
 
