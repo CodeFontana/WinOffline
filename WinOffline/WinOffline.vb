@@ -53,6 +53,8 @@
                         Init.DeInit(CallStack, True, False)
                         Return 0
                     End If
+                ElseIf Globals.GoSwitch Then
+                    Logger.WriteDebug(CallStack, "UI interaction: None")
                 Else
                     Logger.WriteDebug(CallStack, "UI interaction: WinOffline Explorer")
                     Globals.CleanupLogsSwitch = True
