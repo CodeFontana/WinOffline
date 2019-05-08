@@ -53,9 +53,7 @@
                         Init.DeInit(CallStack, True, False)
                         Return 0
                     End If
-                ElseIf Globals.GoSwitch Then
-                    Logger.WriteDebug(CallStack, "UI interaction: None")
-                Else
+                ElseIf Globals.ParentProcessTree(0).ToLower().Equals("explorer") Then
                     Logger.WriteDebug(CallStack, "UI interaction: WinOffline Explorer")
                     Globals.CleanupLogsSwitch = True
                     Globals.WinOfflineExplorer = New WinOfflineUI
@@ -72,6 +70,8 @@
                     Globals.ProgressUIThread = New System.Threading.Thread(AddressOf Globals.ProgressGUI.ShowDialog)
                     Globals.ProgressUIThread.Start()
                     Globals.ProgressGUI.TrayIcon.Visible = True
+                Else
+                    Logger.WriteDebug(CallStack, "UI interaction: None")
                 End If
             End If
             Globals.DispatcherReturnCode = Dispatcher(CallStack)
