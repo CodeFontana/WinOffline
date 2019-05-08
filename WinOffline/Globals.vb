@@ -85,7 +85,6 @@ Public Class Globals
     Public Shared RebootOnTermination As Boolean = False                        ' Flag: Reboot upon termination of WinOffline.
 
     ' User Switch Globals
-    Public Shared GoSwitch As Boolean = False                                   ' Switch: Run without user interaction. (When invoked as a Windows app)
     Public Shared RemovePatchSwitch As Boolean = False                          ' Switch: Remove patches (instead of apply).
     Public Shared CleanupLogsSwitch As Boolean = False                          ' Switch: Cleanup various log folders.
     Public Shared ResetCftraceSwitch As Boolean = False                         ' Switch: Reset cftrace level.
