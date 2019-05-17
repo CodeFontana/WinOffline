@@ -332,7 +332,7 @@ Partial Public Class WinOfflineUI
             Return 3 ' Unsupported component
         End If
 
-        If NewPatch.GetShortNameReplaceList.Count + NewPatch.GetPreCommandList.Count + NewPatch.GetSysCommandList.Count = 0 Then
+        If NewPatch.GetShortNameReplaceList.Count + NewPatch.GetPreCommandList.Count + NewPatch.GetSysCommandList.Count + NewPatch.GetPostCommandList.Count = 0 Then
             Return 4 ' Patch contains NO instructions 
         End If
 
