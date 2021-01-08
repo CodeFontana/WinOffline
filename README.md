@@ -1,3 +1,5 @@
+# ** NO LONGER UNDER ACTIVE DEVELOPMENT **
+
 # WinOffline
 WinOffline is a utility designed to simplify IT Client Manager (ITCM) product self-patching and help automate common maintenance procedures, in order to make your day run much smoother.
 
