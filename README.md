@@ -4,7 +4,7 @@
 WinOffline is a utility designed to simplify IT Client Manager (ITCM) product self-patching and help automate common maintenance procedures, in order to make your day run much smoother.
 
 ## License
-> Not licensed, use at your own risk.  WinOffline is available on an as-is basis.  If you have a problem or question, we recommend filing a GitHub Issue.
+> MIT License.
 
 ## Requirements
 > .NET Framework 4.0 or newer.
